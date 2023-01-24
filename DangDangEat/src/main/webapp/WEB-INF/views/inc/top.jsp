@@ -135,7 +135,7 @@ header > div {
 		let isLogout = confirm("로그아웃 하시겠습니까?");
 		
 		if(isLogout) {
-			location.href = "MemberLogout.me";
+			location.href = "MemberLogout";
 		}
 	}
 </script>
@@ -217,7 +217,7 @@ header > div {
 			<%-- 로그인 상태일 경우 아이디 표시, Logout 링크 표시 --%>
 			<%-- EL 을 사용하여 세션 객체 접근 시 sessionScope.속성명 으로 접근 --%>
 			<c:when test="${not empty sessionScope.sId }">
-				<a href="CheckPassForm.me">${sessionScope.sId } 님</a> |	
+				<a href="CheckPassForm">${sessionScope.sId } 님</a> |	
 				<%-- 만약, 로그인 된 세션 아이디가 "admin" 일 경우 관리자페이지 링크(MemberList.me) 표시 --%>	
 				<c:if test='${sessionScope.sId eq "admin" }'>
 					<span class="admin_page"><a href="AdminMain.ad">Admin</a> |</span> 		
@@ -226,7 +226,7 @@ header > div {
 			</c:when>
 			<c:otherwise>
 			<%-- 로그인 상태가 아닐 경우 Login, Join 링크 표시 --%>
-				<a href="MemberLoginForm.me">Login</a>		
+				<a href="MemberLoginForm">Login</a>		
 				| <a href="MemberJoinForm.me">Join</a>
 			</c:otherwise>
 		</c:choose>

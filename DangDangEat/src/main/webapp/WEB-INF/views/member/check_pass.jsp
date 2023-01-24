@@ -80,9 +80,9 @@ body {
 										<h1 class="h4 text-gray-900 mb-2">Password 확인</h1>
 										<p class="mb-4">비밀번호를 한 번 더 입력해주시개</p>
 									</div>
-									<form class="user" action="MemberCheckPro.me" method="post">
+									<form class="user" action="MemberCheckPro" method="post">
 										<div class="form-group">
-											<input type="password" name="pass"
+											<input type="password" name="member_pass"
 												class="form-control form-control-user"
 												id="exampleInputEmail" aria-describedby="emailHelp"
 												placeholder="Password">

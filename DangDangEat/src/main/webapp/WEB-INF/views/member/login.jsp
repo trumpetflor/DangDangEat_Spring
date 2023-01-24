@@ -130,14 +130,14 @@ body {
 									<div class="text-center">
 										<h1 class="h4 text-gray-900 mb-4">로그인</h1>
 									</div>
-									<form class="user" action="MemberLoginPro.me" method="post">
+									<form class="user" action="MemberLoginPro" method="post">
 										<div class="form-group">
-											<input type="text" name="id" required="required"
+											<input type="text" name="member_id" required="required"
 												class="form-control form-control-user" id="id"
 												aria-describedby="emailHelp" placeholder="Id">
 										</div>
 										<div class="form-group">
-											<input type="password" name="pass" required="required"
+											<input type="password" name="member_pass" required="required"
 												class="form-control form-control-user" id="pass"
 												placeholder="Password">
 										</div>
