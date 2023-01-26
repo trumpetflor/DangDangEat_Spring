@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- mapper 태그 내에 namespace 속성 지정 후 Mapper 인터페이스 위치 지정 -->
+<mapper namespace="com.thisteam.dangdangeat.mapper.MemberMapper">
+
+<!-- 	private String cp_code ;//쿠폰코드(PK)
+	private String cp_name;//할인코드명
+	private Cp_target cp_target;//타켓(birth, new_member, event )
+	private int cp_discount_value; //할인율(%)
+	private String cp_startdate;//쿠폰시작일:  쿠폰시작일(YYYY-MM-DD): birth, new_member는 null
+	private int cp_period;//유효기간
+	private int cp_min_price;//최소구매액
+	private int cp_max_discount;//최대할인금액
+	private int cp_status; //관리자가 (0 삭제 , 1 존재) -->
+	
+
+    <insert id="insertCoupon">
+        INSERT INTO coupon values(
+        	#{cp_code} -- 쿠폰코드
+        	, #{cp_name} -- 쿠폰명
+        	, #{cp_target.name()} -- enum인데 이런식으로 사용 가능한가?
+        	, #{cp_discount_value} -- 할인율
+        	
+        <choose> <!-- 자동발행쿠폰일 경우 시작일 널스트링 -->
+        	<when test="${cp_target.name() == new_member || cp_target.name() == birth">
+        	, "" -- 시작일 널스트링으로 비워둠
+        	</when>
+        	<otherwise>
+        	, #{cp_startdate} -- 쿠폰 시작일
+        	</otherwise>
+        </choose>
+		   	, #{cp_period} -- 기간
+        	, #{cp_min_price} -- 최소구매액
+        	, #{cp_max_discount} -- 최대할인금액
+        	, 1 -- 쿠폰상태(default 1, / 삭제시 0)
+        )
+
+    </insert>
+    
+    <!-- 쿠폰 수정 -->
+    <update id="updateCoupon">
+    	UPDATE coupon 
+    		 SET cp_name = #{cp_name}
+						,cp_period = #{cp_period}
+						,cp_min_price =  #{cp_min_price}
+						,cp_max_discount = #{cp_max_discount}
+			 WHERE cp_code = #{cp_code}
+    </update>
+    
+    
+    <!-- 쿠폰 삭제 -->
+    <update id="deleteCoupon">
+    	UPDATE coupon 
+    		 SET cp_status = 0
+			 WHERE cp_code = #{cp_code}
+    </update>
+    
+	<!-- 관리자페이지 쿠폰 개수 조회 (ajax)-->
+	<select id="selectCouponCount" resultType="int">
+	SELECT count(cp_code) 
+	FROM coupon_view 
+		WHERE cp_status = 1 
+			 AND ((cp_current_st = 1 AND cp_target ='event') OR (cp_target IN('new_member','birth')))
+	</select>
+
+	<select id="selectCouponFromCouponView" resultType="HashMap">
+		SELECT *  
+		FROM coupon_view 
+			 WHERE cp_status = 1
+				 AND cp_code = #{cp_code}
+	</select>
+
+</mapper>
