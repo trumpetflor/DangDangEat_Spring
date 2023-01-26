@@ -8,6 +8,7 @@
 		SELECT member_pass
 			FROM member
 			WHERE member_id = #{id}
+				AND member_status = 'Y'
 	</select>
   
   	<!-- 회원 정보 조회	-->
@@ -26,6 +27,20 @@
 			FROM member
 			WHERE member_id = #{id}
   	</select>
+  	
+  	<!-- 회원 정보 수정 -->
+  	<update id="modifyMemberInfo">
+  		UPDATE member
+  			SET member_pass = #{member_pass}
+  				, member_email = #{member_email}  
+  				, member_mobile = #{member_mobile}  
+  				, member_addr1 = #{member_addr1}  
+  				, member_addr2 = #{member_addr2}  
+  				, member_postcode = #{member_postcode}  
+  			WHERE
+  				member_id = #{member_id}
+  	</update>
+  	
   	
   	
 </mapper>

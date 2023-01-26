@@ -22,6 +22,11 @@ public class MemberService {
 	public MemberVO getMemberInfo(String id) {
 		return mapper.selectMemberInfo(id);
 	}
+
+	// 회원 정보 수정
+	public int modifyMemberInfo(MemberVO member) {
+		return mapper.modifyMemberInfo(member);
+	}
 	
 	
 

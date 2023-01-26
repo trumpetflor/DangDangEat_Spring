@@ -53,16 +53,16 @@ body {
 </style>
 <%
 // 세션 아이디가 null 이거나 "" 일 경우 "로그인이 필요한 페이지입니다." 출력 후 로그인 페이지로 이동
-String sId = (String)session.getAttribute("sId");
+// String sId = (String)session.getAttribute("sId");
 // System.out.println(sId);
-if(sId == null || sId.equals("")) {
+// if(sId == null || sId.equals("")) {
 		%>
 <script>
-		alert("로그인이 필요한 페이지입니다.");
-		location.href = "MemberLoginForm.me";
+// 		alert("로그인이 필요한 페이지입니다.");
+// 		location.href = "MemberLoginForm";
 		</script>
 <%
-}
+// }
 %>
 <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
@@ -266,21 +266,18 @@ if(sId == null || sId.equals("")) {
 					</div>
 					<div class="row form-group">
 						<div class="col col-md-3">
-							<label for="oldPass" class=" form-control-label font-weight-bold">기존
-								비밀번호<font color="red">*</font>
+							<label for="oldPass" class=" form-control-label font-weight-bold">기존 비밀번호
+								<font color="red">*</font>
 							</label>
 						</div>
 						<div class="col-12 col-md-4">
-							<input type="password" id="oldPass" name="oldPass"
-								class="form-control" required="required"> <span
-								class="help-block form-text bg-gradient-light"
-								id="checkPasswdResult"></span>
+							<input type="password" id="oldPass" name="member_pass" class="form-control" required="required">
+							<span class="help-block form-text bg-gradient-light" id="checkPasswdResult"></span>
 						</div>
 					</div>
 					<div class="row form-group">
 						<div class="col col-md-3">
-							<label for="newPass" class=" form-control-label font-weight-bold">신규
-								비밀번호</label>
+							<label for="newPass" class=" form-control-label font-weight-bold">신규 비밀번호</label>
 						</div>
 						<div class="col-12 col-md-4">
 							<input type="password" id="newPass" name="newPass"
@@ -308,7 +305,7 @@ if(sId == null || sId.equals("")) {
 								color="red">*</font></label>
 						</div>
 						<div class="col-12 col-md-4 d-flex">
-							<input type="text" id="postcode" name="postcode"
+							<input type="text" id="postcode" name="member_postcode"
 								value="${member.member_postcode }"
 								class="form-control bg-gradient-light" required="required">
 							<input type="button" class=" mx-1 btn btn-outline-secondary"
@@ -318,7 +315,7 @@ if(sId == null || sId.equals("")) {
 					<div class="row form-group">
 						<div class="col col-md-3"></div>
 						<div class="col-12 col-md-8">
-							<input type="text" id="addr1" name="addr1"
+							<input type="text" id="addr1" name="member_addr1"
 								value="${member.member_addr1 }"
 								class="form-control bg-gradient-light" required="required">
 							<small class="form-text text-muted">도로명주소</small>
@@ -329,7 +326,7 @@ if(sId == null || sId.equals("")) {
 							<label for="text-input" class=" form-control-label"></label>
 						</div>
 						<div class="col-12 col-md-8">
-							<input type="text" id="addr2" name="addr2"
+							<input type="text" id="addr2" name="member_addr2"
 								value="${member.member_addr2 }"
 								class="form-control bg-gradient-light"> <small
 								class="form-text text-muted">상세주소</small>
@@ -342,7 +339,7 @@ if(sId == null || sId.equals("")) {
 								color="red">*</font></label>
 						</div>
 						<div class="col-12 col-md-6">
-							<input type="text" id="mobile" name="mobile"
+							<input type="text" id="mobile" name="member_mobile"
 								value="${member.member_mobile }"
 								class="form-control bg-gradient-light" required="required">
 							<small class="form-text text-muted"></small>
@@ -355,7 +352,7 @@ if(sId == null || sId.equals("")) {
 								color="red">*</font></label>
 						</div>
 						<div class="col-12 col-md-6 d-flex">
-							<input type="email" id="email" name="email"
+							<input type="email" id="email" name="member_email"
 								value="${member.member_email }"
 								class="form-control bg-gradient-light" required="required">
 							<input type="button" id="email_auth"
@@ -384,7 +381,7 @@ if(sId == null || sId.equals("")) {
 								class=" form-control-label font-weight-bold">댕생일</label>
 						</div>
 						<div class="col-12 col-md-6">
-							<input type="text" id="birth" name="birth"
+							<input type="text" id="birth" name="member_birth"
 								value="${member.member_birth }"
 								class="form-control bg-gradient-light" readonly="readonly">
 							<small class="form-text text-muted">변경 불가한 정보입니다.</small>

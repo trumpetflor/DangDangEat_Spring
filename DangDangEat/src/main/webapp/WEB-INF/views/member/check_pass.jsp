@@ -16,17 +16,17 @@
 
 <%
 // 세션 아이디가 null 이거나 "" 일 경우 "로그인이 필요한 페이지입니다." 출력 후 로그인 페이지로 이동
-String sId = (String)session.getAttribute("sId");
+// String sId = (String)session.getAttribute("sId");
 // System.out.println(sId);
 // 잘못된 접근일 때 바로 로 보내기
-if(sId == null || sId.equals("")) {
+// if(sId == null || sId.equals("")) {
 		%>
 <script>
-		alert("로그인이 필요한 페이지입니다.");
-		location.href="MemberLoginForm.me";
+// 		alert("로그인이 필요한 페이지입니다.");
+// 		location.href="MemberLoginForm.me";
 		</script>
 <%
-}
+// }
 %>
 
 <!-- Custom fonts for this template-->

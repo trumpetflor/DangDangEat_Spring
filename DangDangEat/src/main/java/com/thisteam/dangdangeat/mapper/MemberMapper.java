@@ -9,6 +9,9 @@ public interface MemberMapper {
 
 	// 회원 정보 조회
 	MemberVO selectMemberInfo(String id);
+
+	// 회원 정보 수정
+	int modifyMemberInfo(MemberVO member);
 	
 	
 
