@@ -54,7 +54,7 @@
 	            	
 					 $.ajax({
 		                  type: "GET", 
-		                  url: "OrderPaymentPro.od", 
+		                  url: "OrderPaymentPro", 
 		                  data: {
 				                   pro_code : $('#pro_code').val(),
 				           		   cart_code : $('#cart_code').val(),
@@ -89,7 +89,7 @@
 		
 		$.ajax({
 				type: "get",
-				url: "OrderCouponPro.od",
+				url: "OrderCouponPro",
 				dataType : "text",
 				async:false,
 				data: {
@@ -122,7 +122,7 @@
  <jsp:include page="../inc/top.jsp"></jsp:include>
   <main>
   <div id="resultArea"></div>
-  	<form action="OrderPaymentPro.od" method="post" id="orderPaymentForm" >
+  	<form action="OrderPaymentPro" method="post" id="orderPaymentForm" >
   	<c:forEach var="cart" items="${orderProductList }" varStatus="status">
   		<input type="hidden" name="cart_code" id="cart_code" value="${cart.cart_code }">
   		<input type="hidden" name="pro_code"  value="${cart.pro_code }">
