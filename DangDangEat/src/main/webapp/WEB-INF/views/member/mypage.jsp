@@ -59,7 +59,7 @@ if (sId == null || sId.equals("")) {
 %>
 <script>
 	alert("로그인이 필요한 페이지입니다.");
-	location.href = "MemberLoginForm.me";
+	location.href = "MemberLoginForm";
 </script>
 <%
 }
@@ -141,7 +141,7 @@ if (sId == null || sId.equals("")) {
 		const param = new URL(location).searchParams;
 		if(param.get("cp_code") != null){//파라미터cp_code가 존재하면 자동으로 쿠폰페이지로 넘어가므로 페이지 이동
 			
-			location.href="MyPage.me"; 
+			location.href="MyPage"; 
 			
 		}else{//파라미터가 없으면 리로드//파라미터cp_code가 존재하면 자동으로 쿠폰페이지로 넘어가므로 페이지 이동
 			
@@ -365,7 +365,7 @@ if (sId == null || sId.equals("")) {
 							color="red">*</font>은(는) 필수 입력 정보입니다.</small>
 					</div>
 					<div class="col-12 col-md-8">
-						<button onclick="location.href='CheckPassForm.me'"
+						<button onclick="location.href='CheckPassForm'"
 							class="btn btn-secondary" value="회원 정보 페이지" style="float: right;">회원 정보 페이지</button>
 					</div>
 				</div>
@@ -390,6 +390,6 @@ if (sId == null || sId.equals("")) {
 		src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-	<script src="assets/js/main.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/assets/js/main.js"></script>
 </body>
 </html>

@@ -30,8 +30,8 @@
 	href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
-<link rel="stylesheet" href="assets/css/cs-skin-elastic.css">
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/cs-skin-elastic.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/style.css">
 
 <link
 	href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800'
@@ -160,7 +160,7 @@ if(sId == null || sId.equals("")) {
 				
 				$.ajax({
 					type: "POST",
-					url: "MemberEmailUpdate.me",
+					url: "MemberEmailUpdate",
 					async : false,
 					data: { 
 						id: $("#id").text(),
@@ -189,7 +189,7 @@ if(sId == null || sId.equals("")) {
 			
 			$.ajax({
 				type: "POST",
-				url: "MemberEmailAuth.me",
+				url: "MemberEmailAuth",
 				async : false,
 				data: { 
 					id: $("#id").text(),
@@ -246,7 +246,7 @@ if(sId == null || sId.equals("")) {
 				<strong>회원 정보</strong>
 			</div>
 			<div class="card-body card-block">
-				<form action="MemberModifyPro.me" method="post"
+				<form action="MemberModifyPro" method="post"
 					class="form-horizontal">
 					<div class="row form-group">
 						<div class="col col-md-3">
@@ -404,7 +404,7 @@ if(sId == null || sId.equals("")) {
 			</div>
 		</div>
 		<div>
-			<a href="MemberWithdrawForm.me"> 
+			<a href="MemberWithdrawForm"> 
 				<small class="form-text text-muted" style="text-align: right;">회원 탈퇴</small>
 			</a>
 		</div>
@@ -427,7 +427,7 @@ if(sId == null || sId.equals("")) {
 		src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-	<script src="assets/js/main.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/assets/js/main.js"></script>
 
 </body>
 </html>

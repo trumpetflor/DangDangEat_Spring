@@ -206,7 +206,7 @@ header > div {
   <header>
     <div class="myDiv">
       <a href="./">
-      <img src = "img/logo3.png" width="300px">
+      <img src = "${pageContext.request.contextPath}/resources/img/logo3.png" width="300px">
       </a>
     </div>
   </header>
@@ -220,7 +220,7 @@ header > div {
 				<a href="CheckPassForm">${sessionScope.sId } 님</a> |	
 				<%-- 만약, 로그인 된 세션 아이디가 "admin" 일 경우 관리자페이지 링크(MemberList.me) 표시 --%>	
 				<c:if test='${sessionScope.sId eq "admin" }'>
-					<span class="admin_page"><a href="AdminMain.ad">Admin</a> |</span> 		
+					<span class="admin_page"><a href="AdminMain">Admin</a> |</span> 		
 				</c:if>
 					<span class="logout"><a href="javascript:logout()">Logout</a></span>	
 			</c:when>
@@ -234,9 +234,9 @@ header > div {
 
   <div class="div-top-icon">
     <ul class="ul-top-icon">
-        <li><a href="WishlistDetail.ct"><img class="top-icon" src="img/heart.png"></a></li>
-        <li><a href="CartList.ct"><img class="top-icon" src="img/shopping-cart.png"></a></li>
-        <li><a href="MyPage.me"><img class="top-icon" src="img/dog.png"></a></li>
+        <li><a href="WishlistDetail.ct"><img class="top-icon" src="${pageContext.request.contextPath}/resources/img/heart.png"></a></li>
+        <li><a href="CartList.ct"><img class="top-icon" src="${pageContext.request.contextPath}/resources/img/shopping-cart.png"></a></li>
+        <li><a href="MyPage"><img class="top-icon" src="${pageContext.request.contextPath}/resources/img/dog.png"></a></li>
     </ul>
 </div>
 
