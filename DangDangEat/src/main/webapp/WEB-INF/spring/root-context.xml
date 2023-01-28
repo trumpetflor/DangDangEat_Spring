@@ -12,11 +12,11 @@
 	<!-- bean 태그 사이에는 property 태그를 통해 커넥션풀 관련 정보 설정 -->
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
-		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/mvc_board5"></property>
-		<property name="username" value="root"></property>
+		<property name="jdbcUrl" value="jdbc:mysql://db.itwillbs.dev:3306/class5_220823_team2"></property>
+		<property name="username" value="class5_220823_team2"></property>
 		<property name="password" value="1234"></property>
 	</bean>	
-	
+
 	<!-- 2. HikariCP 의 DataSource 객체(HikariDataSource) 생성을 위해 HikariConfig 객체 전달 -->
 	<!-- destroy-method="close" 속성은 DB 작업 종료 후 자동으로 호출할 메서드(close())명 지정 -->
 	<!-- 태그 사이에 constructor-arg 태그 ref 속성값으로 1번의 id 속성값 지정 -->
@@ -38,17 +38,3 @@
 	<!-- MyBatis 연동에 사용될 객체들의 패키지 위치 지정(기본 루트 패키지 지정) -->
 	<mybatis-spring:scan base-package="com.thisteam.dangdangeat"/>
 </beans>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
