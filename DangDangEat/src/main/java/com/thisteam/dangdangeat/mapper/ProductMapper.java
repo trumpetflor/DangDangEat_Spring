@@ -24,6 +24,10 @@ public interface ProductMapper {
 			@Param("keyword") String keyword, 
 			@Param("category") String category);
 
+	//3. 상품 상세 정보 조회
+	// => 파라미터 : 상품번호  리턴타입 : ProductVO(product)
+	ProductVO selectProductDetail(int pro_code);
+
 	
 	
 

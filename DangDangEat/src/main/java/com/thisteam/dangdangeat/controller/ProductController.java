@@ -75,8 +75,24 @@ public class ProductController {
 		model.addAttribute("pageInfo", pageInfo);
 		
 		return "product/list";
+		
 	}
 	
+	//상품 상세정보 
+	@GetMapping(value = "/ProductDetail.pd")
+	public String detail(
+			@RequestParam(defaultValue = "1") int pro_code, 
+			Model model) {
+		
+	// Service 객체의 getProductDetail() 메서드를 호출하여 게시물 상세 정보 조회
+	// => 파라미터 : 상품번호  리턴타입 : ProductVO(product)
+		ProductVO product = service.getProductDetail(pro_code);
+		
+		// Model 객체에 ProductVO 객체 추가
+		model.addAttribute("product", product);
+			
+		return "product/list_detail";
+	}	
 }
 
 

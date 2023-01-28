@@ -37,15 +37,41 @@
 
 	<!-- 전체 상품 수 조회하는 select 태그 -->
 	<select id="selectProductListCount" resultType="int">
-			SELECT 
-				COUNT(*)
-			FROM product
-			WHERE	
-				pro_name LIKE '%${keyword}%'
-				AND cate_code LIKE '%${category}%'
+		SELECT 
+			COUNT(*)
+		FROM product
+		WHERE	
+			pro_name LIKE '%${keyword}%'
+			AND cate_code LIKE '%${category}%'
 	</select>
 	
-	
+	<!-- 상품 상세정보를 조회하는 SELECT 태그  -->
+	<select id="selectProductDetail" resultType="com.thisteam.dangdangeat.vo.ProductVO" >
+		SELECT 
+			pro_code
+			,pro_name  
+			,cate_code
+		    ,case
+				when pro_brand = '1' then '-'
+		        when pro_brand = '2' then 'LILYS KITCHEN'
+		        when pro_brand = '3' then 'PETSGREEN'
+		        when pro_brand = '4' then 'RICHZ BOX'
+				else 'LORENZ'
+		    END pro_brand
+		    ,pro_option
+		    ,pro_qty
+		    ,pro_price
+		    ,pro_yn
+		    ,pro_thumb
+		    ,pro_real_thumb
+		    ,pro_img
+		    ,pro_real_img
+		    ,pro_info
+		    ,pro_date
+		FROM product 
+		WHERE
+			pro_code = #{pro_code}
+	</select>
 </mapper>
 
 

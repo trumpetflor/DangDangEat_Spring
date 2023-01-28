@@ -25,6 +25,14 @@ public class ProductService {
 	public int getProductListCount(String keyword, String category) {
 		return mapper.selectProductListCount(keyword, category);
 	}
+
+	//상품 상세정보 조회
+	// => 파라미터 : 상품번호  리턴타입 : ProductVO(product)
+	public ProductVO getProductDetail(int pro_code) {
+		return mapper.selectProductDetail(pro_code);
+	}
+
+
 	
 
 }
