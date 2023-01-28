@@ -1,10 +1,10 @@
 package com.thisteam.dangdangeat.mapper;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Update;
-import org.json.JSONArray;
+import org.apache.ibatis.annotations.Param;
 
 import com.thisteam.dangdangeat.vo.CouponVO;
 
@@ -19,11 +19,23 @@ public interface CouponMapper {
 //	@Delete()
 	public int deleteCoupon(CouponVO coupon);
 
-	
+	   
 	public int selectCouponCount();
 	
-	//TODO: JSON���� ��ȯ�ؾ���
-	public HashMap selectCouponFromCouponView(String cp_code);
+	//특정 쿠폰 검색
+	public Map selectCouponFromCouponView(String cp_code);
+
+	//사용가능한 쿠폰 조회
+	public List<Map<String,Object>> selectMemberCoupon(@Param("id")String sId);
 	
+//	public void updateBirthCp(@Param("id") String sId);
+
+	  
+	public String selectCouponCode(String cp_code);
+
+	//쿠폰 검색 버튼
+	public String selectCouponCodebyUser(String cp_code);
+
+	public int InsertCouponCodeToMemCp(@Param("id") String sId, @Param("cp_code")String cp_code);
 
 }
