@@ -27,6 +27,26 @@ public class MemberService {
 	public int modifyMemberInfo(MemberVO member) {
 		return mapper.modifyMemberInfo(member);
 	}
+
+	// 회원 주문 수 조회
+	public int getMemberOrderCount(String id) {
+		return mapper.selectMemberOrderCount(id);
+	}
+
+	 // 회원 쿠폰 수 조회
+	public int getMemberCouponCount(String id) {
+		return mapper.selectMemberCouponCount(id);
+	}
+
+	// 회원 리뷰 수 조회
+	public int getMemberReviewCount(String id) {
+		return mapper.selectMemberReviewCount(id);
+	}
+
+	// 회원 문의 수 조회
+	public int getMemberQnaCount(String id) {
+		return mapper.selectMemberQnaCount(id);
+	}
 	
 	
 

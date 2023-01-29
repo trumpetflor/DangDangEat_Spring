@@ -13,6 +13,18 @@ public interface MemberMapper {
 	// 회원 정보 수정
 	int modifyMemberInfo(MemberVO member);
 	
+	// 회원 주문 수 조회
+	int selectMemberOrderCount(String id);
+
+	// 회원 쿠폰 수 조회
+	int selectMemberCouponCount(String id);
+
+	// 회원 리뷰 수 조회
+	int selectMemberReviewCount(String id);
+
+	// 회원 문의 수 조회
+	int selectMemberQnaCount(String id);
+
 	
 
 }

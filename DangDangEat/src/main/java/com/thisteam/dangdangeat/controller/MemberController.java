@@ -113,7 +113,7 @@ public class MemberController {
 			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
 			return "MemberLoginForm";
 		} else { // 세션 아이디 있을 경우
-			MemberVO member = service.getMemberInfo(id);
+			MemberVO member = service.getMemberInfo(id); // 회원 정보 조회
 
 			model.addAttribute("member", member);
 
@@ -172,6 +172,46 @@ public class MemberController {
 		}
 
 	}
+	
+	// 마이페이지
+	@GetMapping(value = "MyPage")
+	public String myPage(
+			Model model, 
+			HttpSession session) {
+		
+		String id = (String)session.getAttribute("sId");
+
+		if(id == null || id.equals("")) { // 세션 아이디가 null 이거나 "" 일 때 쫓아내기
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			return "MemberLoginForm";
+		} else { // 세션 아이디 있을 경우
+			MemberVO member = service.getMemberInfo(id); // 회원 정보 조회
+			model.addAttribute("member", member); // Model 객체에 회원 정보 저장
+
+//			int memberHistoryCount[] = service.getMemberHistoryCount(id);
+			int memberOrderCount = service.getMemberOrderCount(id);
+			int memberCouponCount = service.getMemberCouponCount(id);
+			int memberReviewCount = service.getMemberReviewCount(id);
+			int memberQnaCount = service.getMemberQnaCount(id);
+			
+			model.addAttribute("memberOrderCount", memberOrderCount);
+			model.addAttribute("memberCouponCount", memberCouponCount);
+			model.addAttribute("memberReviewCount", memberReviewCount);
+			model.addAttribute("memberQnaCount", memberQnaCount);
+			
+			return "member/mypage";
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 }

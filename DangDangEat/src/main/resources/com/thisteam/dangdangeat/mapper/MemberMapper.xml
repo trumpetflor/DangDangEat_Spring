@@ -41,7 +41,36 @@
   				member_id = #{member_id}
   	</update>
   	
+  	<!-- 회원 주문 수 조회 -->
+  	<select id="selectMemberOrderCount" resultType="int">
+  		SELECT COUNT(*)
+  			FROM orders
+  			WHERE member_id = #{id}
+  	</select>
   	
+  	<!-- 회원 쿠폰 수 조회 -->
+  	<select id="selectMemberCouponCount" resultType="int">
+  		SELECT COUNT(*)
+  			FROM mc_view
+  			WHERE member_id = #{id}
+  				AND cp_status = 1
+  				AND mc_stat = 1
+  				AND mc_used = 'N'
+  	</select>
+  	
+  	<!-- 회원 리뷰 수 조회 -->
+  	<select id="selectMemberReviewCount" resultType="int">
+  		SELECT COUNT(*)
+  			FROM review
+  			WHERE member_id = #{id}
+  	</select>
+  	
+  	<!-- 회원 문의 수 조회 -->
+  	<select id="selectMemberQnaCount" resultType="int">
+  		SELECT COUNT(*)
+  			FROM qna
+  			WHERE member_id = #{id}
+  	</select>
   	
 </mapper>
 
