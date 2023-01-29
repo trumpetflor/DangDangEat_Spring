@@ -248,7 +248,8 @@ body {
 		</div>
 	</div>
 	<!-- /Widgets -->
-
+	
+	<br>
 
 	<div class="container" id="ajax_changeDiv">
 		<div class="card" >
@@ -360,6 +361,17 @@ body {
 			</div>
 		</div>
 	</div>
+	
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
 
 	<!-- Footer-->
 	<footer class="py-5 bg-dark">

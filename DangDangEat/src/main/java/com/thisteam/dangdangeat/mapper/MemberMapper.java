@@ -25,6 +25,9 @@ public interface MemberMapper {
 	// 회원 문의 수 조회
 	int selectMemberQnaCount(String id);
 
+	// 회원 탈퇴 및 상태 업데이트
+	int updateMember(MemberVO member);
+
 	
 
 }

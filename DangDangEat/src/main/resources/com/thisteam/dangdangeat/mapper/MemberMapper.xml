@@ -72,6 +72,15 @@
   			WHERE member_id = #{id}
   	</select>
   	
+  	<!-- 회원 상태 변경 -->
+  	<update id="updateMember">
+  		UPDATE member
+  			SET member_status = #{member_status}
+  			WHERE member_id = #{member_id}
+  	</update>
+  	
+  	
+  	
 </mapper>
 
 

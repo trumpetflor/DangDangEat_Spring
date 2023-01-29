@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- mapper 태그 내에 namespace 속성 지정 후 Mapper 인터페이스 위치 지정 -->
+<mapper namespace="com.thisteam.dangdangeat.mapper.AdminMapper">
+	
+	<!-- 관리자 페이지 회원 목록 조회 -->  	
+  	<select id="selectMemberList" resultType="com.thisteam.dangdangeat.vo.MemberVO">
+  		SELECT *
+  			FROM member
+  	</select>
+  	
+  	<!-- 관리자 페이지 회원 정보 수정 -->
+  	<update id="updateMember">
+  		UPDATE member
+  			SET member_status = #{member_status}
+  			WHERE member_id = #{member_id}
+  	</update>
+  	
+  	<!-- 관리자 페이지 회원 삭제 -->
+  	<delete id="deleteMember">
+  		DELETE
+  			FROM member
+  			WHERE member_id = #{member_id}
+  	</delete>
+  	
+  	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -59,7 +59,7 @@ body {
 						<!-- Nested Row within Card Body -->
 						<div class="row">
 							<div class="col-lg-6 d-none d-lg-block">
-								<img src="img/withdraw_result.jpg">
+								<img src="${pageContext.request.contextPath}/resources/img/withdraw_result.jpg">
 							</div>
 							<div class="col-lg-6">
 								<div class="p-5">
@@ -88,6 +88,17 @@ body {
 		</div>
 
 	</div>
+
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
 
 	<!-- Footer-->
 	<footer class="py-5 bg-dark">

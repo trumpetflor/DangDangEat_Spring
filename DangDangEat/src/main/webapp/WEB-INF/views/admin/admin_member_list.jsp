@@ -16,14 +16,14 @@
 <title>DangDangEAT Admin - MemberList</title>
 
 <!-- Custom fonts for this template -->
-<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
+<link href="${pageContext.request.contextPath}/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
 	type="text/css">
 
 <!-- Custom styles for this template -->
-<link href="css/sb-admin-2.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
 <!-- Custom styles for this page -->
-<link href="vendor/datatables/dataTables.bootstrap4.min.css"
+<link href="${pageContext.request.contextPath}/resources/vendor/datatables/dataTables.bootstrap4.min.css"
 	rel="stylesheet">
 
 <!-- 폰트 설정 -->
@@ -64,21 +64,6 @@ font-family: 'GmarketSans';
 }
 </style>
 
-<%
-// 세션 아이디가 null 이거나 "admin" 이 아닐 경우 "잘못된 접근입니다!" 출력 후 메인페이지로 이동
-String sId = (String)session.getAttribute("sId");
-// System.out.println(sId);
-// 잘못된 접근일 때 바로 main.jsp 로 보내기
-if(sId == null || !sId.equals("admin")) {
-	%>
-<script>
-		alert("잘못된 접근입니다!");
-		location.href = "./";
-	</script>
-<%
-}
-%>
-
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script type="text/javascript">
 	
@@ -113,7 +98,7 @@ if(sId == null || !sId.equals("admin")) {
 		let result = confirm(id + " 회원 기록을 삭제하시겠습니까?");
 		
 		if(result) {
-			location.href = "AdminMemberDelete.ad?id=" + id;
+			location.href = "AdminMemberDelete?id=" + id;
 		}
 	}
 	
@@ -122,7 +107,7 @@ if(sId == null || !sId.equals("admin")) {
 		let result = confirm(id + "회원의 상태를 수정하시겠습니까?");
 		
 		if(result) {
-			location.href = "AdminMemberUpdate.ad?id=" + id + "&status=" + status;
+			location.href = "AdminMemberUpdate?id=" + id + "&status=" + status;
 		} else {
 			alert("취소되었습니다.");
 			location.reload();
@@ -190,9 +175,9 @@ if(sId == null || !sId.equals("admin")) {
 
 			<a
 				class="sidebar-brand d-flex align-items-center justify-content-center"
-				href="AdminMain.ad">
+				href="AdminMain">
 				<div class="div-top-icon">
-					<img class="main-icon" src="img/maindog_white.png">
+					<img class="main-icon" src="${pageContext.request.contextPath}/resources/img/maindog_white.png">
 					<!--                     <i class="fas fa-laugh-wink"></i> -->
 				</div>
 
@@ -218,23 +203,23 @@ if(sId == null || !sId.equals("admin")) {
 
 			<!-- Nav Item - Tables -->
 			<li class="nav-item active"><a class="nav-link"
-				href="AdminProductList.ad"> <i class="fas fa-fw fa-calendar"></i>
+				href="AdminProductList"> <i class="fas fa-fw fa-calendar"></i>
 					<span>상품 관리</span></a></li>
 			<!-- Nav Item - Tables -->
 			<li class="nav-item active"><a class="nav-link"
-				href="AdminMemberList.ad"> <i class="fas fa-fw fa-table"></i> <span>회원
+				href="AdminMemberList"> <i class="fas fa-fw fa-table"></i> <span>회원
 						관리</span></a></li>
 			<!-- Nav Item - Tables -->
 			<li class="nav-item active"><a class="nav-link"
-				href="AdminOrderList.ad"> <i class="fas fa-fw fa-dollar-sign"></i>
+				href="AdminOrderList"> <i class="fas fa-fw fa-dollar-sign"></i>
 					<span>주문 관리</span></a></li>
 			<!-- Nav Item - Tables -->
 			<li class="nav-item active"><a class="nav-link"
-				href="AdminCouponList.ad"> <i
+				href="AdminCouponList"> <i
 					class="fas fa-fw fa-clipboard-list"></i> <span>쿠폰 관리</span></a></li>
 			<!-- Nav Item - Tables -->
 			<li class="nav-item active"><a class="nav-link"
-				href="AdminBoardList.ad"> <i class="fas fa-fw fa-comments"></i>
+				href="AdminBoardList"> <i class="fas fa-fw fa-comments"></i>
 					<span>게시판 관리</span></a></li>
 
 			<!-- Divider -->
@@ -316,7 +301,7 @@ if(sId == null || !sId.equals("admin")) {
 							aria-expanded="false"> <span
 								class="mr-2 d-none d-lg-inline text-gray-600 font-weight-bold">Admin</span>
 								<img class="img-profile rounded-circle"
-								src="img/dangprofile.png">
+								src="${pageContext.request.contextPath}/resources/img/dangprofile.png">
 						</a> <!-- Dropdown - User Information -->
 							<div
 								class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -324,11 +309,11 @@ if(sId == null || !sId.equals("admin")) {
 								<a class="dropdown-item" href="./"> <i
 									class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> Member
 									Main
-								</a> <a class="dropdown-item" href="CheckPassForm.me"> <i
+								</a> <a class="dropdown-item" href="CheckPassForm"> <i
 									class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
 								</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="MemberLogout.me"> <i
+								<a class="dropdown-item" href="MemberLogout"> <i
 									class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i> Logout
 								</a>
 							</div></li>
@@ -495,21 +480,21 @@ if(sId == null || !sId.equals("admin")) {
 	</div>
 
 	<!-- Bootstrap core JavaScript-->
-	<script src="vendor/jquery/jquery.min.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendor/jquery/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 	<!-- Core plugin JavaScript-->
-	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 	<!-- Custom scripts for all pages-->
-	<script src="js/sb-admin-2.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/sb-admin-2.min.js"></script>
 
 	<!-- Page level plugins -->
-	<script src="vendor/datatables/jquery.dataTables.min.js"></script>
-	<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendor/datatables/jquery.dataTables.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 	<!-- Page level custom scripts -->
-	<script src="js/demo/datatables-demo.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/demo/datatables-demo.js"></script>
 
 </body>
 

@@ -47,6 +47,11 @@ public class MemberService {
 	public int getMemberQnaCount(String id) {
 		return mapper.selectMemberQnaCount(id);
 	}
+
+	// 회원 탈퇴 및 상태 업데이트
+	public int memberWithdraw(MemberVO member) {
+		return mapper.updateMember(member);
+	}
 	
 	
 

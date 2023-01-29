@@ -194,22 +194,79 @@ public class MemberController {
 			int memberReviewCount = service.getMemberReviewCount(id);
 			int memberQnaCount = service.getMemberQnaCount(id);
 			
-			model.addAttribute("memberOrderCount", memberOrderCount);
-			model.addAttribute("memberCouponCount", memberCouponCount);
-			model.addAttribute("memberReviewCount", memberReviewCount);
-			model.addAttribute("memberQnaCount", memberQnaCount);
+			model.addAttribute("order_count", memberOrderCount);
+			model.addAttribute("coupon_count", memberCouponCount);
+			model.addAttribute("review_count", memberReviewCount);
+			model.addAttribute("qna_count", memberQnaCount);
 			
 			return "member/mypage";
 		}
 		
+	}
+	
+	// 회원 탈퇴
+	@GetMapping(value = "MemberWithdrawForm")
+	public String withdraw(
+			Model model,
+			HttpSession session
+			) {
+		
+		String id = (String)session.getAttribute("sId");
+
+		if(id == null || id.equals("")) { // 세션 아이디가 null 이거나 "" 일 때 쫓아내기
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			return "MemberLoginForm";
+		} else { // 세션 아이디 있을 경우
+			return "member/withdraw"; // 회원 탈퇴 폼으로 포워딩
+		}
 		
 	}
 	
+	@PostMapping(value = "MemberWithdrawPro")
+	public String withdrawPro(
+			@ModelAttribute MemberVO member,
+			Model model,
+			HttpSession session
+			) {
+		
+		String id = (String)session.getAttribute("sId");
+		
+		if(id == null || id.equals("")) { // 세션 아이디가 null 이거나 "" 일 경우
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			return "MemberLoginForm";
+		} else { // 세션 아이디 있을 경우
+			// 비밀번호 암호화
+			BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder(); // 객체 생성
+			String pass = service.getPass(id); // id 에 해당하는 암호화 비밀번호 가져오기
+
+			// 암호화 비밀번호 비교
+			if(pass == null || !passwdEncoder.matches(member.getMember_pass(), pass)) { // 불일치(id 에 해당하는 pass 없거나 pass 맞지 X)
+				model.addAttribute("msg", "비밀번호가 틀렸댕!");
+				return "fail_back"; // "fail_back.jsp" 포워딩
+			} else { // 비밀번호 일치
+				
+				member.setMember_id(id); // MemberVO 객체 아이디 저장
+				member.setMember_status("N"); // MemberVO 객체 회원 상태 "N" 으로 설정
+				
+				int updateCount = service.memberWithdraw(member); // 회원 탈퇴 작업 수행
+				
+				if(updateCount > 0) { // 탈퇴 작업 성공
+					session.invalidate(); // 모든 세션 초기화
+					return "redirect:MemberWithdrawResult"; // 탈퇴 결과 페이지 리다이렉트
+				} else { // 탈퇴 작업 실패
+					model.addAttribute("msg", "회원 탈퇴 실패했댕ㅠㅠ");
+					return "fail_back";
+				}
+				
+			}
+		}
+		
+	}
 	
-	
-	
-	
-	
+	@GetMapping(value = "MemberWithdrawResult")
+	public String withdrawResult() {
+		return "member/withdraw_result"; // 회원 탈퇴 결과 페이지 포워딩
+	}
 	
 	
 
