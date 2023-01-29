@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- mapper 태그 내에 namespace 속성 지정 후 Mapper 인터페이스 위치 지정 -->
+<mapper namespace="com.thisteam.dangdangeat.mapper.CartMapper">
+
+	<!-- 장바구니 목록 -->
+	<select id="selectCartList" resultType="com.thisteam.dangdangeat.vo.CartVO">
+		SELECT cart_amount, pro_name, pro_price, pro_real_thumb
+			FROM cart_product_view
+			WHERE member_id = #{member_id}
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
