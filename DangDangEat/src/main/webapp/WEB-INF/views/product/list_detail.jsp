@@ -8,19 +8,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" content="" />
 <meta name="author" content="" />
 <title>DangDangEAT - List_Detail</title>
 <!-- Favicon-->
-<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+<link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/resources/assets/favicon.ico" />
 <!-- Bootstrap icons-->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-	rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
 <!-- Core theme CSS (includes Bootstrap)-->
-<link href="css/styles.css" rel="stylesheet" />
+<link href="${pageContext.request.contextPath}/resources/css/styles.css" rel="stylesheet" />
 <!-- 부트스트랩 폰트 아이콘 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
@@ -168,7 +165,7 @@ body {
 <body>
 	<!-- Header-->
 	<!-- top.jsp -->
-	<jsp:include page="../inc/top.jsp" />
+		<jsp:include page="../inc/top.jsp" />
 	<!-- Product section-->
 	<section>
 		<div class="container px-4 px-lg-5 my-5">
@@ -180,8 +177,8 @@ body {
 <!-- 						onerror="this.src='./img/sample1_thumb.png';" /> -->
 <!-- 						alt="..." onerror= "this.src='./img/error_img.png'"/> -->
 						<img class="card-img-top"
-						src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/upload/${product.pro_real_thumb }"
-						alt="..." onerror="this.src='./img/sample1_thumb.png';" />
+						src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${product.pro_real_thumb }"
+						alt="..." onerror="this.src='${pageContext.request.contextPath}/resources/img/sample1_thumb.png';" />
 
 				</div>
 				<div class="col-md-6" id="productDIV">
@@ -286,8 +283,8 @@ body {
 <%-- 						src="http://localhost:8080/DangDangEat/upload/${product.pro_real_img }" --%>
 <!-- 						alt="..." onerror="this.src='./img/sample1_img.jpg';" /> -->
 						<img class="card-img-top"
-						src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/upload/${product.pro_real_img }"
-						alt="..." onerror="this.src='./img/sample1_thumb.png';" />
+						src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${product.pro_real_img }"
+						alt="..." onerror="this.src='${pageContext.request.contextPath}/resources/img/sample1_thumb.png';" />
 
 				</div>
 		</div>
@@ -509,6 +506,6 @@ body {
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 	<!-- Core theme JS-->
-	<script src="js/scripts.js"></script>
+	<script src="resources/js/scripts.js"></script>
 </body>
 </html>

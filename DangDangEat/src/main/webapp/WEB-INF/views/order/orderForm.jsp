@@ -63,7 +63,7 @@
  <jsp:include page="../inc/top.jsp"></jsp:include>
 <!--  <section> -->
   <main>
-  	<form action="OrderInsertPro.od" method="post">
+  	<form action="OrderInsertPro" method="post">
   		<!-- order_product 에 들어갈 정보 -->
   		<input type="hidden" name="cart_code" value="${param.cart_code }"> 
   		<input type="hidden" name="pro_code" value="${param.pro_code }">

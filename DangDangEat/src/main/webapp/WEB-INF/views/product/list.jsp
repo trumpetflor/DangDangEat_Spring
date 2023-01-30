@@ -6,16 +6,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
 <title>DangDangEAT - List</title>
-<link href="css/styles.css" rel="stylesheet" />
- <link rel="stylesheet" href="resources/css/bootstrap.min.css"
-	type="text/css">
-<link rel="stylesheet" href="resources/css/slicknav.min.css"
-	type="text/css">
-<link rel="stylesheet" href="resources/css/style.css" type="text/css">	
-
+<link href="${pageContext.request.contextPath}/resources/resources/css/styles.css" rel="stylesheet" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/resources/css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/resources/css/slicknav.min.css" type="text/css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/resources/css/style.css" type="text/css">	
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 <!-- Css Styles -->
 <!-- <link rel="stylesheet" href="resources/css/bootstrap.min.css"
@@ -88,7 +84,7 @@ body {
 
 
 </style>
-<script src="js/jquery-3.6.3.js"></script>
+<script src="resources/js/jquery-3.6.3.js"></script>
 <script>
 	//검색 기능 추가
 	function fn_search() {
@@ -197,8 +193,8 @@ body {
 													
 													<!-- [방법2] -->
 													<img class="card-img-top"
-													src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/upload/${product.pro_real_thumb }"
-													alt="..." onerror="this.src='./img/sample1_thumb.png';" />
+													src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/resources/upload/${product.pro_real_thumb }"
+													alt="..." onerror="this.src='${pageContext.request.contextPath}/resources/img/sample1_thumb.png';" />
 												</a>
 											</div>
 											<div class="product__item__text">

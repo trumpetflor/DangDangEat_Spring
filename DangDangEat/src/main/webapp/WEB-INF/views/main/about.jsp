@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
-<link href="css/styles.css" rel="stylesheet" />
+<link href="${pageContext.request.contextPath}/resources/css/styles.css" rel="stylesheet" />
 <link rel="stylesheet" 	href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script	src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
@@ -57,7 +57,7 @@ body {
 			<div class="row justify-content-center" style="margin-bottom: 20px;">
 				<div class="col-lg-8">
 					<h1 class="mb-2" style="text-align: center;font-style: oblique;">
-					<img src="img/dog_logo.png" width="50px" height="50px" style="margin-bottom: 20px;">&nbsp;모든 동물들의 더 나은 내일을 만듭니다</h1>
+					<img src="${pageContext.request.contextPath}/resources/img/dog_logo.png" width="50px" height="50px" style="margin-bottom: 20px;">&nbsp;모든 동물들의 더 나은 내일을 만듭니다</h1>
 					<br>
 					<h3 style="font-weight: 900;color: #4c8e5f; text-align: center;">#For Better Life</h3><br>
 					<p class="lead" style="text-align: center; ">	올바른 반려 문화를 만들기 위해, 더 의식 있는 <b style="font-weight: bold;">'브랜드'</b>와 <b style="font-weight: bold;">'서비스'</b>를 제공합니다 </p>
@@ -99,7 +99,7 @@ body {
 						<i class="icon-Guard fs-40 mb-2"></i>
 						<h4 class="eyebrow d-block">반려동물 제품도 브랜드를 말하다</h4>
 						<p>국내 대표 브랜드 커머스 플랫폼</p>
-						<img src="img/circle_1.png" width="150px" height="150px" style="border-radius: 100%;margin-bottom: 20px;">
+						<img src="${pageContext.request.contextPath}/resources/img/circle_1.png" width="150px" height="150px" style="border-radius: 100%;margin-bottom: 20px;">
 					</div>
 				</div>
 				<div class="col-md-4">
@@ -107,7 +107,7 @@ body {
 						<i class="icon-Truck fs-40 mb-2"></i>
 						<h4 class="eyebrow d-block">편리한 댕댕잇 자체 배송</h4>
 						<p>더욱더 안전한 배송 시스템</p>
-						<img src="img/circle_2.png" width="150px" height="150px" style="border-radius: 100%;margin-bottom: 20px;">
+						<img src="${pageContext.request.contextPath}/resources/img/circle_2.png" width="150px" height="150px" style="border-radius: 100%;margin-bottom: 20px;">
 					</div>
 				</div>
 				<div class="col-md-4">
@@ -115,7 +115,7 @@ body {
 						<i class="icon-Money---Alt fs-40 mb-2"></i>
 						<h4 class="eyebrow d-block">지구와 환경을 사랑하는 마음, 가득담아</h4>
 						<p>지구와 환경에 이로운 방법을 고민합니다</p>
-						<img src="img/circle_3.jpeg" width="150px" height="150px" style="border-radius: 100%;margin-bottom: 20px;">
+						<img src="${pageContext.request.contextPath}/resources/img/circle_3.jpeg" width="150px" height="150px" style="border-radius: 100%;margin-bottom: 20px;">
 						
 					</div>
 				</div>
@@ -139,7 +139,7 @@ body {
 	<!-- numbers -->
 	<section style="padding: 20px; padding-bottom: 60px;background-color: #f4f4f4;">
 		<div class="container-center">
-			 <input type="image" src="img/team_member_info.png" class="rounded mx-auto d-block" width="700px">
+			 <input type="image" src="${pageContext.request.contextPath}/resources/img/team_member_info.png" class="rounded mx-auto d-block" width="700px">
 		</div>
 	</section>
 
