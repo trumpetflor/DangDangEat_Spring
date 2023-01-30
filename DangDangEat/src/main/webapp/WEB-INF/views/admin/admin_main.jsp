@@ -133,7 +133,7 @@ body {
             <!-- Nav Item - Dashboard -->
 
             <li class="nav-item active">
-                <a class="nav-link" href="AdminMain.ad">
+                <a class="nav-link" href="AdminMain">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>관리자 메인 페이지</span></a>
             </li>
@@ -150,7 +150,7 @@ body {
 
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminProductList.ad">
+                <a class="nav-link" href="AdminProductList">
                     <i class="fas fa-fw fa-calendar"></i>
                     <span>상품 관리</span></a>
             </li>

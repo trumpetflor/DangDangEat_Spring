@@ -39,6 +39,11 @@ public class AdminController {
 		return "main/about";
 	}
 
+	//관리자페이지(상품관리)
+	@GetMapping(value = "/AdminProductList")
+	public String adminProductList() {
+		return "admin/admin_product";
+	}	
 	
 
 // ============================================== jakyoung ================================================
