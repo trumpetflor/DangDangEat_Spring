@@ -71,7 +71,7 @@ public class CartController {
 	}
 	
 	// 위시리스트 삭제
-	@PostMapping(value = "CartDelete")
+	@PostMapping(value = "WishlistDelete")
 	public String wishlistDelete() {
 		
 		return "redirect:/WishlistDetail";

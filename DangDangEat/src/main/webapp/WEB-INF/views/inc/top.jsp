@@ -234,8 +234,8 @@ header > div {
 
   <div class="div-top-icon">
     <ul class="ul-top-icon">
-        <li><a href="WishlistDetail.ct"><img class="top-icon" src="${pageContext.request.contextPath}/resources/img/heart.png"></a></li>
-        <li><a href="CartList.ct"><img class="top-icon" src="${pageContext.request.contextPath}/resources/img/shopping-cart.png"></a></li>
+        <li><a href="WishlistDetail"><img class="top-icon" src="${pageContext.request.contextPath}/resources/img/heart.png"></a></li>
+        <li><a href="CartList"><img class="top-icon" src="${pageContext.request.contextPath}/resources/img/shopping-cart.png"></a></li>
         <li><a href="MyPage"><img class="top-icon" src="${pageContext.request.contextPath}/resources/img/dog.png"></a></li>
     </ul>
 </div>

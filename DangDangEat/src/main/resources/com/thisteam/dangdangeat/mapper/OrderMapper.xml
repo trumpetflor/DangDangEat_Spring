@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- mapper 태그 내에 namespace 속성 지정 후 Mapper 인터페이스 위치 지정 -->
-<mapper namespace="com.itwillbs.mvc_board.mapper.MemberMapper">
+<mapper namespace="com.thisteam.dangdangeat.mapper.OrderMapper">
 	
 	<!--               주문/결제 작업                -->
 	
