@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- mapper 태그 내에 namespace 속성 지정 후 Mapper 인터페이스 위치 지정 -->
+<mapper namespace="com.itwillbs.mvc_board.mapper.MemberMapper">
+	
+	<!--               주문/결제 작업                -->
+	
+	<!--  1-(1). 주문서에 회원의 정보를 가져오는 메서드 -->
+	<select id="selectMemberList" resultType="com.thisteam.dangdangeat.vo.MemberVO">
+		SELECT *
+		 	FROM member 
+		 	WHERE member_id = ${id}
+	</select>
+	<!--  1-(2). 주문서에 장바구니 결제 상품 정보를 가져오는 메서드 -->
+	<select id="selectCartList" resultType="com.thisteam.dangdangeat.vo.CartVO">
+		SELECT * 
+			FROM cart_product_view
+			WHERE
+				cart_code = ${cartCode}
+				AND member_id = ${id}
+				AND pro_code = ${proCode} 
+	</select>
+	
+	<!-- 2-(1)-1. 카트번호가 중복되는 주문상품 조회 구문 -->
+	<select id="selectCartOrder" resultType="integer">
+		SELECT *
+			FROM order_product 
+			WHERE cart_code = ${cartCode}
+	</select>
+	
+	<!-- 2-(1)-2. 카트번호가 중복되는 주문상품 삭제 구문 - 1 -->
+	<delete id="deleteCartOrder">
+		DELETE 
+			FROM order_product
+			WHERE order_code 
+				IN 
+				 (SELECT order_code 
+				 	FROM orders
+				 	WHERE order_status = 0)	 
+	</delete>
+	
+	<!-- 2-(1)-2. 카트번호가 중복되는 주문상품 삭제 구문 - 2 -->
+	<delete id="deleteOrderStatusEqZero">
+		DELETE 
+			FROM orders
+			WHERE order_status = 0 	 
+	</delete>
+	
+	<!-- 2-(1). 주문자 정보 등록 구문 (orders) -->
+	<insert id="insertOrder">
+		<selectKey keyProperty="order_code" resultType="integer" order="BEFORE">
+			SELECT MAX(order_code)
+				FROM orders 
+		</selectKey>
+		INSERT 
+			INTO board
+			VALUES (
+				#{order_code}
+				, #{member_id}
+				, #{order_name}
+				, #{order_postcode}
+				, #{order_address1}
+				, #{order_address2}
+				, #{order_mobile}
+				, #{order_comment}
+				,0
+				,now()			
+			)
+	</insert>
+	
+	<!-- 2-(1). 주문상품 등록 구문 (order_product) -->
+	<insert id="insertOrderProduct">
+		INSERT
+			INTO order_product 
+				(order_code, pro_code, order_stock, cart_code)
+				SELECT o.order_code, c.pro_code, c.cart_amount, c.cart_code
+					FROM orders o NATURAL JOIN cart c
+					WHERE c.cart_code = ${cartCode} 
+						AND o.order_code = ${order.order_code}
+	</insert>
+	
+	<!-- 2-(2). 주문자 정보 리스트 (출력용) -->
+	<select id="selectOrderMemberList" resultType="com.thisteam.dangdangeat.vo.OrdersBeanVO">
+		SELECT *
+			FROM orders 
+			WHERE order_code = (SELECT order_code 
+									FROM order_product
+									WHERE cart_code = ${cartCode} 
+										AND member_id = ${id})
+	</select>
+	
+	<!-- 2-(3). 주문상품 정보 리스트 (출력용) -->
+	<select id="selectOrderProductList" resultType="com.thisteam.dangdangeat.vo.CartProductVO">
+		SELECT *
+			FROM cart_product_view
+			WHERE member_id = ${id} 
+				AND cart_code = ${cartCode}
+	</select>
+	
+	<!-- 3. 결제 페이지 : 쿠폰 페이지에서 받아온 쿠폰 코드로 할인금액 계산 -->
+	<select id="selectCouponDiscountPrice" resultType="integer">
+		SELECT TRUNCATE (((pro_price * cart_amount) * 
+	 		(SELECT cp_discount_value 
+	 			FROM coupon 
+	 			WHERE cp_code = ${cpCode}) / 100 ), 0)
+		 	FROM cart_product_view WHERE cart_code = ${cartCode}
+		 	<if test="">
+		 		SELECT cp_max_discount 
+		 			FROM coupon
+		 			WHERE cp_code = ${cpCode}
+		 	</if>
+	</select>
+	
+	<!-- 3. 결제 페이지 : 최대 할인금액 계산 -->
+	<select id="selectCouponMaxDiscountPrice" resultType="integer">
+		SELECT cp_max_discount 
+ 			FROM coupon
+ 			WHERE cp_code = ${cpCode}
+	</select>
+	
+	<!--               주문/결제 작업                -->
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
