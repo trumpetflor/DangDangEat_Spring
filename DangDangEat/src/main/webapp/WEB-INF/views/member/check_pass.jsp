@@ -16,28 +16,28 @@
 
 <%
 // 세션 아이디가 null 이거나 "" 일 경우 "로그인이 필요한 페이지입니다." 출력 후 로그인 페이지로 이동
-String sId = (String)session.getAttribute("sId");
+// String sId = (String)session.getAttribute("sId");
 // System.out.println(sId);
 // 잘못된 접근일 때 바로 로 보내기
-if(sId == null || sId.equals("")) {
+// if(sId == null || sId.equals("")) {
 		%>
 <script>
-		alert("로그인이 필요한 페이지입니다.");
-		location.href="MemberLoginForm.me";
+// 		alert("로그인이 필요한 페이지입니다.");
+// 		location.href="MemberLoginForm.me";
 		</script>
 <%
-}
+// }
 %>
 
 <!-- Custom fonts for this template-->
-<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
+<link href="${pageContext.request.contextPath}/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
 	type="text/css">
 <link
 	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
 	rel="stylesheet">
 
 <!-- Custom styles for this template-->
-<link href="css/sb-admin-2.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
 <style type="text/css">
 @font-face {
@@ -80,9 +80,9 @@ body {
 										<h1 class="h4 text-gray-900 mb-2">Password 확인</h1>
 										<p class="mb-4">비밀번호를 한 번 더 입력해주시개</p>
 									</div>
-									<form class="user" action="MemberCheckPro.me" method="post">
+									<form class="user" action="MemberCheckPro" method="post">
 										<div class="form-group">
-											<input type="password" name="pass"
+											<input type="password" name="member_pass"
 												class="form-control form-control-user"
 												id="exampleInputEmail" aria-describedby="emailHelp"
 												placeholder="Password">
@@ -92,7 +92,7 @@ body {
 									</form>
 									<hr>
 									<div class="text-center">
-										<a class="small" href="MemberFindPassForm.me">비밀번호를 잊으셨나요?</a>
+										<a class="small" href="MemberFindPassForm">비밀번호를 잊으셨나요?</a>
 									</div>
 								</div>
 							</div>
@@ -107,14 +107,14 @@ body {
 	</div>
 
 	<!-- Bootstrap core JavaScript-->
-	<script src="vendor/jquery/jquery.min.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendor/jquery/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 	<!-- Core plugin JavaScript-->
-	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 	<!-- Custom scripts for all pages-->
-	<script src="js/sb-admin-2.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/sb-admin-2.min.js"></script>
 
 	<!-- Footer-->
 	<footer class="py-5 bg-dark">

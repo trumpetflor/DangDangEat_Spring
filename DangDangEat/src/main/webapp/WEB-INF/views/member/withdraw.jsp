@@ -15,14 +15,14 @@
 <title>DangDangEAT - Withdraw</title>
 
 <!-- Custom fonts for this template-->
-<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
+<link href="${pageContext.request.contextPath}/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
 	type="text/css">
 <link
 	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
 	rel="stylesheet">
 
 <!-- Custom styles for this template-->
-<link href="css/sb-admin-2.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
 <style type="text/css">
 @font-face {
@@ -38,19 +38,6 @@ body {
 	font-family: "GmarketSansMedium";
 }
 </style>
-<%
-// 세션 아이디가 null 이거나 "" 일 경우 "로그인이 필요한 페이지입니다." 출력 후 로그인 페이지로 이동
-String sId = (String)session.getAttribute("sId");
-// System.out.println(sId);
-if(sId == null || sId.equals("")) {
-		%>
-<script>
-		alert("로그인이 필요한 페이지입니다.");
-		location.href="MemberLoginForm.me";
-		</script>
-<%
-}
-%>
 
 </head>
 
@@ -80,9 +67,9 @@ if(sId == null || sId.equals("")) {
 											정말.... 탈퇴하실 건가요...??? <br> 정말로...? 휴... 슬프다..
 										</p>
 									</div>
-									<form class="user" action="MemberWithdrawPro.me" method="post">
+									<form class="user" action="MemberWithdrawPro" method="post">
 										<div class="form-group">
-											<input type="password" name="pass"
+											<input type="password" name="member_pass"
 												class="form-control form-control-user"
 												id="exampleInputEmail" aria-describedby="emailHelp"
 												placeholder="Password">
@@ -112,19 +99,19 @@ if(sId == null || sId.equals("")) {
 	<footer class="py-5 bg-dark">
 		<div class="container">
 			<p class="m-0 text-center text-white">Copyright &copy;
-				DangDangEat 2023</p>
+				DangDangEat 2023</p> 
 		</div>
 	</footer>
 
 	<!-- Bootstrap core JavaScript-->
-	<script src="vendor/jquery/jquery.min.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendor/jquery/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 	<!-- Core plugin JavaScript-->
-	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 	<!-- Custom scripts for all pages-->
-	<script src="js/sb-admin-2.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/sb-admin-2.min.js"></script>
 
 </body>
 
