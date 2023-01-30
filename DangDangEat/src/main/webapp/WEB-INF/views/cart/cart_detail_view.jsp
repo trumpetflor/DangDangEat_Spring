@@ -1,5 +1,3 @@
-<%@page import="vo.cart_wish_proBean"%>
-<%@page import="vo.CartBean"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -118,7 +116,7 @@ $(function() {
 </head>
 <body>
 	<!-- Login, Join 링크 표시 영역 -->
-	<jsp:include page="/inc/top.jsp"></jsp:include>
+	<jsp:include page="../inc/top.jsp"></jsp:include>
 	<!-- 장바구니 번호, 사진(대표이미지), 상품명, 사이즈,색상,수량,가격, 삭제 -->
 	<div id="id">${sessionScope.sId }님의 장바구니</div>
 	<div class="container">
