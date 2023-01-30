@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>쿠폰 적용</title>
-  	 <link href="css/styles.css" rel="stylesheet" />
+  	 <link href="resources/css/styles.css" rel="stylesheet" />
    	 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
   	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  	 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
@@ -24,14 +24,14 @@ body {
 }
 </style>
 </head>
-<% if(session.getAttribute("sId") == null){%>
+<%-- <% if(session.getAttribute("sId") == null){%> --%>
 
  <script type="text/javascript">
- alert("잘못된 접근입니다.");
- location.href="MemberLoginForm.me";
+//  alert("잘못된 접근입니다.");
+//  location.href="MemberLoginForm.me";
  </script>
 
-<% }%>
+<%-- <% }%> --%>
 
 
 <script type="text/javascript">
@@ -62,7 +62,7 @@ $(function(){
 	
 		$.ajax({//자동등록된 쿠폰(생일쿠폰,회원가입쿠폰) 있는지 확인
 			type: "get",
-			url: "SearchUsableCoupon.od",
+			url: "SearchUsableCoupon.ajax",
 			dataType: "json",
 			contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 
@@ -145,7 +145,7 @@ $(function(){
 	
 			$.ajax({
 				type: "get",
-				url: "SearchCouponCode.od",
+				url: "SearchCouponCode.ajax",
 				dataType: "json",
 				data: {"cp_code": $("#search_coupon_code").val()}
 				

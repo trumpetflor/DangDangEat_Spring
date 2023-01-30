@@ -38,7 +38,7 @@ public class MemberVO {
 	private String member_admin;
 	private String member_status;
 	private String member_authStatus;
-	
+
 	public String getMember_id() {
 		return member_id;
 	}

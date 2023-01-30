@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- mapper 태그 내에 namespace 속성 지정 후 Mapper 인터페이스 위치 지정 -->
+<mapper namespace="com.thisteam.dangdangeat.mapper.CouponMapper">
+
+
+<!--
+	com.thisteam.dangdangeat.vo.CouponVO
+	
+	private String cp_code ;//쿠폰코드(PK)
+	private String cp_name;//할인코드명
+	private Cp_target cp_target;//타켓(birth, new_member, event )
+	private int cp_discount_value; //할인율(%)
+	private String cp_startdate;//쿠폰시작일:  쿠폰시작일(YYYY-MM-DD): birth, new_member는 null
+	private int cp_period;//유효기간
+	private int cp_min_price;//최소구매액
+	private int cp_max_discount;//최대할인금액
+	private int cp_status; //관리자가 (0 삭제 , 1 존재) 
+	
+	=> keyProperty 속성 : 조회 데이터를 저장할 VO 객체의 실제 변수명 => 주의!!!!
+	                      (나중에 #{변수명} 으로 사용 가능)
+	=> resultType 속성 : SELECT 구문 실행 시 기대되는 조회 결과(리턴값)의 타입
+	                     (integer(int), string 등)
+	=> order 속성 : 해당 SELECT 구문 실행할 시점
+	                1) BEFORE : INSERT 구문 실행 전 SELECT 구문 실행
+	                2) AFTER : INSERT 구문 실행 후 SELECT 구문 실행
+	
+	-->
+	
+
+    <insert id="insertCoupon">
+        INSERT INTO coupon values(
+        	#{cp_code} -- 쿠폰코드
+        	, #{cp_name} -- 쿠폰명
+        	, #{cp_target.name()} -- enum인데 이런식으로 사용 가능한가?
+        	, #{cp_discount_value} -- 할인율
+        	
+        <choose> <!-- 자동발행쿠폰일 경우 시작일 널스트링 -->
+        	<when test="${cp_target.name() == new_member || cp_target.name() == birth">
+        	, "" -- 시작일 널스트링으로 비워둠
+        	</when>
+        	<otherwise>
+        	, #{cp_startdate} -- 쿠폰 시작일
+        	</otherwise>
+        </choose>
+		   	, #{cp_period} -- 기간
+        	, #{cp_min_price} -- 최소구매액
+        	, #{cp_max_discount} -- 최대할인금액
+        	, 1 -- 쿠폰상태(default 1, / 삭제시 0)
+        )
+
+    </insert>
+    
+    <!-- 쿠폰 수정 -->
+    <update id="updateCoupon">
+    	UPDATE coupon 
+    		 SET cp_name = #{cp_name}
+						,cp_period = #{cp_period}
+						,cp_min_price =  #{cp_min_price}
+						,cp_max_discount = #{cp_max_discount}
+			 WHERE cp_code = #{cp_code}
+    </update>
+    
+    
+    <!-- 쿠폰 삭제 -->
+    <update id="deleteCoupon">
+    	UPDATE coupon 
+    		 SET cp_status = 0
+			 WHERE cp_code = #{cp_code}
+    </update>
+    
+	<!-- 관리자페이지 쿠폰 개수 조회 (ajax)-->
+	<select id="selectCouponCount" resultType="int">
+	SELECT count(cp_code) 
+	FROM coupon_view 
+		WHERE cp_status = 1 
+			 AND ((cp_current_st = 1 AND cp_target ='event') 
+			 OR (cp_target IN('new_member','birth')))
+	</select>
+
+
+	
+	
+	<!-- mc_view 에서 존재하는 쿠폰 있는지 검색(자동발급이나 등록 후 사용하지않은 쿠폰)-->
+	<!-- 나중에 수정할 것 : 결제단계에서 모두 사용완료 처리 후 여기서는 쿠폰 사용 내역이 없을 경우의 코드만 실행되도록 할 것 -->
+	<!-- 1. 생일쿠폰 사용유무 업데이트 -->
+<!-- 	<update id="updateBirthCp"> -->
+		<!-- 1-1) 쿠폰 사용 내역 조회 -->
+<!-- 		<selectKey keyProperty="code" resultType="HashMap" order="BEFORE">  -->
+<!-- 				SELECT p.cp_code  -->
+<!-- 				FROM orders o , payments p , mc_view mc  -->
+<!-- 						WHERE o.order_code = p.order_code  -->
+<!-- 					     	AND mc.cp_code = p.cp_code  -->
+<!-- 							AND o.order_status = 1  -->
+<!-- 							AND mc.cp_target = 'birth'  -->
+<!-- 							AND o.order_date BETWEEN mc.target_sd AND mc.target_ed  -->
+<!-- 							AND o.member_id = #{id} -->
+<!-- 		</selectKey> -->
+<!-- 		<choose> -->
+<!-- 			 1-2) 쿠폰 사용 내역이 있을 경우--> 
+<!-- 			<when test="${code != null}"> -->
+<!-- 				<foreach collection="code" item="code" index="i"> -->
+<!-- 					UPDATE member_coupon  -->
+<!-- 						SET mc_used = 'Y'   -->
+<!-- 						WHERE member_id = #{id} AND  cp_code = #{code.get(i)}  -->
+<!-- 				</foreach> -->
+<!-- 			</when> -->
+<!-- 			 1-3) 쿠폰 사용 내역이 없을 경우--> 
+<!-- 			<otherwise> -->
+<!-- 				UPDATE member_coupon  -->
+<!-- 					SET mc_used = 'N'   -->
+<!-- 					WHERE member_id = #{id}  -->
+<!-- 					AND  cp_code IN -->
+<!-- 								(SELECT cp_code  -->
+<!-- 								 FROM mc_view  -->
+<!-- 									WHERE cp_status = 1  -->
+<!-- 									AND cp_target = 'birth'  -->
+<!-- 									AND member_id = #{id} ) -->
+<!-- 			</otherwise> -->
+<!-- 		</choose> -->
+<!-- 	</update> -->
+	
+	
+	
+	<select id="selectMemberCoupon" resultType="HashMap">
+		SELECT * 
+		FROM mc_view 
+			WHERE  member_id = #{id}
+			 AND   cp_status = 1  AND  mc_stat = 1 AND mc_used = 'N' 
+		
+	</select>
+	
+	
+	<select id="selectCouponCode" resultType="String">
+		SELECT cp_code 
+		FROM coupon 
+			WHERE cp_code = #{cp_code}
+	</select>
+	
+	<!-- 쿠폰 검색버튼 -->
+	<select id="selectCouponCodebyUser" resultType="String">
+		SELECT cp_code  
+	  	FROM coupon_view 
+			 WHERE cp_current_st = 1 -- 만료되지않고
+				 AND cp_code = #{cp_code}
+				 AND cp_target = 'event' -- 관리자등록쿠폰이며
+  				 AND cp_status = 1  -- 삭제되지않은 쿠폰
+	</select>
+	
+	<insert id="InsertCouponCodeToMemCp" >
+		 <selectKey keyProperty="coupon" order="BEFORE">
+			 SELECT  cp_code 
+			 FROM mc_view 
+				WHERE member_id =  #{id} 
+				AND cp_code = #{cp_code}
+		 </selectKey>
+		 <if test="${coupon} != null ">
+			 INSERT INTO member_coupon VALUES ( #{id} ,  #{cp_code} , 'N')
+		 </if>
+	</insert>
+
+</mapper>
