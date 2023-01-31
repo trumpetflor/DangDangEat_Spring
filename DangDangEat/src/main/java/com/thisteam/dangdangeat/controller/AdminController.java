@@ -24,7 +24,9 @@ public class AdminController {
 
 	@Autowired
 	private AdminService service;
+	@Autowired
 	private OrderService odService;
+	@Autowired
 	private ProductService poService;
 
 	// ============================================== yeram ================================================
@@ -60,11 +62,12 @@ public class AdminController {
 		
 		// Service 객체의 getProductList() 메서드를 호출하여 게시물 목록 조회
 		// => 파라미터 : 검색어, 카테고리, 시작행번호, 목록갯수   리턴타입 : List<ProductBean>(ProductList)
+		System.out.println("keyword==="+keyword);
+		System.out.println("category==="+category);
+		System.out.println("startRow==="+startRow);
+		System.out.println("listLimit==="+listLimit);
 		List<ProductVO> productList = poService.getProductList(keyword, category, startRow, listLimit);
-		System.out.println(keyword);
-		System.out.println(category);
-		System.out.println(startRow);
-		System.out.println(listLimit);
+
 		
 		// ---------------------------------------------------------------------------
 		// 페이징 처리 
