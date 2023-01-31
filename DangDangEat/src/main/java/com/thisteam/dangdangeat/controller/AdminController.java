@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.thisteam.dangdangeat.service.AdminService;
 import com.thisteam.dangdangeat.service.OrderService;
+import com.thisteam.dangdangeat.service.ProductService;
 import com.thisteam.dangdangeat.vo.MemberVO;
+import com.thisteam.dangdangeat.vo.PageInfo;
+import com.thisteam.dangdangeat.vo.ProductVO;
 
 
 @Controller
@@ -22,6 +25,7 @@ public class AdminController {
 	@Autowired
 	private AdminService service;
 	private OrderService odService;
+	private ProductService poService;
 
 	// ============================================== yeram ================================================
 	
@@ -41,9 +45,63 @@ public class AdminController {
 
 	//관리자페이지(상품관리)
 	@GetMapping(value = "/AdminProductList")
-	public String adminProductList() {
+	public String ProductList(
+			@RequestParam(defaultValue = "") String category,
+			@RequestParam(defaultValue = "") String keyword,
+			@RequestParam(defaultValue = "1") int pageNum,
+			Model model) {
+	
+		// ---------------------------------------------------------------------------
+		// 페이징 처리를 위한 변수 선언
+		int listLimit = -1; // 전체 검색을 위해 -1로 값을 설정함! 
+		int startRow = (pageNum - 1) * listLimit; // 현재 페이지 번호 설정(pageNum 파라미터 사용)
+		
+//		System.out.println(startRow);
+		
+		// Service 객체의 getProductList() 메서드를 호출하여 게시물 목록 조회
+		// => 파라미터 : 검색어, 카테고리, 시작행번호, 목록갯수   리턴타입 : List<ProductBean>(ProductList)
+		List<ProductVO> productList = poService.getProductList(keyword, category, startRow, listLimit);
+		System.out.println(keyword);
+		System.out.println(category);
+		System.out.println(startRow);
+		System.out.println(listLimit);
+		
+		// ---------------------------------------------------------------------------
+		// 페이징 처리 
+		//1. 한 페이지에서 표시할 페이지 목록(번호) 갯수 계산
+		//=> 파라미터 : 검색타입, 검색어   리턴타입 : int(listCount)
+		int listCount = poService.getProductListCount(keyword,category);
+		
+		// 2. 한 페이지에서 표시할 페이지 목록 갯수 설정 (페이지 번들의 갯수)
+		int pageListLimit = 10; // 한 페이지에서 표시할 페이지 목록을 10개로 제한	
+		
+		// 3. 전체 페이지 목록 수 계산
+		int maxPage = listCount / listLimit 
+						+ (listCount % listLimit == 0 ? 0 : 1); 
+		
+		// 4. 시작 페이지 번호 계산
+		int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+		
+		// 5. 끝 페이지 번호 계산
+		int endPage = startPage + pageListLimit - 1;
+		
+		// 6. 만약, 끝 페이지 번호(endPage)가 전체(최대) 페이지 번호(maxPage) 보다
+		//    클 경우, 끝 페이지 번호를 최대 페이지 번호로 교체
+		if(endPage > maxPage) {
+			endPage = maxPage;
+		}
+		
+		// PageInfo 객체 생성 후 페이징 처리 정보 저장
+		PageInfo pageInfo = new PageInfo(listCount, pageListLimit, maxPage, startPage, endPage);		
+		
+		// 상품리스트 객체(productList) 와 페이징 정보 객체(pageInfo)를 Model 객체에 저장
+		model.addAttribute("productList", productList);
+		model.addAttribute("pageInfo", pageInfo);
+		model.addAttribute("category", category);
+		
 		return "admin/admin_product";
-	}	
+		
+	}
 	
 
 // ============================================== jakyoung ================================================

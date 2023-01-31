@@ -31,8 +31,10 @@
 					AND cate_code LIKE '%${category}%'
 				ORDER BY
 					pro_code DESC
-				LIMIT 
+					<if test="listLimit > 0">
+				LIMIT  
 					#{startRow} , #{listLimit} 
+					</if>
 	</select>
 
 	<!-- 전체 상품 수 조회하는 select 태그 -->
