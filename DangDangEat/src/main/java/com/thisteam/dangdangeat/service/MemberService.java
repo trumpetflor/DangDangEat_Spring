@@ -53,6 +53,16 @@ public class MemberService {
 		return mapper.updateMember(member);
 	}
 	
+	// 회원 아이디 중복 체크
+	public String idCheck(String id) {
+		return mapper.selectidCheck(id);
+	}
+	
+	// 회원 이메일 중복 체크
+	public String emailCheck(String email) {
+		return mapper.selectEmailCheck(email);
+	}
+	
 	
 
 }
