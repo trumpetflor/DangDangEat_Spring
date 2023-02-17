@@ -227,7 +227,7 @@ header > div {
 			<c:otherwise>
 			<%-- 로그인 상태가 아닐 경우 Login, Join 링크 표시 --%>
 				<a href="MemberLoginForm">Login</a>		
-				| <a href="MemberJoinForm.me">Join</a>
+				| <a href="MemberJoinForm">Join</a>
 			</c:otherwise>
 		</c:choose>
   </div>

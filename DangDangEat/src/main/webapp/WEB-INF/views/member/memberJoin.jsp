@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link href="css/styles.css" rel="stylesheet" /> 
+<link href="resources/css/styles.css" rel="stylesheet" /> 
 <title>DangDangEat - Join</title>
 <title>DangDangEAT - Member Join</title>
 <style type="text/css">
@@ -176,7 +176,7 @@ input::placeholder  {
 /*     }  */
 /*  }  */
 </style>
-<script src="js/jquery-3.6.3.js"></script>
+<script src="resources/js/jquery-3.6.3.js"></script>
 <script type="text/javascript">
 //확인용 전역변수
 var idResult = false;
@@ -200,10 +200,10 @@ var emailResult = false;
 			} else {
 				//// ID 중복체크 ////
 				$.ajax({
-					url: "MemberIdCheck.me",
+					url: "MemberIdCheck",
 					data: { id: $("#id").val()},
 					success: function(result) {
-						$("#checkId").html(result);
+						$("#checkId").html(result).css("color","red");
 						
 						if(result == "true") {
 							$("#checkId").html("아이디 중복이다멍").css("color","red");
@@ -287,16 +287,15 @@ var emailResult = false;
 			if(email == "") {
 				$("#checkEmail").html("필수 입력").css("color","red");
 				emailResult = false;
-				
 			} else {
 				//// Email 중복체크 ////
 				$.ajax({
-					url: "MemberEmailCheck.me",
+					url: "MemberEmailCheck",
 					data: { email: $("#email").val()},
 					success: function(result) {
 						$("#checkEmail").html(result);
 						
-						if(result == "true") {
+						if(result) {
 							$("#checkEmail").html("이미 사용중인 이메일 이다멍!").css("color","red");
 							emailResult = false;
 						} else {
@@ -401,20 +400,20 @@ var emailResult = false;
 </head>
 
 <body>
-<form action="MemberJoin.me" method="post">
+<form action="MemberJoin" method="post">
 	<div class="member">
         <!--  로고 -->
-        <a href="http://localhost:8080/DangDangEat/"><img class="logo" src="img/logo3.png"></a>
+        <a href="http://localhost:8080/DangDangEat/"><img class="logo" src="resources/img/logo3.png"></a>
 
         <!--  필드 -->
         <div class="field">
             <b>아이디</b>
-            <span class="placehold-text"><input type="text" name="id" id="id" required="required" placeholder="5~14자 대,소문자 숫자 사용가능"></span>
+            <span class="placehold-text"><input type="text" name="member_id" id="id" required="required" placeholder="5~14자 대,소문자 숫자 사용가능"></span>
             <span id="checkId"></span>
         </div>
         <div class="field">
             <b>비밀번호</b>
-            <input class="userpw" type="password" name="passwd" id="passwd" placeholder="8~16자 대,소문자 숫자 특수문자(!@#$%) 조합">
+            <input class="userpw" type="password" name="member_pass" id="passwd" placeholder="8~16자 대,소문자 숫자 특수문자(!@#$%) 조합">
             <span id="checkPw"></span>
         </div>
         <div class="field">
@@ -424,7 +423,7 @@ var emailResult = false;
         </div>
         <div class="field">
             <b>이름</b>
-            <input type="text" name="name" id="name" required="required" placeholder="2~10자 한글 입력해주세요">
+            <input type="text" name="member_name" id="name" required="required" placeholder="2~10자 한글 입력해주세요">
             <span id="checkName"></span>
         </div>
 
@@ -432,25 +431,25 @@ var emailResult = false;
         <!--  이메일_전화번호 -->
         <div class="field">
             <b>이메일</b>
-            <input type="email" placeholder="인증메일이 발송될 이메일입니다." name="email" id="email" required="required">
+            <input type="email" placeholder="인증메일이 발송될 이메일입니다." name="member_email" id="email" required="required">
             <span id="checkEmail"></span>
         </div>
         
         <div class="field tel-number">
             <b>휴대전화</b>
             <div>
-                <input type="text" placeholder="숫자만 입력해주세요." name="mobile">
+                <input type="text" placeholder="숫자만 입력해주세요." name="member_mobile">
             </div>
         </div>
         <!-- 주소 -->
         <div class="field tel-number">
             <b>주소</b>
             <div>
-                <input type="text" placeholder="우편 번호" name="postcode" id="postcode">
+                <input type="text" placeholder="우편 번호" name="member_postcode" id="postcode">
                 <input type="button" value="주소 검색" onclick="kakaoAddr()">
             </div>
-            <input type="text" placeholder="주소 입력" name="addr1" id="addr1">
-            <input type="text" placeholder="상세주소 입력" name="addr2">
+            <input type="text" placeholder="주소 입력" name="member_addr1" id="addr1">
+            <input type="text" placeholder="상세주소 입력" name="member_addr2">
             
         </div>
         

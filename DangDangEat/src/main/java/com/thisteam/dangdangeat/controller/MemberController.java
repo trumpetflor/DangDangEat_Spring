@@ -1,9 +1,21 @@
 package com.thisteam.dangdangeat.controller;
 
 
-import javax.servlet.http.HttpSession;
 
+import java.sql.Date;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.PageContext;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.stereotype.Controller;
@@ -12,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thisteam.dangdangeat.service.MemberService;
 import com.thisteam.dangdangeat.vo.MemberVO;
@@ -23,9 +36,91 @@ public class MemberController {
 
 	@Autowired
 	private MemberService service;
+	
+	@Autowired
+	private JavaMailSender mailSender;
+	
+	// 회원가입 페이지
+	@GetMapping(value = "/MemberJoinForm")
+	public String join() {
+		return "member/memberJoin";
+	}
 
-
-
+	// 아이디 중복 체크
+	@GetMapping(value = "/MemberIdCheck")
+	@ResponseBody
+	public String idCheck(@RequestParam("id") String id) {
+		System.out.println("아이디 : " + id);
+		String result = "";
+		
+		result = service.idCheck(id);
+		if(result != null) {
+			result = "true";
+		} else {
+			result = "false";
+		}
+		return result;
+	}
+	
+	// 이메일 중복 체크
+	@GetMapping(value = "/MemberEmailCheck")
+	@ResponseBody
+	public String emailCheck(@RequestParam("email") String email) {
+		System.out.println("이메일 : " + email);
+		String result = "";
+		
+		result = service.emailCheck(email);
+		if(result != null) {
+			result = "true";
+		}
+		
+		
+		return result;
+	}
+	
+	// 회원가입 프로
+	@PostMapping(value = "/MemberJoin")
+	public String joinPro(@ModelAttribute MemberVO member,Model model, 
+							@Param("year") String year,
+							@Param("month") String month,
+							@Param("day") String day) {
+		System.out.println(member);
+		
+		// 날짜 데이터 String -> Date 변환과 동시에 합치기
+		if(year != null && !year.equals("")) {
+			member.setMember_birth(Date.valueOf(year + "-" + month + "-" + day));
+		}
+		
+		// 패스워드 와 이메일 해싱
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String securePass = passwordEncoder.encode(member.getMember_pass());
+		String secureEmail = passwordEncoder.encode(member.getMember_email());
+		System.out.println("패스워드 : " + securePass + " 이메일 : " + secureEmail);
+		
+		
+		// 이메일 발송 
+		MimeMessage mail = mailSender.createMimeMessage();
+		String mailContent = "<h1>[이메일인증]</h1><br>"
+								+ "<p>링크 클릭 시 이메일 인증이 완료됩니다.</p>"
+								+ "<a href='https://naver.com'>클릭</a>";
+		try {
+			mail.setSubject("회원가입 인증","utf-8");
+			mail.setText(mailContent,"utf-8","html");
+			mail.addRecipient(Message.RecipientType.TO, new InternetAddress(member.getMember_email()));
+			mailSender.send(mail);
+		} catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MailException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "redirect:MemberJoinResult";
+	}
+	
 	// 회원가입 결과
 	@GetMapping(value = "/MemberJoinResult")
 	public String joinResult() {
