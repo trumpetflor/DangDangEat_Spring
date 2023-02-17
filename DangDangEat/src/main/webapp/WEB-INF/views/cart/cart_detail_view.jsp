@@ -15,7 +15,7 @@ int finalTotal = 0;
 <title>DangDangEAT - Cart</title>
 <!-- 외부 CSS 가져오기 -->
 <!-- <link href="css/bootstrap.css" rel="stylesheet" type="text/css"> -->
-<link href="css/styles.css" rel="stylesheet" /> 
+<link href="${pageContext.request.contextPath}/resources/css/styles.css" rel="stylesheet" /> 
 <style type="text/css">
 	@font-face {
 	    font-family: 'GmarketSansMedium';
@@ -149,7 +149,7 @@ $(function() {
 					<div style="text-align: center;">
                       <img class="card-img-top" style="width: 100px; height: 100px;"
 		                src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/upload/${cart.pro_real_thumb }"
-        		        alt="..." onerror="this.src='./img/sample1_thumb.png';" />
+        		        alt="..." onerror="this.src='${pageContext.request.contextPath}/resources/img/sample1_thumb.png';" />
         		        </div>
 					</td>
 					<td><a href="ProductDetail.pd?pro_code=${cart.pro_code }">${cart.pro_name }</a></td>
@@ -163,7 +163,7 @@ $(function() {
                      <td class="text-center">
 	                     <form action="CartUpdate.ct" method="post">
         				 <input type="hidden" name="pro_code" value=${cart.pro_code }>
-	                     <input class="form-control text-center me-3" name="amount" id="amount" type="number" value="${cart.cart_amount}" MIN="1" MAX="100" onchange="amountChange()" />
+	                     <input class="form-control text-center me-3" name="cart_amount" id="cart_amount" type="number" value="${cart.cart_amount}" MIN="1" MAX="100" onchange="amountChange()" />
 	                     <input type="submit" value="변경">
 	                     </form>
                      </td>
