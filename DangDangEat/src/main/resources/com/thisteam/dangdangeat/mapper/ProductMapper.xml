@@ -3,6 +3,8 @@
 <mapper namespace="com.thisteam.dangdangeat.mapper.ProductMapper">
 
 	<!-- 상품 리스트를 조회하는 SELECT 태그  -->
+	<!--주의!! admin_productList도 함께 사용함! 단, 그리드를 사용해 전체검색이 필요하므로
+	  if로 목록갯수(listLimit)이 음수일때 전체 검색이 나올 수 있도록 조건 사용함!-->
 	<select id="selectProductList" resultType="com.thisteam.dangdangeat.vo.ProductVO" >
 		SELECT 
 			pro_code
@@ -31,8 +33,10 @@
 					AND cate_code LIKE '%${category}%'
 				ORDER BY
 					pro_code DESC
-				LIMIT 
+					<if test="listLimit gt 0">
+				LIMIT  
 					#{startRow} , #{listLimit} 
+					</if>
 	</select>
 
 	<!-- 전체 상품 수 조회하는 select 태그 -->
