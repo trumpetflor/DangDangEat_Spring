@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.thisteam.dangdangeat.mapper.MemberMapper;
 import com.thisteam.dangdangeat.vo.MemberVO;
+import com.thisteam.dangdangeat.vo.Member_Mypage_ViewVO;
 
 @Service
 public class MemberService {
@@ -29,24 +30,24 @@ public class MemberService {
 	}
 
 	// 회원 주문 수 조회
-	public int getMemberOrderCount(String id) {
-		return mapper.selectMemberOrderCount(id);
-	}
+//	public int getMemberOrderCount(String id) {
+//		return mapper.selectMemberOrderCount(id);
+//	}
 
 	 // 회원 쿠폰 수 조회
-	public int getMemberCouponCount(String id) {
-		return mapper.selectMemberCouponCount(id);
-	}
+//	public int getMemberCouponCount(String id) {
+//		return mapper.selectMemberCouponCount(id);
+//	}
 
 	// 회원 리뷰 수 조회
-	public int getMemberReviewCount(String id) {
-		return mapper.selectMemberReviewCount(id);
-	}
+//	public int getMemberReviewCount(String id) {
+//		return mapper.selectMemberReviewCount(id);
+//	}
 
 	// 회원 문의 수 조회
-	public int getMemberQnaCount(String id) {
-		return mapper.selectMemberQnaCount(id);
-	}
+//	public int getMemberQnaCount(String id) {
+//		return mapper.selectMemberQnaCount(id);
+//	}
 
 	// 회원 탈퇴 및 상태 업데이트
 	public int memberWithdraw(MemberVO member) {
@@ -62,9 +63,20 @@ public class MemberService {
 	public String emailCheck(String email) {
 		return mapper.selectEmailCheck(email);
 	}
-	
-	
 
+	// 멤버 마이페이지 조회(주문, 쿠폰, 리뷰, 질문 수)
+	public Member_Mypage_ViewVO getMemberMypage(String id) {
+		return mapper.selectMemberMypageView(id);
+	}
+	
+	// 회원 이메일 수정
+	public int updateMemberEmail(String id, String email) {
+		return mapper.updateMemberEmail(id, email);
+	}
+
+	
+	
+	
 }
 
 

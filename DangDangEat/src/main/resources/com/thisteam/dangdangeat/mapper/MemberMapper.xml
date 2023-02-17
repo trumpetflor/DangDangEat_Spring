@@ -46,6 +46,7 @@
   		SELECT COUNT(*)
   			FROM orders
   			WHERE member_id = #{id}
+  				AND order_status = '1'
   	</select>
   	
   	<!-- 회원 쿠폰 수 조회 -->
@@ -92,6 +93,33 @@
   			FROM member
   			WHERE member_email = #{email}
   	</select>
+  	
+  	<!-- 멤버 마이페이지 조회(주문, 쿠폰, 리뷰, 질문 수) -->
+  	<select id="selectMemberMypageView" resultType="com.thisteam.dangdangeat.vo.Member_Mypage_ViewVO">
+  		SELECT *
+  			FROM member_mypage_view
+  			WHERE member_id = #{id}
+  	</select>
+  	
+  	<!-- 회원 정보 이메일 수정 -->
+  	<update id="updateMemberEmail">
+  		<!-- 이미 존재하는 이메일인지 확인 -->
+  		<selectKey resultType="com.thisteam.dangdangeat.vo.MemberVO" order="BEFORE" keyProperty="member">
+  			SELECT *
+  				FROM member
+  				WHERE 
+  					member_id = #{id}
+  					AND member_email = #{email}
+  		</selectKey>
+  		<!-- 이미 존재하거나 탈퇴한 회원의 이메일이 아닐 때 -->
+  		<if test="member neq null">
+  			UPDATE member
+  				SET	member_email = #{email}
+  					, member_authStatus = 'N'
+  				WHERE member_id = #{id}
+  		</if>
+  	</update>
+  	
   	
 </mapper>
 

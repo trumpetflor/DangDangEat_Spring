@@ -2,6 +2,8 @@ package com.thisteam.dangdangeat.controller;
 
 
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
 
 import javax.mail.Message;
@@ -9,6 +11,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thisteam.dangdangeat.service.MemberService;
 import com.thisteam.dangdangeat.vo.MemberVO;
+import com.thisteam.dangdangeat.vo.Member_Mypage_ViewVO;
 
 
 
@@ -182,8 +186,8 @@ public class MemberController {
 		String id = (String)session.getAttribute("sId");
 
 		if(id == null || id.equals("")) { // 세션 아이디가 null 이거나 "" 일 경우
-			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
-			return "MemberLoginForm";
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			return "fail_back";
 		} else { // 세션 아이디 있을 경우
 			// 비밀번호 암호화
 			BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder(); // 객체 생성
@@ -209,8 +213,8 @@ public class MemberController {
 		String id = (String)session.getAttribute("sId");
 
 		if(id == null || id.equals("")) { // 세션 아이디가 null 이거나 "" 일 때 쫓아내기
-			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
-			return "MemberLoginForm";
+			model.addAttribute("msg", "잘못된 접근입니다.");
+			return "fail_back";
 		} else { // 세션 아이디 있을 경우
 			MemberVO member = service.getMemberInfo(id); // 회원 정보 조회
 
@@ -233,7 +237,7 @@ public class MemberController {
 
 		if(id == null || id.equals("")) { // 세션 아이디가 null 이거나 "" 일 때 쫓아내기
 			model.addAttribute("msg", "잘못된 접근입니다.");
-			return "MemberLoginForm";
+			return "fail_back";
 		} else { // 세션 아이디 있을 경우
 			
 			member.setMember_id(id); // MemberVO 객체에 세션 아이디 저장
@@ -267,7 +271,6 @@ public class MemberController {
 				
 			}
 			
-			
 		}
 
 	}
@@ -281,22 +284,29 @@ public class MemberController {
 		String id = (String)session.getAttribute("sId");
 
 		if(id == null || id.equals("")) { // 세션 아이디가 null 이거나 "" 일 때 쫓아내기
-			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
-			return "MemberLoginForm";
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/MemberLoginForm");
+			return "redirect";
 		} else { // 세션 아이디 있을 경우
 			MemberVO member = service.getMemberInfo(id); // 회원 정보 조회
 			model.addAttribute("member", member); // Model 객체에 회원 정보 저장
 
+			// 구문 따로따로
 //			int memberHistoryCount[] = service.getMemberHistoryCount(id);
-			int memberOrderCount = service.getMemberOrderCount(id);
-			int memberCouponCount = service.getMemberCouponCount(id);
-			int memberReviewCount = service.getMemberReviewCount(id);
-			int memberQnaCount = service.getMemberQnaCount(id);
+//			int memberOrderCount = service.getMemberOrderCount(id);
+//			int memberCouponCount = service.getMemberCouponCount(id);
+//			int memberReviewCount = service.getMemberReviewCount(id);
+//			int memberQnaCount = service.getMemberQnaCount(id);
+//			
+//			model.addAttribute("order_count", memberOrderCount);
+//			model.addAttribute("coupon_count", memberCouponCount);
+//			model.addAttribute("review_count", memberReviewCount);
+//			model.addAttribute("qna_count", memberQnaCount);
 			
-			model.addAttribute("order_count", memberOrderCount);
-			model.addAttribute("coupon_count", memberCouponCount);
-			model.addAttribute("review_count", memberReviewCount);
-			model.addAttribute("qna_count", memberQnaCount);
+			// view 테이블을 이용한 멤버 마이페이지 조회(주문, 쿠폰, 리뷰, 질문 수)
+			Member_Mypage_ViewVO mypageView = service.getMemberMypage(id);
+			
+			model.addAttribute("mypageView", mypageView);
 			
 			return "member/mypage";
 		}
@@ -313,14 +323,16 @@ public class MemberController {
 		String id = (String)session.getAttribute("sId");
 
 		if(id == null || id.equals("")) { // 세션 아이디가 null 이거나 "" 일 때 쫓아내기
-			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
-			return "MemberLoginForm";
+			model.addAttribute("msg", "로그인이 필요합니다");
+			model.addAttribute("url", "/MemberLoginForm");
+			return "redirect";
 		} else { // 세션 아이디 있을 경우
 			return "member/withdraw"; // 회원 탈퇴 폼으로 포워딩
 		}
 		
 	}
 	
+	// 회원 탈퇴 (상태 변경)
 	@PostMapping(value = "MemberWithdrawPro")
 	public String withdrawPro(
 			@ModelAttribute MemberVO member,
@@ -331,8 +343,8 @@ public class MemberController {
 		String id = (String)session.getAttribute("sId");
 		
 		if(id == null || id.equals("")) { // 세션 아이디가 null 이거나 "" 일 경우
-			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
-			return "MemberLoginForm";
+			model.addAttribute("msg", "잘못된 접근입니다");
+			return "fail_back";
 		} else { // 세션 아이디 있을 경우
 			// 비밀번호 암호화
 			BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder(); // 객체 생성
@@ -362,11 +374,102 @@ public class MemberController {
 		
 	}
 	
+	// 회원 탈퇴 결과
 	@GetMapping(value = "MemberWithdrawResult")
 	public String withdrawResult() {
 		return "member/withdraw_result"; // 회원 탈퇴 결과 페이지 포워딩
 	}
 	
+	// 회원 정보 페이지 이메일 인증 상태 변경
+	@ResponseBody
+	@PostMapping(value = "MemberEmailUpdate")
+	public void emailUpdate(
+			@RequestParam String id,
+			@RequestParam String email,
+			Model model,
+			HttpSession session,
+			HttpServletResponse response
+			) {
+		
+		String sId = (String)session.getAttribute("sId");
+		
+		if(sId == null || sId.equals("") || !sId.equals(id)) {
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			// redirect 필요
+		} else { // 세션 아이디 있을 경우
+			
+			int updateCount = service.updateMemberEmail(id, email);
+			
+			try {
+				if(updateCount > 0) { // 변경 성공
+					response.setContentType("text/html; charset=UTF-8");
+					PrintWriter out = response.getWriter();
+					out.println("이메일이 변경되었습니다.");
+					
+				} else { // 실패 시
+					
+					response.setContentType("text/html; charset=UTF-8");
+					PrintWriter out = response.getWriter();
+					out.println("이미 사용 중이거나 탈퇴한 회원의 이메일입니다.");
+					
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}	
+	}
+	
+	// 회원 정보 페이지 이메일 인증
+	@ResponseBody
+	@PostMapping(value = "MemberEmailAuth")
+	public void emailAuth(
+			@RequestParam String id,
+			@RequestParam String email,
+			Model model,
+			HttpSession session,
+			HttpServletResponse response
+			) {
+		
+		String sId = (String)session.getAttribute("sId");
+		
+		try {
+			if(sId == null || sId.equals("") || !sId.equals(id)) {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.println("false");
+//			out.println("<script>");
+//			out.println("alert('잘못된 접근입니다.')");
+//			out.println("history.back()");
+//			out.println("</script>");
+			} else { // 세션 아이디 있을 경우
+				// 인증 이메일 발송 
+				MimeMessage mail = mailSender.createMimeMessage();
+				String mailContent = "<h1>[이메일인증]</h1><br>"
+										+ "<p>링크 클릭 시 이메일 인증이 완료됩니다.</p>"
+										+ "<a href='http://itwillbs4.cafe24.com/DangDangEat/MailCheck'>클릭</a>";
+				
+				mail.setSubject("댕댕잇 이메일 인증메일입니다.","utf-8");
+				mail.setText(mailContent,"utf-8","html");
+				mail.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+				mailSender.send(mail);
+			}
+		} catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MailException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 
 
