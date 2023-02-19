@@ -16,7 +16,7 @@
 
 <title>DangDangEat Admin - 쿠폰 등록</title>
 
-   <link href="css/styles.css" rel="stylesheet" />
+   <link href="${pageContext.request.contextPath}/resources/css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
@@ -25,13 +25,13 @@
   
 
 <!-- Custom fonts for this template -->
-<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
 <!-- Custom styles for this template -->
-<link href="css/sb-admin-2.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
 <!-- Custom styles for this page -->
-<link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <!-- 폰트 설정 -->
 <style>
 @font-face {
@@ -476,7 +476,7 @@ $(document).on("click", "input[name=updateCpBtn]", function(){
 
   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
     <li><a class="dropdown-item" href="CouponRegister.ad">쿠폰 등록</a></li>
-    <li><a class="dropdown-item" href="AdminCouponList.ad">등록된 쿠폰 관리</a></li>
+    <li><a class="dropdown-item" href="AdminCouponList">등록된 쿠폰 관리</a></li>
   </ul>
 </div>
  	  > &#127903; 쿠폰등록

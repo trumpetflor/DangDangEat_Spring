@@ -122,12 +122,11 @@
 	
 	
 	
-	<select id="selectMemberCoupon" resultType="HashMap">
+	<select id="selectMemberCoupon" resultType="map">
 		SELECT * 
 		FROM mc_view 
 			WHERE  member_id = #{id}
 			 AND   cp_status = 1  AND  mc_stat = 1 AND mc_used = 'N' 
-		
 	</select>
 	
 	
@@ -158,5 +157,11 @@
 			 INSERT INTO member_coupon VALUES ( #{id} ,  #{cp_code} , 'N')
 		 </if>
 	</insert>
+	
+	<!-- 관리자페이지 쿠폰 리스트 -->
+	<select id="selectCouponList" resultType="Coupon_viewVO">
+	 SELECT *  
+	 FROM coupon_view WHERE cp_status = 1 ORDER BY cp_enddate DESC
+	</select>
 
 </mapper>

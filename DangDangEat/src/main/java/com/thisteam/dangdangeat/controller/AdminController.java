@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.thisteam.dangdangeat.service.AdminService;
 import com.thisteam.dangdangeat.service.OrderService;
 import com.thisteam.dangdangeat.service.ProductService;
+import com.thisteam.dangdangeat.vo.Coupon_viewVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.PageInfo;
 import com.thisteam.dangdangeat.vo.ProductVO;
@@ -221,17 +224,21 @@ public class AdminController {
 		
 		
 		// admin_couponList.jsp에서 보여질 쿠폰 리스트 JSONArray형태로 request객체에 저장
-//		JSONArray CouponList =  odService.SelectCouponList();
-//		System.out.println(CouponList +" - "+this.getClass());
-//		model.setAttribute("CouponList", CouponList);
+		List<Coupon_viewVO> CouponList =  odService.selectCouponList();
+		JSONArray CouponListJson = new JSONArray();
+		for(Coupon_viewVO coupon : CouponList) {
+			CouponListJson.put(new JSONObject(coupon));
+		}
+		System.out.println("CouponListJson :  "+ CouponListJson);
+		model.addAttribute("CouponList", CouponListJson);
 		
 		// 쿠폰 개수 리턴받음
 		int couponCount = odService.getCouponTotalAmount();
-//		model.addAttribute("couponCount", CouponList);
+		model.addAttribute("couponCount", couponCount);
 		
 
 
-		return "admi/admin_couponList";
+		return "admin/admin_couponList";
 	}
   
   

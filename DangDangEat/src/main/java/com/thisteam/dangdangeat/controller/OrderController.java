@@ -34,7 +34,7 @@ public class OrderController {
   
   // ==================================== Hawon =============================================
 
-	@GetMapping(value = "SelectCoupon" )
+	@GetMapping(value = "SelectCoupon")
 	public String selectCoupon(){
 		
 		return "order/coupon_select";
@@ -49,13 +49,12 @@ public class OrderController {
 		System.out.println("SearchUsableCoupon 메서드");
 		 
 		String sId = null;
-		boolean isMypage = false;
 		session =  request.getSession(false);
 		  
 		if(session != null) {
 			sId = (String)session.getAttribute("sId");
 		}
-		
+		System.out.println("sId : "+ sId);
 		JSONArray couponList = service.getUsableMemberCoupon(sId);
 		System.out.println("couponList : "+  couponList);
 		try {
@@ -76,19 +75,16 @@ public class OrderController {
 									HttpServletRequest request){
 		
 		String sId = null;
-		boolean isMypage = false;
+	
 		 response.setCharacterEncoding("UTF-8");
 		session =  request.getSession(false);
-	
-	
-		if(request.getParameter("isMypage") != null) {
-			isMypage = Boolean.valueOf(request.getParameter("isMypage"));
-		}
-		JSONArray couponList = service.getUsableMemberCoupon(sId);
-		if(isMypage) {
-			request.setAttribute("couponList", couponList);
+
 		
-		}
+		JSONArray couponList = service.getUsableMemberCoupon(sId);
+	
+		request.setAttribute("couponList", couponList);
+		
+		
 		return "member/mypage_couponAjax";
 	}
 	

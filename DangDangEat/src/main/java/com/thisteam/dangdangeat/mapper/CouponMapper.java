@@ -1,12 +1,12 @@
 package com.thisteam.dangdangeat.mapper;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.thisteam.dangdangeat.vo.CouponVO;
+import com.thisteam.dangdangeat.vo.Coupon_viewVO;
 
 public interface CouponMapper {
 	
@@ -37,5 +37,8 @@ public interface CouponMapper {
 	public String selectCouponCodebyUser(String cp_code);
 
 	public int InsertCouponCodeToMemCp(@Param("id") String sId, @Param("cp_code")String cp_code);
+	
+	//관리자페이지 쿠폰 리스트
+	public List<Coupon_viewVO> selectCouponList();
 
 }
