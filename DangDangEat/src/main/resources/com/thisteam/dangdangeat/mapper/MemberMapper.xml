@@ -104,21 +104,31 @@
   	<!-- 회원 정보 이메일 수정 -->
   	<update id="updateMemberEmail">
   		<!-- 이미 존재하는 이메일인지 확인 -->
-  		<selectKey resultType="com.thisteam.dangdangeat.vo.MemberVO" order="BEFORE" keyProperty="member">
-  			SELECT *
-  				FROM member
-  				WHERE 
-  					member_id = #{id}
-  					AND member_email = #{email}
-  		</selectKey>
+<!--   		<selectKey resultType="string" order="BEFORE" keyProperty="memberName"> -->
+<!--   			SELECT IFNULL(member_name, 'NotExist') -->
+<!--   				FROM member -->
+<!--   				WHERE  -->
+<!--   					member_id = #{id} -->
+<!--   					AND member_email = #{email} -->
+<!--   		</selectKey> -->
   		<!-- 이미 존재하거나 탈퇴한 회원의 이메일이 아닐 때 -->
-  		<if test="member neq null">
+<!--   		<if test="!memberName.equals('NotExist')"> -->
   			UPDATE member
   				SET	member_email = #{email}
   					, member_authStatus = 'N'
   				WHERE member_id = #{id}
-  		</if>
+<!--   		</if> -->
   	</update>
+  	
+  	<select id="selectMemberId" resultType="com.thisteam.dangdangeat.vo.MemberVO">
+  		SELECT 
+  			<![CDATA[REGEXP_REPLACE(member_id, '(?<=.{3}).', '*') AS masking_member_id]]>
+			, member_name
+			, member_email
+  			FROM member
+  			WHERE member_name = #{member_name}
+  				AND member_email = #{member_email}
+  	</select>
   	
   	
 </mapper>

@@ -471,6 +471,43 @@ public class MemberController {
 		
 	}
 	
+	// 아이디 찾기 페이지
+	@GetMapping(value = "MemberFindIdForm")
+	public String findId() {
+		return "member/find_id";
+	}
+
+	// 아이디 찾기 결과
+	@PostMapping(value = "MemberFindIdResult")
+	public String findIdPro(
+			@ModelAttribute MemberVO member
+			, Model model
+//			, HttpServletResponse response
+			) {
+		
+//		System.out.println(member);
+		
+		// 아이디 조회
+		MemberVO foundMember = service.findMemberId(member);
+		
+//		System.out.println(foundMember);
+		
+		if(foundMember != null) { // 조회된 회원이 존재할 경우 (아이디 있음)
+			model.addAttribute("member", foundMember);
+			return "member/find_id_result";
+		} else { // 회원이 존재하지 않을 경우 (아이디 없음)
+			model.addAttribute("msg", "입력하신 정보로 가입된 회원이 존재하지 않습니다.");
+			return "fail_back";
+		}
+		
+	}
+	
+	// 비밀번호 찾기 페이지
+	@GetMapping(value = "MemberFindPassForm")
+	public String findPass() {
+		return "member/find_pass";
+	}
+	
 
 
 }
