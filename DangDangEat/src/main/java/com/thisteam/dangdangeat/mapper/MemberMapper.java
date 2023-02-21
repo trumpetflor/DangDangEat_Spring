@@ -27,6 +27,15 @@ public interface MemberMapper {
 
 	// 회원 탈퇴 및 상태 업데이트
 	int updateMember(MemberVO member);
+	
+	// 회원 아이디 중복 체크
+	String selectidCheck(String id);
+	
+	// 회원 이메일 중복 체크
+	String selectEmailCheck(String email);
+	
+	// 회원 가입
+	int insertMemberJoin(MemberVO member);
 
 	
 

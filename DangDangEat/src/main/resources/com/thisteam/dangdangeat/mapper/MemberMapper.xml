@@ -93,6 +93,28 @@
   			WHERE member_email = #{email}
   	</select>
   	
+  	<!-- 회원 가입 -->
+  	<insert id="insertMemberJoin">
+  		INSERT
+  			INTO member
+  			VALUES (
+  				#{member_id}
+  				,#{member_pass}
+  				,#{member_email}
+  				,#{member_name}
+  				,#{member_mobile}
+  				,#{member_addr1}
+  				,#{member_addr2}
+  				,#{member_postcode}
+  				,now()
+  				,0
+  				,#{member_birth}
+  				,'N'
+  				,'N'
+  				,'N'
+  			)
+  	</insert>
+  	
 </mapper>
 
 

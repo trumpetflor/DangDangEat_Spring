@@ -2,6 +2,7 @@ package com.thisteam.dangdangeat.controller;
 
 
 
+import java.io.IOException;
 import java.sql.Date;
 
 import javax.mail.Message;
@@ -9,6 +10,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thisteam.dangdangeat.service.MemberService;
+import com.thisteam.dangdangeat.vo.AuthVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 
 
@@ -49,38 +52,51 @@ public class MemberController {
 	// 아이디 중복 체크
 	@GetMapping(value = "/MemberIdCheck")
 	@ResponseBody
-	public String idCheck(@RequestParam("id") String id) {
+	public void idCheck(@RequestParam("id") String id, HttpServletResponse response) {
 		System.out.println("아이디 : " + id);
 		String result = "";
 		
 		result = service.idCheck(id);
-		if(result != null) {
-			result = "true";
-		} else {
-			result = "false";
+		try {
+			if(result != null) {
+				response.setCharacterEncoding("utf-8");
+				response.getWriter().print("true");
+			} else {
+				response.setCharacterEncoding("utf-8");
+				response.getWriter().print("false");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		return result;
 	}
 	
 	// 이메일 중복 체크
 	@GetMapping(value = "/MemberEmailCheck")
 	@ResponseBody
-	public String emailCheck(@RequestParam("email") String email) {
+	public void emailCheck(@RequestParam("email") String email, HttpServletResponse response) {
 		System.out.println("이메일 : " + email);
 		String result = "";
 		
 		result = service.emailCheck(email);
-		if(result != null) {
-			result = "true";
+		try {
+			if(result != null) {
+				response.setCharacterEncoding("utf-8");
+				response.getWriter().print("true");
+			} else {
+				response.setCharacterEncoding("utf-8");
+				response.getWriter().print("false");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		
-		return result;
 	}
 	
 	// 회원가입 프로
 	@PostMapping(value = "/MemberJoin")
-	public String joinPro(@ModelAttribute MemberVO member,Model model, 
+	public String joinPro(@ModelAttribute MemberVO member,Model model,
+							@ModelAttribute AuthVO auth,
 							@Param("year") String year,
 							@Param("month") String month,
 							@Param("day") String day) {
@@ -96,6 +112,10 @@ public class MemberController {
 		String securePass = passwordEncoder.encode(member.getMember_pass());
 		String secureEmail = passwordEncoder.encode(member.getMember_email());
 		System.out.println("패스워드 : " + securePass + " 이메일 : " + secureEmail);
+		member.setMember_pass(securePass);
+		auth.setAuth_code(secureEmail);
+		auth.setAuth_id(member.getMember_id());
+		
 		
 		
 		// 이메일 발송 
@@ -103,19 +123,18 @@ public class MemberController {
 		String mailContent = "<h1>[이메일인증]</h1><br>"
 								+ "<p>링크 클릭 시 이메일 인증이 완료됩니다.</p>"
 								+ "<a href='https://naver.com'>클릭</a>";
+		
+		int joinResult = service.memberJoinPro(member);
 		try {
 			mail.setSubject("회원가입 인증","utf-8");
 			mail.setText(mailContent,"utf-8","html");
 			mail.addRecipient(Message.RecipientType.TO, new InternetAddress(member.getMember_email()));
 			mailSender.send(mail);
 		} catch (AddressException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MailException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "redirect:MemberJoinResult";

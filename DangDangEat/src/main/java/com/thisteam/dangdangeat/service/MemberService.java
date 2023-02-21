@@ -63,6 +63,11 @@ public class MemberService {
 		return mapper.selectEmailCheck(email);
 	}
 	
+	// 회원 가입
+	public int memberJoinPro(MemberVO member) {
+		return mapper.insertMemberJoin(member);
+	}
+	
 	
 
 }

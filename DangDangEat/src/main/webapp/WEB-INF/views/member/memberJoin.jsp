@@ -227,7 +227,8 @@ var emailResult = false;
 			let numRegex = /[0-9]/;
 			let specRegex = /[!@#$%]/;
 			if(!lengthRegex.exec(passwd)) { // 입력한 패스워드가 정규식에 포함 X
-				$("#checkPw").html("8~16자 대,소문자 숫자 특수문자(!@#$%) 조합하여 작성해주개").css("color","#404040");
+				$("#checkPw").html("8~16자 대,소문자 숫자 특수문자(!@#$%) 조합하여 작성해주개").css("color","#404040"),
+				$("#passwd").css("color","#999999");
 				passwdResult = false; 
 			} else { // 입력한 패스워드가 정규식에 포함 O
 				// 복잡도 검사 (전체 규칙 검사 통과 시)
@@ -295,7 +296,7 @@ var emailResult = false;
 					success: function(result) {
 						$("#checkEmail").html(result);
 						
-						if(result) {
+						if(result == "true") {
 							$("#checkEmail").html("이미 사용중인 이메일 이다멍!").css("color","red");
 							emailResult = false;
 						} else {
@@ -455,7 +456,7 @@ var emailResult = false;
         
         <!--  필드(생년월일) -->
         <div class="field birth">
-            <b>댕생일<small>(선택)</small></b>
+            <b>댕생일<small>(필수)</small></b>
             <div>
                 <input type="text" placeholder="연(4자)" name="year">                
                 <input type="text" placeholder="월" name="month">                
