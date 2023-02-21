@@ -87,6 +87,15 @@ public class MemberService {
 		return mapper.selectMemberId(member);
 	}
 
+	// 회원 비밀번호 찾기
+	public MemberVO findMemberPass(MemberVO member) {
+		return mapper.selectMemberPass(member);
+	}
+
+	// 회원 임시 비밀번호 변경
+	public int updateMemberPass(MemberVO member) {
+		return mapper.updateMemberPass(member);
+	}
 	
 	
 	

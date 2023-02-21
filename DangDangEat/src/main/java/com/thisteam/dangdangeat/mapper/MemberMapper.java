@@ -43,7 +43,12 @@ public interface MemberMapper {
 	// 회원 아이디 조회
 	MemberVO selectMemberId(MemberVO member);
 
+	// 회원 비밀번호 조회
+	MemberVO selectMemberPass(MemberVO member);
 
+	// 회원 비밀번호 변경
+	int updateMemberPass(MemberVO member);
+	
 	
 
 }

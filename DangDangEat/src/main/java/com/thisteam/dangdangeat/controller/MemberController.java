@@ -5,6 +5,7 @@ package com.thisteam.dangdangeat.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.util.Random;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -508,6 +509,100 @@ public class MemberController {
 		return "member/find_pass";
 	}
 	
+	// 비밀번호
+	@PostMapping(value = "MemberFindPassPro")
+	public String findPassPro(
+			@ModelAttribute MemberVO member
+			, Model model
+			, HttpServletResponse response
+			) {
+		
+		System.out.println(member);
+		
+		// 회원 아이디, 이름, 이메일과 일치하는 회원 확인
+		MemberVO foundMember = service.findMemberPass(member);
+		
+		if(foundMember != null) { // 일치하는 회원이 존재할 경우
+			
+			// 임시 비밀번호 발급
+			// 인증코드에 사용될 문자를 배열로 모두 저장
+			char[] codeTable = {
+					'A', 'B', 'C', 'D', 'C', 'F', 'G', 'H', 'I', 'J', 
+					'K', 'L', 'N', 'M', 'O', 'P', 'Q', 'R', 'S', 'T', 
+					'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 
+					'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 
+					'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 
+					'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', 
+					'8', '9', '!', '@', '$'
+			};
+			
+			Random r = new Random();
+			String randomPass = "";
+			int codeLength = 10;
+			
+			// 원하는 코드 길이만큼 for문을 사용하여 반복문으로 처리
+			for(int i = 1; i <= codeLength; i++) {
+				// 배열 크기를 난수의 범위로 지정하여 난수 생성
+				int index = r.nextInt(codeTable.length);
+				
+				// 생성된 난수를 배열 인덱스로 활용하여 1개의 코드 가져와서 문자열 결합
+				randomPass += codeTable[index];
+				
+			}
+			
+			System.out.println("임시 비밀번호 : " + randomPass);
+			
+			// 패스워드 솔팅 및 임시 비밀번호로 회원 정보 변경
+			BCryptPasswordEncoder passwdEncoder = new BCryptPasswordEncoder(); // 객체 생성
+			foundMember.setMember_pass(passwdEncoder.encode(randomPass)); // MemberVO 객체에 암호화된 임시 비밀번호 저장
+			
+			System.out.println(foundMember);
+			
+			int updateCount = service.updateMemberPass(foundMember); // 임시 비밀번호 변경
+			
+			if(updateCount > 0) { // 임시 비밀번호 변경 성공 시
+				
+				try {
+					// 임시 비밀번호 이메일 발송
+					MimeMessage mail = mailSender.createMimeMessage();
+					String mailContent = "<b>" + foundMember.getMember_name() + "</b> 님의 비밀번호가 요청되었습니다.<br>"
+							+ "회원 아이디 : " + foundMember.getMember_id() + "<br>"
+							+ "임시 비밀번호 : <strong>" + randomPass + "</strong><br>"
+							+ "비밀번호는 정보관리시스템에서 매우 중요하게 사용되므로 안전하게 관리하시기 바랍니다.<br>"
+							+ "해당 비밀번호로 로그인 후 비밀번호 재설정하세요.<br>"
+							+ "<font color='#ff0000'>본 메일은 발신 전용이므로 회신이 되지 않습니다.</font><br>"
+							+ "<a href='http://itwillbs4.cafe24.com/DangDangEat/MemberLoginForm'>댕댕잇 로그인</a>";
+					
+					mail.setSubject("댕댕잇 임시 비밀번호입니다.","utf-8");
+					mail.setText(mailContent,"utf-8","html");
+					mail.addRecipient(Message.RecipientType.TO, new InternetAddress(foundMember.getMember_email()));
+					mailSender.send(mail);
+				} catch (AddressException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (MailException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				model.addAttribute("msg", "회원 이메일로 임시 비밀번호가 발송되었습니다.");
+				model.addAttribute("url", "/MemberLoginForm");
+				return "redirect";
+				
+			} else { // 변경 실패 시
+				model.addAttribute("msg", "회원 정보를 다시 입력바랍니다.");
+				return "fail_back";
+			}
+			
+		} else { // 일치하는 회원이 존재하지 않을 경우
+			model.addAttribute("msg", "입력하신 정보로 가입된 회원이 존재하지 않습니다.");
+			return "fail_back";
+		}
+		
+	}
 
 
 }
