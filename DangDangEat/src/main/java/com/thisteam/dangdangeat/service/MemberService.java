@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.thisteam.dangdangeat.mapper.MemberMapper;
+import com.thisteam.dangdangeat.vo.AuthVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 
 @Service
@@ -53,6 +54,8 @@ public class MemberService {
 		return mapper.updateMember(member);
 	}
 	
+	//----------------------- sangwoo ---------------------// 
+	
 	// 회원 아이디 중복 체크
 	public String idCheck(String id) {
 		return mapper.selectidCheck(id);
@@ -68,7 +71,22 @@ public class MemberService {
 		return mapper.insertMemberJoin(member);
 	}
 	
+	// 메일 인증 정보 등록
+	public void insertAuthMail(AuthVO auth) {
+		mapper.insertAuthMail(auth);
+	}
 	
+	// 인증 메일 확인
+	public int checkAuthMail(AuthVO auth) {
+		return mapper.checkAuthMail(auth);
+	}
+	
+	// 회원 메일 인증 상태 업데이트
+	public void updateMemberAuth(AuthVO auth) {
+		mapper.updateMemberAuth(auth);
+	}
+	
+	//----------------------- sangwoo ---------------------// 
 
 }
 

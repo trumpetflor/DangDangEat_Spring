@@ -1,5 +1,6 @@
 package com.thisteam.dangdangeat.mapper;
 
+import com.thisteam.dangdangeat.vo.AuthVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 
 public interface MemberMapper {
@@ -28,6 +29,8 @@ public interface MemberMapper {
 	// 회원 탈퇴 및 상태 업데이트
 	int updateMember(MemberVO member);
 	
+	//----------------------- sangwoo ---------------------// 
+	
 	// 회원 아이디 중복 체크
 	String selectidCheck(String id);
 	
@@ -36,8 +39,17 @@ public interface MemberMapper {
 	
 	// 회원 가입
 	int insertMemberJoin(MemberVO member);
-
 	
+	// 인증 메일 정보 등록
+	void insertAuthMail(AuthVO auth);
+	
+	// 메일 인증 확인
+	int checkAuthMail(AuthVO auth);
+	
+	// 회원 메일 인증 상태 업데이트
+	void updateMemberAuth(AuthVO auth);
+
+	//----------------------- sangwoo ---------------------// 
 
 }
 

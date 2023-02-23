@@ -10,6 +10,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
@@ -43,6 +44,7 @@ public class MemberController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
+	//----------------------- sangwoo ---------------------// 
 	// 회원가입 페이지
 	@GetMapping(value = "/MemberJoinForm")
 	public String join() {
@@ -97,6 +99,8 @@ public class MemberController {
 	@PostMapping(value = "/MemberJoin")
 	public String joinPro(@ModelAttribute MemberVO member,Model model,
 							@ModelAttribute AuthVO auth,
+							HttpServletRequest request,
+							HttpSession session,
 							@Param("year") String year,
 							@Param("month") String month,
 							@Param("day") String day) {
@@ -116,26 +120,38 @@ public class MemberController {
 		auth.setAuth_code(secureEmail);
 		auth.setAuth_id(member.getMember_id());
 		
-		
+		String host = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+//		System.out.println("1번 : "+ request.getScheme());
+//		System.out.println("2번 : " + request.getServerName());
+//		System.out.println("3번 : " + request.getServerPort());
+//		System.out.println("4번 : " + request.getContextPath());
 		
 		// 이메일 발송 
 		MimeMessage mail = mailSender.createMimeMessage();
-		String mailContent = "<h1>[이메일인증]</h1><br>"
+		String mailContent = "<h1>[ DangDangEat 이메일인증 ]</h1><br>"
 								+ "<p>링크 클릭 시 이메일 인증이 완료됩니다.</p>"
-								+ "<a href='https://naver.com'>클릭</a>";
+								+ "<a href='"+host+"/MemberMailAuth?auth_id="+auth.getAuth_id()+"&auth_code="+auth.getAuth_code()+"'>링크를 눌러 인증완료하개!</a>";
 		
 		int joinResult = service.memberJoinPro(member);
-		try {
-			mail.setSubject("회원가입 인증","utf-8");
-			mail.setText(mailContent,"utf-8","html");
-			mail.addRecipient(Message.RecipientType.TO, new InternetAddress(member.getMember_email()));
-			mailSender.send(mail);
-		} catch (AddressException e) {
-			e.printStackTrace();
-		} catch (MailException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
+		
+		if(joinResult > 0) {
+			try {
+				mail.setSubject("댕댕잇 회원가입 인증","utf-8");
+				mail.setText(mailContent,"utf-8","html");
+				mail.addRecipient(Message.RecipientType.TO, new InternetAddress(member.getMember_email()));
+				mailSender.send(mail);
+			} catch (AddressException e) {
+				e.printStackTrace();
+			} catch (MailException e) {
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
+			
+			service.insertAuthMail(auth);
+		} else {
+			model.addAttribute("msg", "회원가입 실패!");
+			return "fail_back";
 		}
 		return "redirect:MemberJoinResult";
 	}
@@ -145,7 +161,28 @@ public class MemberController {
 	public String joinResult() {
 		return "member/member_join_result"; // member_join_result.jsp 로 포워딩
 	}
-
+	
+	// 메일 인증 확인 및 업데이트
+	@GetMapping(value = "/MemberMailAuth")
+	public String MailAuthPro(@Param("auth_id") String auth_id,
+								@Param("auth_code") String auth_code,
+								@ModelAttribute AuthVO auth,
+								Model model) {
+		auth.setAuth_id(auth_id);
+		auth.setAuth_code(auth_code);
+//		System.out.println("확인용 : " + auth);
+		int mailAuthCount = service.checkAuthMail(auth);
+		if(mailAuthCount > 0) {
+			service.updateMemberAuth(auth);
+		} else {
+			model.addAttribute("msg", "인증 실패!");
+			return "redirect:/"; 
+		}
+		return "redirect:/MemberLoginForm";
+	}
+	
+	//----------------------- sangwoo ---------------------// 
+	
 	// 로그인 페이지
 	@GetMapping(value = "/MemberLoginForm")
 	public String login() {

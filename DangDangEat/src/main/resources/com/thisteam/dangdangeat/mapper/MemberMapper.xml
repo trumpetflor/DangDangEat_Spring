@@ -79,6 +79,8 @@
   			WHERE member_id = #{member_id}
   	</update>
   	
+  	<!--===================== sangwoo =========================-->
+  	
   	<!-- 회원 아이디 중복 조회 -->
   	<select id="selectidCheck" resultType="String">
   		SELECT member_id
@@ -115,6 +117,31 @@
   			)
   	</insert>
   	
+  	<!-- 메일 인증 정보 등록 -->
+  	<insert id="insertAuthMail">
+  		INSERT
+  			INTO auth
+  			VALUES (
+  				#{auth_id}
+  				,#{auth_code}
+  			)
+  	</insert>
+  	
+  	<!-- 인증 메일 확인 업데이트 -->
+  	<delete id="checkAuthMail">
+  		DELETE
+  			FROM auth
+  			WHERE auth_code = #{auth_code} AND auth_id = #{auth_id}
+  	</delete>
+  	
+  	<!-- 회원 메일 인증 상태 업데이트 -->
+  	<update id="updateMemberAuth">
+  		UPDATE member
+  			SET member_authStatus = 'Y'
+  			WHERE member_id = #{auth_id}
+  	</update>
+  	
+  	<!--===================== sangwoo =========================-->
 </mapper>
 
 
