@@ -40,18 +40,22 @@
 			   
 		      var url_href = window.location.href;
 		      var url = new URL(url_href);
-//		      alert($("#amount").val());
 		       
 		       $.ajax({
-		          url: "CartInsert.ct",
+		    	  type: "GET",
+		          url: "CartInsert",
 		          data: {
 		             pro_code : url.searchParams.get("pro_code"),
 		             amount : $("#amount").val(),
-		             path : "product_detail"
-// 		             pro_name : $("#pro_name").val()
 		          },
 		          success: function(result) {
-		             alert("장바구니에 상품이 담겼습니다.");
+		        	 if(result == "true"){
+			             alert("장바구니에 상품이 담겼습니다.");
+		        	 } else if(result == "false") {
+			             alert("상품 담기가 실패했습니다.");
+		        	 } else if(result == "duplication"){
+		        		 alert("이미 담겨있는 상품입니다.")
+		        	 }
 		          }
 		       }); // ajax
 		}); //cart
@@ -60,18 +64,21 @@
 			   
 		      var url_href = window.location.href;
 		      var url = new URL(url_href);
-//  		      alert($("#amount").val());
 		       
 		       $.ajax({
-		          url: "WishlistInsert.ct",
+		    	  type: "GET",
+		          url: "WishlistInsert",
 		          data: {
 		             pro_code : url.searchParams.get("pro_code"),
-		             amount : 1,
-		             path : "product_detail"
-//  		             pro_name : $("#pro_name").val()
 		          },
 		          success: function(result) {
-		             alert("위시리스트에 상품이 담겼습니다.");
+			        	 if(result == "true"){
+				             alert("위시리스트에 상품이 담겼습니다.");
+			        	 } else if(result == "false") {
+				             alert("상품 담기가 실패했습니다.");
+			        	 } else if(result == "duplication"){
+			        		 alert("이미 담겨있는 상품입니다.")
+			        	 }
 		          }
 		          
 		          
@@ -215,7 +222,7 @@ body {
 					      <td id="pro_nameSize">${product.pro_name }</td>
 					      <!-- 상품 수량 -->
 					      <td class="text-center">
-					      <input class="form-control text-center me-3" id="amount" type="number" value="1" MIN="1" MAX="${product.pro_qty}" 
+					      <input class="form-control text-center me-3" id="amount" name="amount" type="number" value="1" MIN="1" MAX="${product.pro_qty}" 
 					      				onchange="fn_count_qty(this,${product.pro_price})" /></td>
 						  <!-- 상품 가격 -->		
 					      <td class="text-center totalPrice"><fmt:formatNumber value="${product.pro_price}" pattern="#,###"/> 원</td>
@@ -229,28 +236,15 @@ body {
 					
 					<div class="fs-5 mb-5">
 						<div class="d-flex">
-							<!-- 장바구니 추가 -->	
-<!-- 							<button class="btn btn-outline-dark flex-shrink-0" type="button" id="cart"> -->
-<!-- 								<i class="bi-cart-fill me-1"></i> Add to cart -->
-<!-- 							</button> -->
-							<form action="CartInsert" method="post">
-								<input type="hidden" name="pro_code" value=${product.pro_code }>
-								<input type="hidden" name="path" value="product">
-								<input type="hidden" name="amount" value=${amount }>
-								<i class="bi-cart-fill me-1"></i>
-								<input type="submit" class="btn btn-outline-dark flex-shrink-0" value="Add to Cart">
-							</form>
+							<!-- cart -->	
+							<button class="btn btn-outline-dark flex-shrink-0" type="button" id="cart">
+								<i class="bi-cart-fill me-1"></i> Add to cart
+							</button>
 							&nbsp;&nbsp;&nbsp;
-							<!-- wishList -->
-<!-- 							<button class="btn btn-outline-dark flex-shrink-0" type="button" id="wishlist"> -->
-<!-- 								<i class="bi bi-heart-fill"></i> Wishlist -->
-<!-- 							</button> -->
-							<form action="WishlistInsert.ct" method="post">
-								<input type="hidden" name="pro_code" value=${product.pro_code }>
-								<input type="hidden" name="amount" value="1">
-								<i class="bi bi-heart-fill"></i> 
-								<input type="submit" class="btn btn-outline-dark flex-shrink-0" value="Wishlist">
-							</form>
+							<!-- wishlist -->
+							<button class="btn btn-outline-dark flex-shrink-0" type="button" id="wishlist">
+								<i class="bi bi-heart-fill"></i> Wishlist
+							</button>
 							<div>
 <!-- 							총 합계 <input type="text" id="count" value="1"> -->
 							</div>

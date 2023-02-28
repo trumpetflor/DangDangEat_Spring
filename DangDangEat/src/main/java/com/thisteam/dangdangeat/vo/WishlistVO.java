@@ -1,7 +1,10 @@
 package com.thisteam.dangdangeat.vo;
 
 /*
-  
+  create view wishlist_view
+   as    select w.member_id, w.pro_code, w.ischecked, p.pro_name, p.pro_price, p.pro_real_thumb
+      from wishlist w join product p 
+      on (w.pro_code = p.pro_code);
  */
 public class WishlistVO {
 	
