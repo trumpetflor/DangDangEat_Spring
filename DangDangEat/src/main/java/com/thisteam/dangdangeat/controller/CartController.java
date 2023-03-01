@@ -12,8 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.thisteam.dangdangeat.service.CartService;
 import com.thisteam.dangdangeat.vo.CartVO;
 import com.thisteam.dangdangeat.vo.PageInfo;
@@ -191,10 +195,35 @@ public class CartController {
 		
 	}
 	
-	// 다중 삭제
-	@PostMapping(value = "CartCheckDelete")
-	public void cartCheckDelete() {
+	// 장바구니 다중 삭제
+	@ResponseBody
+	@PostMapping("/CartDeleteJson")
+	public void cartDeleteJson(@RequestBody String jsonData,
+								HttpSession session,
+								HttpServletResponse response) {
+//		System.out.println(jsonData);
 		
+		String sId = (String)session.getAttribute("sId");
+		Gson gson = new Gson();
+		List<CartVO> cartList =
+				gson.fromJson(jsonData, new TypeToken<List<CartVO>>(){}.getType());
+//		System.out.println(cartList);
+		
+		int deleteCount = service.deleteCheckCart(sId, cartList);
+		try {
+			
+			if(deleteCount > 0) { // 삭제 성공
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("true");
+			} else { // 삭제 실패
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("false");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// 위시리스트 담기
@@ -235,6 +264,46 @@ public class CartController {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	// 위시리스트 다중 추가
+	@ResponseBody
+	@PostMapping("/WishlistInsertJson")
+	public void wishlistInsertJson(@RequestBody String jsonData,
+								HttpSession session,
+								HttpServletResponse response) {
+		System.out.println(jsonData);
+		
+		String sId = (String)session.getAttribute("sId");
+		Gson gson = new Gson();
+		List<WishlistVO> wishlist =
+				gson.fromJson(jsonData, new TypeToken<List<WishlistVO>>(){}.getType());
+		System.out.println(wishlist);
+		
+		// 
+		List<WishlistVO> wishlist2 = service.getCheckWishlist(sId, wishlist);
+		for(int i = 0; i < wishlist2.size(); i++) {
+			WishlistVO wish = new WishlistVO();
+			
+			wishlist.remove(i);
+			
+		}
+		
+		int inserCount = service.insertCheckWish(sId, wishlist2);
+		try {
+			
+			if(inserCount > 0) { // 추가 성공
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("true");
+			} else { // 추가 실패
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("false");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// 위시리스트 목록 조회
@@ -327,6 +396,36 @@ public class CartController {
 		}
 	}
 	
+	// 위시리스트 다중 삭제
+	@ResponseBody
+	@PostMapping("/WishlistDeleteJson")
+	public void wishlistDeleteJson(@RequestBody String jsonData,
+								HttpSession session,
+								HttpServletResponse response) {
+		System.out.println(jsonData);
+		
+		String sId = (String)session.getAttribute("sId");
+		Gson gson = new Gson();
+		List<WishlistVO> wishlist =
+				gson.fromJson(jsonData, new TypeToken<List<WishlistVO>>(){}.getType());
+		System.out.println(wishlist);
+		
+		int deleteCount = service.deleteCheckWish(sId, wishlist);
+		try {
+			
+			if(deleteCount > 0) { // 삭제 성공
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("true");
+			} else { // 삭제 실패
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("false");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 }
 

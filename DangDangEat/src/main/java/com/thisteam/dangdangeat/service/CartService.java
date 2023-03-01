@@ -46,6 +46,10 @@ public class CartService {
 		return mapper.selectCartListCount(sId);
 	}
 	
+	// 장바구니 다중 삭제
+	public int deleteCheckCart(String sId, List<CartVO> cartList) {
+		return mapper.deleteCheckCart(sId, cartList);
+	}
 	// 위시리스트 담기
 	public int insertWishlist(WishlistVO wish) {
 		return mapper.insertWishlist(wish);
@@ -66,10 +70,17 @@ public class CartService {
 		return mapper.deleteWishlist(member_id, pro_code);
 	}
 	
+	// 위시리스트 다중 삭제
+	public int deleteCheckWish(String sId, List<WishlistVO> wishlist) {
+		return mapper.deleteCheckWish(sId, wishlist);
+	}
+	
 	// 위시리스트 목록 갯수
 	public int getWishlistCount(String sId) {
 		return mapper.selectWishlistCount(sId);
 	}
+
+
 	
 	
 	

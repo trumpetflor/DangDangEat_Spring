@@ -29,6 +29,10 @@ public interface CartMapper {
 	int deleteCart(@Param("sId") String sId,
 					@Param("pro_code") int pro_code);
 	
+	// 장바구니 다중 삭제
+	int deleteCheckCart(@Param("sId") String sId,
+						@Param("cartList")List<CartVO> cartList);
+	
 	// 장바구니 목록 갯수
 	int selectCartListCount(String sId);
 
@@ -47,8 +51,15 @@ public interface CartMapper {
 	int deleteWishlist(@Param("member_id") String member_id,
 						@Param("pro_code") int pro_code);
 	
+	// 위시리스트 다중 삭제
+	int deleteCheckWish(@Param("sId") String sId,
+						@Param("wishlist") List<WishlistVO> wishlist);
+	
 	// 위시리스트 목록 갯수
 	int selectWishlistCount(String sId);
+
+
+	
 	
 	
 

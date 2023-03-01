@@ -103,13 +103,71 @@ $(function() {
 		}
 	});	//전체선택버튼
 	
-	// 체크박스 클릭
-// 	$(document).on("change","input[name=inChecked]",function(){
-// 		$("#selectCount > small").html($('input:checkbox[name=inChecked]:checked').length +" 개 선택됨");
-// 		let in_schedule_cd = $(this).val();
-// 	});//체크박스
+	// 다중삭제버튼
+	$("#checkDeleteBtn").click(function(){
+		let cartArr = new Array();
+		$('input:checkbox[name=inChecked]').each(function(){
+			if($(this).is(":checked")==true){
+				let index = $(this).val();
+				let cart = new Object();
+				cart.pro_code = $("#pro_code" + index).val();
+				cartArr.push(cart);
+			}
+		});
+		
+		$.ajax({
+			type: "POST",
+			url: "CartDeleteJson",
+			contentType: "application/json",
+			data: JSON.stringify(cartArr),
+			success: function(result){
+	        	 if(result == "true"){
+		             alert("선택한 상품이 삭제되었습니다.");
+		             location.reload();
+	        	 } else if(result == "false") {
+		             alert("삭제에 실패했습니다.");
+	        	 }
+			},
+			fail: function() {
+				alert("요청 실패!");
+			}
+		});
+		
+	}); //다중삭제버튼
 
-});
+	// 다중 위시리스트 추가 버튼
+	$("#checkWishBtn").click(function(){
+		let wishArr = new Array();
+		$('input:checkbox[name=inChecked]').each(function(){
+			if($(this).is(":checked")==true){
+				let index = $(this).val();
+				let wishlist = new Object();
+				wishlist.pro_code = $("#pro_code" + index).val();
+				wishArr.push(wishlist);
+			}
+		});
+		
+		$.ajax({
+			type: "POST",
+			url: "WishlistInsertJson",
+			contentType: "application/json",
+			data: JSON.stringify(wishArr),
+			success: function(result){
+	        	 if(result == "true"){
+		             alert("선택한 상품이 위시리스트에 추가되었습니다.");
+		             location.reload();
+	        	 } else if(result == "false") {
+		             alert("위시리스트 추가에 실패했습니다.");
+	        	 }
+			},
+			fail: function() {
+				alert("요청 실패!");
+			}
+		});
+		
+	}); //다중 위시 추가
+	
+}); // jQuery
 
 // 위시리스트 개별 추가
 function wishlistInsert(pro_code){
@@ -177,7 +235,7 @@ function amountModify(pro_code, index){
 	<jsp:include page="../inc/top.jsp"></jsp:include>
 	<!-- 장바구니 번호, 사진(대표이미지), 상품명, 사이즈,색상,수량,가격, 삭제 -->
 	<div id="id">${sessionScope.sId }님의 장바구니</div>
-	<div class="container">
+	<div class="container" style="margin-bottom: 10px;">
 	 <table class="table">
 		<tr>
 		   <th><input type="checkbox" id="AllChecked" name="AllChecked"></th>
@@ -201,7 +259,8 @@ function amountModify(pro_code, index){
 				<input type="hidden" name="cart_code" value=${cart.cart_code }>
 				<tr>
 					<td>
-						<input type="checkbox" name="inChecked" id="inChecked">
+						<input type="checkbox" value="${i.index }" name="inChecked" id="inChecked">
+						<input type="hidden" value="${cart.pro_code }" name="pro_code${i.index }" id="pro_code${i.index }">
 					</td>
 					<td>
 					<div style="text-align: center;">
@@ -241,9 +300,14 @@ function amountModify(pro_code, index){
 		</c:choose>
 	</table>
 	</div>
+	<div class="container">
+		<input type="button" value="삭제" id="checkDeleteBtn">
+		<input type="button" value="위시리스트 추가" id="checkWishBtn">
+	</div>
 	<div class="container" id="total">
 		Total : <fmt:formatNumber value="${finalTotal }" pattern="###,###,###"/> 원
 	</div>
+	
 	
 <!-- //////////////////////////// 페이징 처리 ////////////////////////////   -->
 <div class="float-right">

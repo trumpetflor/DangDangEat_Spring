@@ -120,6 +120,40 @@ $(function() {
 			$("input[name=inChecked]").prop("checked",false);
 		}
 	});	//전체선택버튼
+	
+	// 다중삭제버튼
+	$("#checkDeleteBtn").click(function(){
+		let wishArr = new Array();
+		$('input:checkbox[name=inChecked]').each(function(){
+			if($(this).is(":checked")==true){
+				let index = $(this).val();
+				let wishlist = new Object();
+				wishlist.pro_code = $("#pro_code" + index).val();
+				wishArr.push(wishlist);
+			}
+		});
+		
+		$.ajax({
+			type: "POST",
+			url: "WishlistDeleteJson",
+			contentType: "application/json",
+			data: JSON.stringify(wishArr),
+			success: function(result){
+	        	 if(result == "true"){
+		             alert("선택한 상품이 삭제되었습니다.");
+		             location.reload();
+	        	 } else if(result == "false") {
+		             alert("삭제에 실패했습니다.");
+	        	 }
+			},
+			fail: function() {
+				alert("요청 실패!");
+			}
+		});
+		
+	}); //다중삭제버튼
+	
+	
 });
 </script>
 </head>
@@ -146,9 +180,12 @@ $(function() {
 					</tr>
 				</c:when>
 				<c:otherwise>
-					<c:forEach var="wishlist" items="${wishlist }">
+					<c:forEach var="wishlist" items="${wishlist }" varStatus="i">
 						<tr>
-							<td style="text-align: center;"><input type="checkbox" name="inChecked" id="inChecked"></td>
+							<td style="text-align: center;">
+								<input type="checkbox" value="${i.index }" name="inChecked" id="inChecked">
+								<input type="hidden" value="${wishlist.pro_code }" name="pro_code${i.index }" id="pro_code${i.index }">
+							</td>
 							<td>
 							<div style="text-align: center;">
 		                      <img class="card-img-top" style="width: 100px; height: 100px;"
@@ -168,17 +205,6 @@ $(function() {
 								<input type="button" value="장바구니" id="cart" onclick="cartInsert(${wishlist.pro_code})">
 								<input type="button" value="삭제" id="delete" onclick="wishlistDelete(${wishlist.pro_code})">
 								</div>
-								<!-- 장바구니 버튼 -->
-<!-- 								<form action="CartInsert" method="post"> -->
-<!-- 									<input type="hidden" name="path" value="wishlist"> <input -->
-<%-- 										type="hidden" name="pro_code" value=${wishlist.pro_code }> --%>
-<!-- 									<input type="submit" value="장바구니"> -->
-<!-- 								</form> -->
-								<!-- 삭제 버튼 -->
-<!-- 								<form action="WishlistDelete" method="post"> -->
-<%-- 									<input type="hidden" name="pro_code" value=${wishlist.pro_code }> --%>
-<!-- 									<input type="submit" value="삭제"> -->
-<!-- 								</form> -->
 							</td>
 						</tr>
 					</c:forEach>
@@ -186,12 +212,10 @@ $(function() {
 			</c:choose>
 		</table>
 	</div>
-
-	<!-- 	<form action="WishlistDelete.ct" method="post"> -->
-	<%-- 		<input type="hidden" name="pro_code" value=${wishlist.pro_code }> --%>
-	<!-- 		<input type="submit" value="삭제하기"> -->
-	<!-- 	</form> -->
-	<!-- 	<input type="button" value="위시리스트 비우기" onclick="location.href='WishlistDelete.ct'"> -->
+	<div class="container">
+		<input type="button" value="삭제" id="checkDeleteBtn">
+		<input type="button" value="장바구니 추가" id="checkCartBtn">
+	</div>
 
 <!-- //////////////////////////// 페이징 처리 ////////////////////////////   -->
 <div class="float-right">

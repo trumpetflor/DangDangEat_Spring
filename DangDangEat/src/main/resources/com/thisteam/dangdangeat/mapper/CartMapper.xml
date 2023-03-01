@@ -54,6 +54,16 @@
 			WHERE member_id = #{sId}
 	</select>
 	
+	<!-- 장바구니 다중 삭제 -->
+	<delete id="deleteCheckCart">
+		DELETE FROM cart
+			WHERE member_id = #{sId}
+			AND pro_code IN
+			<foreach collection="cartList" item="cart" open="(" close=")" separator=",">
+				#{cart.pro_code}
+			</foreach>
+	</delete>
+	
 	<!-- 위시리스트 담기 -->
 	<insert id="insertWishlist">
 		INSERT INTO wishlist
@@ -85,6 +95,16 @@
 		DELETE FROM wishlist
 			WHERE member_id = #{member_id}
 			AND pro_code = #{pro_code}
+	</delete>
+	
+	<!-- 장바구니 다중 삭제 -->
+	<delete id="deleteCheckWish">
+		DELETE FROM wishlist
+			WHERE member_id = #{sId}
+			AND pro_code IN
+			<foreach collection="wishlist" item="wish" open="(" close=")" separator=",">
+				#{wish.pro_code}
+			</foreach>
 	</delete>
 	
 	<!-- 위시리스트 목록 갯수 -->
