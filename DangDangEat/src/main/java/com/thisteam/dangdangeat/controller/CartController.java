@@ -2,6 +2,7 @@ package com.thisteam.dangdangeat.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -74,6 +75,55 @@ public class CartController {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	// 장바구니 다중 추가
+	@ResponseBody
+	@PostMapping("/CartInsertJson")
+	public void cartInsertJson(@RequestBody String jsonData,
+								HttpSession session,
+								HttpServletResponse response) {
+		System.out.println(jsonData);
+		
+		String sId = (String)session.getAttribute("sId");
+		Gson gson = new Gson();
+		List<CartVO> cartList =
+				gson.fromJson(jsonData, new TypeToken<List<CartVO>>(){}.getType());
+		int resultCount = 1;
+		for(CartVO cart : cartList) {
+			cart.setMember_id(sId);
+			cart.setCart_amount(1);
+			System.out.println("장바구니 : " + cart);
+			
+			// 중복 확인
+			String isExist = service.isCartExist(cart);
+			if(isExist == null) { // 중복 아님
+				// 장바구니 추가
+				int insertCount = service.insertCart(cart);
+				System.out.println(cart.getPro_code()+": 추가됨");
+				 // 실패 판별
+				if(insertCount <= 0) {
+					resultCount = 0;
+				} 
+			} else {
+				System.out.println(cart.getPro_code()+": 중복상품");
+			}
+		}
+
+		try {
+			// 한번이라도 실패하면 0임
+			if(resultCount > 0) { // 추가 성공
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("true");
+			} else { // 추가 실패
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				out.print("false");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// 장바구니 목록 조회
@@ -278,21 +328,29 @@ public class CartController {
 		Gson gson = new Gson();
 		List<WishlistVO> wishlist =
 				gson.fromJson(jsonData, new TypeToken<List<WishlistVO>>(){}.getType());
-		System.out.println(wishlist);
-		
-		// 
-		List<WishlistVO> wishlist2 = service.getCheckWishlist(sId, wishlist);
-		for(int i = 0; i < wishlist2.size(); i++) {
-			WishlistVO wish = new WishlistVO();
+		System.out.println("위시리스트 : " + wishlist);
+		int resultCount = 1;
+		for(WishlistVO wish : wishlist) {
+			wish.setMember_id(sId);
 			
-			wishlist.remove(i);
-			
+			// 중복 확인
+			String isExist = service.isWishlistExist(wish);
+			if(isExist == null) { // 중복 아님
+				// 위시리스트 추가
+				int insertCount = service.insertWishlist(wish);
+				System.out.println(wish.getPro_code()+": 추가됨");
+				 // 실패 판별
+				if(insertCount <= 0) {
+					resultCount = 0;
+				} 
+			} else {
+				System.out.println(wish.getPro_code()+": 중복상품");
+			}
 		}
-		
-		int inserCount = service.insertCheckWish(sId, wishlist2);
+
 		try {
-			
-			if(inserCount > 0) { // 추가 성공
+			// 한번이라도 실패하면 0임
+			if(resultCount > 0) { // 추가 성공
 				response.setContentType("text/html; charset=UTF-8");
 				PrintWriter out = response.getWriter();
 				out.print("true");

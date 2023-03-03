@@ -38,7 +38,7 @@ public interface CartMapper {
 
 	// 위시리스트 담기
 	int insertWishlist(WishlistVO wish);
-
+	
 	// 위시리스트 중복상품 확인
 	String isWishlistExist(WishlistVO wish);
 	

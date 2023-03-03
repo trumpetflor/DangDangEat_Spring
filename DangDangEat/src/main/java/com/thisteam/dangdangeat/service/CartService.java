@@ -54,7 +54,7 @@ public class CartService {
 	public int insertWishlist(WishlistVO wish) {
 		return mapper.insertWishlist(wish);
 	}
-
+	
 	// 위시리스트 중복상품 확인
 	public String isWishlistExist(WishlistVO wish) {
 		return mapper.isWishlistExist(wish);
@@ -79,6 +79,8 @@ public class CartService {
 	public int getWishlistCount(String sId) {
 		return mapper.selectWishlistCount(sId);
 	}
+
+
 
 
 	

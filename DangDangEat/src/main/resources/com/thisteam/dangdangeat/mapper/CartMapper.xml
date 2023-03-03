@@ -11,8 +11,7 @@
 				0,
 				#{member_id},
 				#{pro_code},
-				#{cart_amount},
-				0
+				#{cart_amount}
 			)
 	</insert>
 	
@@ -69,11 +68,10 @@
 		INSERT INTO wishlist
 			VALUES (
 				#{member_id},
-				#{pro_code},
-				0
+				#{pro_code}
 			)
 	</insert>
-
+	
 	<!-- 위시리스트 중복상품 확인 -->
 	<select id="isWishlistExist" resultType="string">
 		SELECT pro_code

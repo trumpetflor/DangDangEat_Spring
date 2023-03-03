@@ -24,6 +24,56 @@
   	</delete>
   	
   	
+  	<!-- ============================================== yeram ================================================ -->
+  	<!-- Wish Top -->
+  	<select id="selectWishlistTop" resultType="com.thisteam.dangdangeat.vo.WishlistVO">
+  		SELECT *,
+  			COUNT(pro_code) AS wish_count
+  		FROM wishlist_view
+  		GROUP BY pro_code
+  		ORDER BY wish_count DESC
+  	</select>
+  	
+  	<!-- 한 달 가입 수 -->
+  	<select id="selectMemberMonthlyJoin" resultType="int">
+  		SELECT COUNT(member_id) AS joincount
+  		FROM member
+  		WHERE DATE_FORMAT(member_date, '%m') = DATE_FORMAT(sysdate(), '%m')
+  	</select>
+  	
+  	<!-- 한 달 매출액 -->
+	<select id="selectSalesTotalMonthly" resultType="int">
+	SELECT SUM(pay_amount) AS salestotal
+		FROM payments
+		WHERE order_code IN
+			(
+			SELECT order_code
+			FROM orders
+			WHERE DATE_FORMAT(order_date, '%m') = DATE_FORMAT(sysdate(), '%m')
+			)
+	</select>
+  	
+  	<!-- 한 달 주문 건 수 -->
+  	<select id="selectOrderMonthly" resultType="int">
+  		SELECT COUNT(pay_number) AS ordercount
+  			FROM payments
+			WHERE order_code IN
+				(
+				SELECT order_code FROM orders
+				WHERE DATE_FORMAT(order_date, '%m') = DATE_FORMAT(sysdate(), '%m')
+				)
+  	</select>
+  	
+  	<!-- 한 달 리뷰 수 -->
+  	<select id="selectReviewCountMonthly" resultType="int">
+  		SELECT COUNT(review_code) AS reviewCount
+  			FROM review
+  			WHERE DATE_FORMAT(review_date, '%m') = DATE_FORMAT(sysdate(), '%m')
+  	</select>
+  	<!-- ============================================== yeram ================================================ -->
+  	
+  	
+  	
 </mapper>
 
 

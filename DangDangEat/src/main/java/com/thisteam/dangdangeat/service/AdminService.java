@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.thisteam.dangdangeat.mapper.AdminMapper;
 import com.thisteam.dangdangeat.vo.MemberVO;
+import com.thisteam.dangdangeat.vo.WishlistVO;
 
 @Service
 public class AdminService {
@@ -30,6 +31,33 @@ public class AdminService {
 	}
 	
 	
+	// ============================================== yeram ================================================
+	// Wish Top
+	public List<WishlistVO> getWishlistTop() {
+		return mapper.selectWishlistTop();
+	}
+
+	// 한 달 가입 수
+	public int getMemberMonthlyJoin() {
+		return mapper.selectMemberMonthlyJoin();
+	}
+	
+	// 한 달 매출액
+	public int getSalesTotalMonthly() {
+		return mapper.selectSalesTotalMonthly();
+	}
+
+	// 한 달 주문 건 수
+	public int getOrderMonthly() {
+		return mapper.selectOrderMonthly();
+	}
+	
+	// 한 달 리뷰 수
+	public int getReviewCountMonthly() {
+		return mapper.selectReviewCountMonthly();
+	}
+	
+	// ============================================== yeram ================================================
 	
 
 }

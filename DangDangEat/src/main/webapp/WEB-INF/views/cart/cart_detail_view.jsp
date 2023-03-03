@@ -135,7 +135,7 @@ $(function() {
 		
 	}); //다중삭제버튼
 
-	// 다중 위시리스트 추가 버튼
+	// 위시리스트 다중추가 버튼
 	$("#checkWishBtn").click(function(){
 		let wishArr = new Array();
 		$('input:checkbox[name=inChecked]').each(function(){
@@ -156,8 +156,8 @@ $(function() {
 	        	 if(result == "true"){
 		             alert("선택한 상품이 위시리스트에 추가되었습니다.");
 		             location.reload();
-	        	 } else if(result == "false") {
-		             alert("위시리스트 추가에 실패했습니다.");
+	        	 } else {
+	        		 alert("위시리스트 추가에 실패했습니다.");
 	        	 }
 			},
 			fail: function() {
