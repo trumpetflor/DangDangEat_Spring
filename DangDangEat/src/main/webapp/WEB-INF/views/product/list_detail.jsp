@@ -108,7 +108,7 @@
 			let sendData = $("form").serialize();
 			$.ajax({
 				type: "post", // AJAX 로 요청 시
-				url: "ReviewList.bo?pd=1",
+				url: "ReviewList?pd=" + ${product.pro_code},
 				// serialize() 함수를 통해 가져온 폼 데이터를 전송할 데이터로 지정
 				data: sendData,
 				dataType: "text", // 전송되는 데이터에 대한 타입 지정(일반 데이터는 text)
