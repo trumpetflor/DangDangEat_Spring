@@ -4,15 +4,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.thisteam.dangdangeat.mapper.CouponMapper;
 import com.thisteam.dangdangeat.mapper.OrderMapper;
+import com.thisteam.dangdangeat.vo.CartProductVO;
 import com.thisteam.dangdangeat.vo.CouponVO;
 import com.thisteam.dangdangeat.vo.Coupon_viewVO;
-import com.thisteam.dangdangeat.vo.CartProductVO;
+import com.thisteam.dangdangeat.vo.Mc_viewVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.OrderProductVO;
 import com.thisteam.dangdangeat.vo.OrdersBeanVO;
@@ -39,10 +39,7 @@ public class OrderService {
 		return mapper_cp.updateCoupon(coupon);
 	}
 	
-	//쿠폰 삭제(수정)
-	public int deleteCoupon(CouponVO coupon) {
-		return mapper_cp.deleteCoupon(coupon);
-	}
+
 	
 	//쿠폰 전체 개수 조회
 	public int getCouponTotalAmount() {
@@ -75,23 +72,26 @@ public class OrderService {
 		return isExist;
 	}
 	
-	//쿠폰 검색
-	public JSONArray selectCouponCodebyUser(String sId,String cp_code) {
-		JSONArray jArr = new JSONArray();
-		//1. 사용가능한 쿠폰인지 조회
-		System.out.println("검색된 쿠폰 코드: "+cp_code);
-		String usableCp_code = mapper_cp.selectCouponCodebyUser(cp_code);
-		System.out.println("usableCp_code: " +  usableCp_code);//TODO: 왜 null?
-		if(usableCp_code != null) {
-		//2. 사용가능한 쿠폰일 경우 회원 쿠폰 테이블에 Insert
-			int insertCount  = mapper_cp.InsertCouponCodeToMemCp( sId ,  cp_code);
-			System.out.println("insertCount : " +  insertCount);
-		
-			 jArr = new JSONArray(mapper_cp.selectMemberCoupon(sId));
+	//1. 사용가능한 쿠폰인지 조회
+	public boolean isUsableCouponCodebyUser(String cp_code) {
+//	System.out.println("사용 가능? "+ mapper_cp.selectCouponCodebyUser(cp_code));
+		return mapper_cp.selectCouponCodebyUser(cp_code) == null ? false : true;
+	}
+	//2. 쿠폰 등록 작업
+	public int giveCouponToMember(String sId,String cp_code) {
+		 int insertCount = 0;
+		//1.회원이 가지고 있는 쿠폰인지 조회
+		 String PossessCode =  mapper_cp.selectIsPossessCode(sId,cp_code);
+		 
+		 //2. 사용가능한 쿠폰일 경우 회원 쿠폰 테이블에 Insert
+		 if(PossessCode == null) {
+			 insertCount  = mapper_cp.insertCouponCodeToMember( sId ,  cp_code);
+		 }
 			 
-		}
-		System.out.println("jArr : " +  jArr);
-		return jArr;
+
+			
+
+		return insertCount;
 	}
 	
 	
@@ -101,7 +101,7 @@ public class OrderService {
 		return mapper_cp.selectCouponList();
 	}
   
-  
+
   
   // ==================================== Mijoo ====================================
 
@@ -173,6 +173,7 @@ public class OrderService {
 		
 		return finalCouponDiscount;
 	}
+
 
 	
 	//---------------------주문/결제 작업------------------------

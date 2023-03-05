@@ -75,13 +75,9 @@ body {
 				
 								 $.ajax({//자동등록된 쿠폰(생일쿠폰,회원가입쿠폰) 있는지 확인
 											type: "get",
-											url: "SearchUsableCoupon.od",
+											url: "SearchUsableCouponMypage.ajax",
 											contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-											dataType: "HTML",
-											data:{
-												"isMypage":true//마이페이지에서 요청할 경우 HTML로 받아옴
-											}
-							
+											dataType: "HTML"
 										})
 										.done(function(result){
 								    		

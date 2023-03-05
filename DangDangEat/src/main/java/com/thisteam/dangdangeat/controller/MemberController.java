@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.thisteam.dangdangeat.service.AdminService;
 import com.thisteam.dangdangeat.service.MemberService;
 import com.thisteam.dangdangeat.vo.MemberVO;
 
@@ -39,6 +40,9 @@ public class MemberController {
 	
 	@Autowired
 	private JavaMailSender mailSender;
+	
+	@Autowired
+	private AdminService service_ad;
 	
 	// 회원가입 페이지
 	@GetMapping(value = "/MemberJoinForm")
@@ -97,6 +101,11 @@ public class MemberController {
 		String secureEmail = passwordEncoder.encode(member.getMember_email());
 		System.out.println("패스워드 : " + securePass + " 이메일 : " + secureEmail);
 		
+		//=====추가 시작(hawon)=====
+		//실행 위치: 회원가입이 완료 되었을때 실행
+		//자동발급쿠폰이 있는 경우 회원가입시 자동 발급(hawon)
+		int couponInsertCount = service_ad.autoCouponInsertForNewMem(member.getMember_id());
+		//==========추가 끝(hawon)==========
 		
 		// 이메일 발송 
 		MimeMessage mail = mailSender.createMimeMessage();

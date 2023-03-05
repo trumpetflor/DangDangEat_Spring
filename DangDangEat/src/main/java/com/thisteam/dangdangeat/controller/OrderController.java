@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import com.thisteam.dangdangeat.service.OrderService;
 import com.thisteam.dangdangeat.vo.CartProductVO;
 import com.thisteam.dangdangeat.vo.CouponVO;
+import com.thisteam.dangdangeat.vo.Mc_viewVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.OrderProductVO;
 import com.thisteam.dangdangeat.vo.OrdersBeanVO;
@@ -76,10 +77,9 @@ public class OrderController {
 		
 		String sId = null;
 	
-		 response.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		session =  request.getSession(false);
 
-		
 		JSONArray couponList = service.getUsableMemberCoupon(sId);
 	
 		request.setAttribute("couponList", couponList);
@@ -94,13 +94,37 @@ public class OrderController {
 	@ResponseBody
 	public void SearchCouponCode(HttpSession session, CouponVO coupon, HttpServletResponse response){
 		System.out.println(coupon.getCp_code());
-
-		String sId = (String)session.getAttribute("sId");
-		service.selectCouponCodebyUser(sId, coupon.getCp_code());
 		
+		try {	
+			response.setCharacterEncoding("UTF-8");
+			boolean canUse =  service.isUsableCouponCodebyUser(coupon.getCp_code());
+			
+			if(canUse) {//사용가능할 쿠폰일 경우 insert작업
+				String sId = (String)session.getAttribute("sId");
+				int insertCount = service.giveCouponToMember(sId, coupon.getCp_code());
+				
+				if(insertCount > 0) {
+					JSONArray couponList = service.getUsableMemberCoupon(sId);
+					response.getWriter().print(couponList);
+				}else {//이미 등록된 쿠폰=>true 
+					response.getWriter().print(true);
+				}
+				
+			}else {//사용불가능한 쿠폰인 경우=>false
+				response.getWriter().print(false);
+			}
+		
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		
 	}
+	
+	
+	
+
 
   // ==================================== Mijoo =============================================
 	/*

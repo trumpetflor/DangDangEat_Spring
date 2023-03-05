@@ -32,11 +32,11 @@
         INSERT INTO coupon values(
         	#{cp_code} -- 쿠폰코드
         	, #{cp_name} -- 쿠폰명
-        	, #{cp_target.name()} -- enum인데 이런식으로 사용 가능한가?
+        	, #{cp_target.name()} -- 오류남 !
         	, #{cp_discount_value} -- 할인율
         	
         <choose> <!-- 자동발행쿠폰일 경우 시작일 널스트링 -->
-        	<when test="${cp_target.name() == new_member || cp_target.name() == birth">
+        	<when test="${cp_target.name == new_member || cp_target.name == birth">
         	, "" -- 시작일 널스트링으로 비워둠
         	</when>
         	<otherwise>
@@ -62,12 +62,7 @@
     </update>
     
     
-    <!-- 쿠폰 삭제 -->
-    <update id="deleteCoupon">
-    	UPDATE coupon 
-    		 SET cp_status = 0
-			 WHERE cp_code = #{cp_code}
-    </update>
+
     
 	<!-- 관리자페이지 쿠폰 개수 조회 (ajax)-->
 	<select id="selectCouponCount" resultType="int">
@@ -136,7 +131,7 @@
 			WHERE cp_code = #{cp_code}
 	</select>
 	
-	<!-- 쿠폰 검색버튼 -->
+	<!-- 사용가능한 쿠폰인지 조회 -->
 	<select id="selectCouponCodebyUser" resultType="String">
 		SELECT cp_code  
 	  	FROM coupon_view 
@@ -145,17 +140,17 @@
 				 AND cp_target = 'event' -- 관리자등록쿠폰이며
   				 AND cp_status = 1  -- 삭제되지않은 쿠폰
 	</select>
+<!-- 고객에게 쿠폰 발행 작업 -->
+	<!-- a. 고객이 이미 가지고 있는 쿠폰인지 확인-->
+	<select id="selectIsPossessCode" resultType="String">
+	SELECT cp_code
+		 	FROM mc_view 
+			WHERE member_id =  #{id}  AND cp_code =  #{cp_code};
+	</select>
 	
-	<insert id="InsertCouponCodeToMemCp" >
-		 <selectKey keyProperty="coupon" order="BEFORE">
-			 SELECT  cp_code 
-			 FROM mc_view 
-				WHERE member_id =  #{id} 
-				AND cp_code = #{cp_code}
-		 </selectKey>
-		 <if test="${coupon} != null ">
-			 INSERT INTO member_coupon VALUES ( #{id} ,  #{cp_code} , 'N')
-		 </if>
+	 <!--b. 등록된 쿠폰이 아닐경우 쿠폰등록 작업-->
+	<insert id="insertCouponCodeToMember" >
+		 INSERT INTO member_coupon VALUES ( #{id} ,  #{cp_code} , 'N')
 	</insert>
 	
 	<!-- 관리자페이지 쿠폰 리스트 -->

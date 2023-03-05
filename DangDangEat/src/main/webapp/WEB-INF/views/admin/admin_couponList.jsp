@@ -213,7 +213,7 @@ $(document).on("click", "input[name=updateCpBtn]", function(){
 	
 				
 					$.ajax({//
-							url:"CouponUpdate.ad",
+							url:"CouponUpdate",
 							data:{
 								"cp_code": cp_code,
 								"cp_name": coupon_name,
@@ -224,39 +224,37 @@ $(document).on("click", "input[name=updateCpBtn]", function(){
 							},
 							 dataType: "json" ,
 							
-							success: function(result){
-							
-								for(let cp of result){
-// 									alert("수정 성공 !")
+							success: function(coupon){
+// 									alert(JSON.stringify(coupon));
+						
 // 									alert(tr_id);
-											//cp_current_st를 발급중/만료됨 문자열로 치환
-												let statStr = "";
-											if(cp.cp_current_st.equals == 1){
-												statStr = "발급중";
-											}else{
-												if(cp.cp_target.equals =="event"){
-													statStr ="만료됨";
-												}else{
-													statStr ="-";
-													}
-												}
+									//cp_current_st를 발급중/만료됨 문자열로 치환
+									let statStr = "";
+								
+									//event쿠폰이면서 발급상태가 1이 아닐경우
+									if(coupon.cp_target =="event" && coupon.cp_current_st != 1){
+										statStr ="만료됨";
+									}else{//event쿠폰이 아닐경우
+										statStr = "발급중";
+										}
+										
 									$("#"+tr_id).empty();
 									$("#"+tr_id).html(
-											"<td>"+cp.cp_name+"</td>"
-											+"<td>"+cp.cp_target+"</td>"
-											+"<td>"+cp.cp_code+"</td>"
-											+"<td>"+cp.cp_discount_value+" %</td>"
-											+"<td>"+cp.cp_period+"</td>"
-											+"<td>"+cp.cp_startdate+"</td>"
-											+"<td>"+cp.cp_enddate+"</td>"
-											+"<td>"+cp.cp_min_price+"</td>"
-											+"<td>"+cp.cp_max_discount+"</td>"
+											"<td>"+coupon.cp_name+"</td>"
+											+"<td>"+coupon.cp_target+"</td>"
+											+"<td>"+coupon.cp_code+"</td>"
+											+"<td>"+coupon.cp_discount_value+" %</td>"
+											+"<td>"+coupon.cp_period+"</td>"
+											+"<td>"+coupon.cp_startdate+"</td>"
+											+"<td>"+coupon.cp_enddate+"</td>"
+											+"<td>"+coupon.cp_min_price+"</td>"
+											+"<td>"+coupon.cp_max_discount+"</td>"
 											+"<td>"+statStr+"</td>"
 											+"<td>"
 							 					+"<input type='button' value='수정 완료' class = 'btn btn-success btn-sm' name='updateCpBtn'>"
 							 				+"</td>"
 									);
-								}
+							
 								if(result == false){//액션클래스에서 false리턴받을 경우
 									alert("쿠폰 정보 수정에 실패했습니다.")
 								}
@@ -285,7 +283,7 @@ $(document).on("click", "input[name=updateCpBtn]", function(){
 			if(isDelete){
 				
 			
-				location.href = "CouponDelete.ad?cp_code="+cp_code+"&isDelete=" + isDelete;
+				location.href = "CouponDelete?cp_code="+cp_code+"&isDelete=" + isDelete;
 			}
 		
 	});
@@ -475,7 +473,7 @@ $(document).on("click", "input[name=updateCpBtn]", function(){
   </a>
 
   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-    <li><a class="dropdown-item" href="CouponRegister.ad">쿠폰 등록</a></li>
+    <li><a class="dropdown-item" href="AdminCouponRegister">쿠폰 등록</a></li>
     <li><a class="dropdown-item" href="AdminCouponList">등록된 쿠폰 관리</a></li>
   </ul>
 </div>
