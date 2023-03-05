@@ -78,12 +78,15 @@ public class OrderController {
 		String sId = null;
 	
 		response.setCharacterEncoding("UTF-8");
-		session =  request.getSession(false);
+		sId =  (String)request.getSession(false).getAttribute("sId");
 
 		JSONArray couponList = service.getUsableMemberCoupon(sId);
 	
 		request.setAttribute("couponList", couponList);
-		
+		System.out.println("sId="+sId);
+		//쿠폰 히스토리
+		 List<Mc_viewVO> couponHistory = service.getCouponHistory(sId);
+		 request.setAttribute("couponHistory", couponHistory);
 		
 		return "member/mypage_couponAjax";
 	}

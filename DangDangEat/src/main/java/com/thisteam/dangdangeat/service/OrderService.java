@@ -100,8 +100,12 @@ public class OrderService {
 		
 		return mapper_cp.selectCouponList();
 	}
-  
-
+	
+	//쿠폰 히스토리
+	public List<Mc_viewVO> getCouponHistory(String sId) {
+		return mapper_cp.selectCouponHistory(sId);
+		
+	}
   
   // ==================================== Mijoo ====================================
 
@@ -173,6 +177,8 @@ public class OrderService {
 		
 		return finalCouponDiscount;
 	}
+
+
 
 
 	

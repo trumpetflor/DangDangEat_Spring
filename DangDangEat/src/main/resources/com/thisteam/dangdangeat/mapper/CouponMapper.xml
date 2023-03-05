@@ -155,8 +155,16 @@
 	
 	<!-- 관리자페이지 쿠폰 리스트 -->
 	<select id="selectCouponList" resultType="Coupon_viewVO">
-	 SELECT *  
-	 FROM coupon_view WHERE cp_status = 1 ORDER BY cp_enddate DESC
+		 SELECT *  
+		 FROM coupon_view WHERE cp_status = 1 ORDER BY cp_enddate DESC
+	</select>
+	
+	<!-- 쿠폰 히스토리 -->
+	<select id="selectCouponHistory" resultType="com.thisteam.dangdangeat.vo.Mc_viewVO">
+		select * from mc_view 
+		where member_id = #{id} 
+		order by target_ed desc 
+		limit 10 
 	</select>
 
 </mapper>

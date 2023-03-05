@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.thisteam.dangdangeat.vo.CouponVO;
 import com.thisteam.dangdangeat.vo.Coupon_viewVO;
+import com.thisteam.dangdangeat.vo.Mc_viewVO;
 
 public interface CouponMapper {
 	
@@ -43,5 +44,8 @@ public interface CouponMapper {
 	public String selectIsPossessCode(@Param("id")String sId, @Param("cp_code") String cp_code);
 	//b. 고객에게 쿠폰 발행 작업
 	public int insertCouponCodeToMember(@Param("id") String sId, @Param("cp_code")String cp_code);
+
+	//쿠폰 히스토리
+	public List<Mc_viewVO> selectCouponHistory(@Param("id") String sId);
 
 }
