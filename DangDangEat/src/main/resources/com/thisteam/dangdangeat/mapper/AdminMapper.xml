@@ -41,7 +41,7 @@
 			WHERE cp_code = #{coupon.cp_code}
   	
   	</update>
-  	
+
 	<!-- 쿠폰 삭제 -->
     <update id="deleteCoupon">
     	UPDATE coupon 
@@ -89,7 +89,16 @@
     </insert>
     
 	<!-- ================================================================================ -->
+
+
+    <!-- ============================ admin/orderList 미주 ===================== -->	
+    
+  	<!-- 관리자 주문 관리 페이지 -->
+  	<select id="selectOrderList" resultType="com.thisteam.dangdangeat.vo.AdminOrderListVO" >
+  		SELECT * FROM admin_order_list_view
+  	</select>
   	
+  	<!-- ============================ admin/orderList 미주 ===================== -->
 </mapper>
 
 

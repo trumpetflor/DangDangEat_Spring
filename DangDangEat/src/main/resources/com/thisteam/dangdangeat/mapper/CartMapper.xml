@@ -18,7 +18,7 @@
 	
 	<!-- 장바구니 목록 -->
 	<select id="selectCartList" resultType="com.thisteam.dangdangeat.vo.CartVO">
-		SELECT cart_amount, pro_name, pro_price, pro_real_thumb
+		SELECT cart_amount, pro_name, pro_price, pro_real_thumb, pro_code
 			FROM cart_view
 			WHERE member_id = #{member_id}
 	</select>

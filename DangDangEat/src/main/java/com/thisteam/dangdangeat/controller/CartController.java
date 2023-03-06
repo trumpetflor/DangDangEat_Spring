@@ -114,7 +114,6 @@ public class CartController {
 		
 		// 장바구니 목록 가져오기
 		List<CartVO> cartList = service.getCartList(member_id);
-		
 		model.addAttribute("cartList", cartList);
 		
 		return "cart/cart_detail_view";

@@ -9,10 +9,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../css/orderConfirmation.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/orderConfirmation.css">
   <!-- 버튼을 위한 css -->
-  <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
-  <link href="css/styles.css" rel="stylesheet" />
+  <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="${pageContext.request.contextPath}/resources/css/styles.css" rel="stylesheet" />
   <style type="text/css">
 		@font-face {
 		    font-family: 'GmarketSansMedium';
@@ -45,7 +45,7 @@
 	<div class="col-md-8">
 	<div class="card">
 	<div class="invoice p-5">
-	<div class = "dangLogo" align="center"><img src="img/order.png" width="50" > </div>
+	<div class = "dangLogo" align="center"><img src="${pageContext.request.contextPath}/resources/img/order.png" width="50" > </div>
 		<c:forEach var="pay" items="${paymentList }" varStatus="status">
         
 			<h5 align="center"><span class="font-weight-bold d-block mt-4">${sessionScope.sId } 고객님, 주문이 완료되었습니다!</span></h5> 
@@ -76,7 +76,7 @@
 		<c:forEach var="orderProduct" items="${orderProductList }" varStatus="status">
 			<tbody>
 			<tr>
-				<td width="20%"><img src="http://localhost:8080/DangDangEat/upload/${orderProduct.pro_real_thumb }" alt="${orderProduct.pro_name }" 
+				<td width="20%"><img src="${pageContext.request.contextPath}/resources/upload/${orderProduct.pro_real_thumb }" alt="${orderProduct.pro_name }" 
 			            	class="product-frame" width="90" onerror="this.src='./img/sample1_thumb.png';" > </td>
 				<td width="60%"> <span class="font-weight-bold">상품명 : ${orderProduct.pro_name }</span>
 					<div class="product-qty"> <span class="d-block">주문수량 : ${orderProduct.cart_amount }개</span></div>
@@ -119,7 +119,7 @@
 			<p align="center"><br>We will be sending shipping confirmation email <br> when the item shipped successfully!</p>
 			<p class="font-weight-bold mb-0" align="center">Thanks for shopping with us!</p><br> <p align="center"><span >DangDangEat Team</span></p><br>
 	<div class="container" align="center">
-		<input type="button" value="장바구니로 돌아가기" onclick="location.href='CartList.ct'">&nbsp;&nbsp;
+		<input type="button" value="장바구니로 돌아가기" onclick="location.href='CartList'">&nbsp;&nbsp;
 		<input type="button" value="홈으로 이동하기" onclick="location.href='./'">
 	</div>
 	</div>

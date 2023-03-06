@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.thisteam.dangdangeat.service.AdminService;
 import com.thisteam.dangdangeat.service.OrderService;
 import com.thisteam.dangdangeat.service.ProductService;
+
+import com.thisteam.dangdangeat.vo.AdminOrderListVO;
 import com.thisteam.dangdangeat.vo.CouponVO;
 import com.thisteam.dangdangeat.vo.Coupon_viewVO;
 import com.thisteam.dangdangeat.vo.Cp_target;
@@ -312,6 +314,10 @@ public class AdminController {
 		return "admin/admin_couponList";
 	}
   
+
+
+  
+
 	@GetMapping(value = "/CouponUpdate" )// ajax요청 서블릿- 쿠폰수정
 	@ResponseBody
 	public void CouponUpdate(HttpSession session, 
@@ -374,6 +380,29 @@ public class AdminController {
 		return "redirect";
 	}
   
+//============================ admin/orderList 미주 ===========================================
+	
+	// 관리자 - 주문 관리 페이지 
+	@GetMapping(value = "AdminOrderList")
+	public String OrderList(Model model, HttpSession session) {
+		
+		String id = (String)session.getAttribute("sId");
+		
+		if(id == null || id.equals("") || !id.equals("admin")) { 
+			model.addAttribute("msg", "잘못된 접근입니다!");
+			return "redirect:/";
+		} else { 
+			// 전체 주문 목록 조회
+			List<AdminOrderListVO> adminOrderList = service.getOrderList();
+			
+			model.addAttribute("adminOrderList", adminOrderList);
+			
+			return "admin/admin_orderList";
+		}
+		
+		
+	}
+//============================ admin/orderList 미주 ===========================================
 
 
 }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.thisteam.dangdangeat.mapper.AdminMapper;
+
+import com.thisteam.dangdangeat.vo.AdminOrderListVO;
 import com.thisteam.dangdangeat.vo.CouponVO;
 import com.thisteam.dangdangeat.vo.Coupon_viewVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
@@ -30,6 +32,7 @@ public class AdminService {
 	public int memberDelete(MemberVO member) {
 		return mapper.deleteMember(member);
 	}
+
 	// ======================================== hawon =============================================
 	//쿠폰 수정
 	public int updateCoupon(Coupon_viewVO coupon) {
@@ -73,8 +76,15 @@ public class AdminService {
 		
 		return mapper.insertAutoCouponForNewMem(member_id);
 	}
+
+//============================ admin/orderList 미주 ===========================================
+
+	// 관리자 - 주문 관리 페이지
+	public List<AdminOrderListVO> getOrderList() {
+		return mapper.selectOrderList();
+	}
 	
-	
+//============================ admin/orderList 미주 ===========================================	
 	
 
 }

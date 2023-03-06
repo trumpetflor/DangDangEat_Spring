@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.thisteam.dangdangeat.vo.AdminOrderListVO;
 import com.thisteam.dangdangeat.vo.CouponVO;
 import com.thisteam.dangdangeat.vo.Coupon_viewVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
@@ -18,6 +19,7 @@ public interface AdminMapper {
 
 	// 회원 삭제
 	int deleteMember(MemberVO member);
+
 	//=========================== hawon 시작=====================================
 	//쿠폰 수정
 	int updateCoupon(@Param("coupon") Coupon_viewVO coupon);
@@ -41,8 +43,14 @@ public interface AdminMapper {
 	int insertAutoCouponForNewMem(String member_id);
 	
 	
-	//=========================== hawon 끝 =====================================
+//=========================== hawon 끝 =====================================
+
+//============================ admin/orderList 미주 ===========================================
 	
+	// 관리자 - 주문 관리 페이지
+	List<AdminOrderListVO> selectOrderList();
+  
+//============================ admin/orderList 미주 ===========================================
 
 }
 
