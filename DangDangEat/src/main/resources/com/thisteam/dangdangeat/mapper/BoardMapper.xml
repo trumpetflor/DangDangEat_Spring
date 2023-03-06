@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- mapper 태그 내에 namespace 속성 지정 후 Mapper 인터페이스 위치 지정 -->
+<mapper namespace="com.thisteam.dangdangeat.mapper.BoardMapper">
+	
+	<select id="getNoticeList" resultType="com.thisteam.dangdangeat.vo.NoticeVO">
+		SELECT
+			notice_code
+			,notice_subject
+			,member_id
+			,notice_date
+			,notice_readcount
+			FROM notice
+				WHERE
+					notice_subject LIKE '%${keyword}%'
+				ORDER BY
+					notice_code DESC
+					<if test="listLimit gt 0">
+				LIMIT
+					#{startRow}, #{listLimit}
+					</if>
+	</select>
+	
+	<select id="getNoticeListCount" resultType="int">
+		SELECT
+			COUNT(*)
+			FROM notice
+			WHERE
+				notice_subject LIKE '%${keyword}%'
+	</select>
+  	
+  	<insert id="insertNotice">
+  		<selectKey keyProperty="notice_code" resultType="int" order="BEFORE">
+  			SELECT MAX(notice_code)
+  				FROM notice
+  		</selectKey>
+  		INSERT 
+  			INTO notice
+  			VALUES (
+  				<choose>
+					<when test="notice_code eq '0'">
+					1
+					</when>
+					<otherwise>
+					(#{notice_code} + 1)
+					</otherwise>
+				</choose>
+				,#{member_id}
+				,#{notice_subject}
+				,#{notice_content}
+				,#{notice_readcount}
+				,now()
+  			) 
+  		
+  	</insert>
+  	
+  	<select id="getDetailList" resultType="com.thisteam.dangdangeat.vo.NoticeVO">
+  		SELECT *
+  			FROM notice
+  			WHERE notice_code = #{code}
+  	</select>
+  	
+  	<update id="modifyNotice">
+  		UPDATE notice
+  			SET
+  				notice_subject = #{notice_subject}
+  				,notice_content = #{notice_content}
+  			WHERE
+  				notice_code = #{notice_code}
+  	</update>
+  	
+  	<delete id="deleteNotice">
+  		DELETE
+  			FROM notice
+  			WHERE notice_code = #{code}
+  	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
