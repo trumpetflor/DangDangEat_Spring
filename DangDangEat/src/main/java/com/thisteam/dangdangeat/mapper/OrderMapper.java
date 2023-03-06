@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.thisteam.dangdangeat.vo.CartProductVO;
+import com.thisteam.dangdangeat.vo.Mc_viewVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.OrderProductVO;
 import com.thisteam.dangdangeat.vo.OrdersBeanVO;
@@ -61,6 +62,8 @@ public interface OrderMapper {
 
 	// 3. 결제 페이지 : 최대 할인금액 계산
 	int selectCouponMaxDiscountPrice(String cp_code);
+
+	List<Mc_viewVO> selectCouponHistory(String sId);
 
 
 

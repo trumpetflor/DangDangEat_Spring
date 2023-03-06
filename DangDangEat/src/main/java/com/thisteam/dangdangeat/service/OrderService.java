@@ -29,37 +29,17 @@ public class OrderService {
 	
   // ==================================== Hawon ====================================
   
-	//쿠폰 등록
-	public int insertCoupon(CouponVO coupon) {
-		return mapper_cp.insertCoupon(coupon);
-	}
 	
-	//쿠폰 수정
-	public int updateCoupon(CouponVO coupon) {
-		return mapper_cp.updateCoupon(coupon);
+	//관리자페이지 쿠폰 리스트
+	public List<Coupon_viewVO> selectCouponList() {
+		
+		return mapper_cp.selectCouponList();
 	}
-	
 
 	
-	//쿠폰 전체 개수 조회
+	//관리자페이지 쿠폰 전체 개수 조회
 	public int getCouponTotalAmount() {
 		return mapper_cp.selectCouponCount();
-	}
-
-	
-	public JSONArray getUsableMemberCoupon(String sId) {
-		//1. 생일쿠폰 업데이트 작업
-//		cp_mapper.updateBirthCp(sId);
-		
-		
-		//2. 쿠폰 조회 후 JSON 데이터로 변경
-		//TODO: 임시 ! 나중에 지울것
-		sId = "admin";
-		List<Map<String,Object>> couponList = mapper_cp.selectMemberCoupon(sId);
-		System.out.println("sId:  "+sId);
-		JSONArray jArr = new JSONArray(mapper_cp.selectMemberCoupon(sId));
-		System.out.println("jArr :  " + jArr);
-		return jArr;
 	}
 
 	// 관리자 쿠폰등록페이지에서 중복된 쿠폰코드인지 확인(Ajax)
@@ -71,6 +51,24 @@ public class OrderService {
 		}
 		return isExist;
 	}
+	
+	//회원별 사용가능 쿠폰 조회
+	public JSONArray getUsableMemberCoupon(String sId) {
+//		System.out.println("getUsableMemberCoupon 메서드");
+//		System.out.println("sId:  "+sId);
+		
+//		//1. 생일쿠폰 업데이트 작업
+//		mapper_cp.updateBirthCp(sId);
+		
+		//2. 쿠폰 조회 후 JSON 데이터로 변경
+
+		List<Map<String,Object>> couponList = mapper_cp.selectMemberCoupon(sId);
+		JSONArray jArr = new JSONArray(mapper_cp.selectMemberCoupon(sId));
+		
+//		System.out.println("jArr :  " + jArr);
+		return jArr;
+	}
+
 	
 	//1. 사용가능한 쿠폰인지 조회
 	public boolean isUsableCouponCodebyUser(String cp_code) {
@@ -87,19 +85,11 @@ public class OrderService {
 		 if(PossessCode == null) {
 			 insertCount  = mapper_cp.insertCouponCodeToMember( sId ,  cp_code);
 		 }
-			 
-
-			
 
 		return insertCount;
 	}
 	
-	
-	//관리자페이지 쿠폰 리스트
-	public List<Coupon_viewVO> selectCouponList() {
-		
-		return mapper_cp.selectCouponList();
-	}
+
 	
 	//쿠폰 히스토리
 	public List<Mc_viewVO> getCouponHistory(String sId) {

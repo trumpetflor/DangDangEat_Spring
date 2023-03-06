@@ -12,21 +12,16 @@ import com.thisteam.dangdangeat.vo.Mc_viewVO;
 public interface CouponMapper {
 	
 	
-	public int insertCoupon(CouponVO coupon);
+	//관리자페이지 쿠폰 리스트
+	public List<Coupon_viewVO> selectCouponList();
 	
-//	@Update()
-	public int updateCoupon(CouponVO coupon);
-
-
-	   
+	//쿠폰 전체개수 조회
 	public int selectCouponCount();
-	
-	//특정 쿠폰 검색
-	public Map selectCouponFromCouponView(String cp_code);
 
 	//사용가능한 쿠폰 조회
 	public List<Map<String,Object>> selectMemberCoupon(@Param("id")String sId);
 	
+	//생일쿠폰 업데이트 작업
 //	public void updateBirthCp(@Param("id") String sId);
 
 	  
@@ -35,9 +30,6 @@ public interface CouponMapper {
 	//사용가능한 쿠폰인지 조회
 	public String selectCouponCodebyUser(String cp_code);
 
-	
-	//관리자페이지 쿠폰 리스트
-	public List<Coupon_viewVO> selectCouponList();
 	
 	//쿠폰발행작업--------------
 	//a. 회원이 이미 가지고 있는 쿠폰인지 조회
