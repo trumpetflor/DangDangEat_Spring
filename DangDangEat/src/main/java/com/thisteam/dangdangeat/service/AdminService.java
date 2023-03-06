@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.thisteam.dangdangeat.mapper.AdminMapper;
+import com.thisteam.dangdangeat.vo.AdminOrderListVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 
 @Service
@@ -28,8 +29,15 @@ public class AdminService {
 	public int memberDelete(MemberVO member) {
 		return mapper.deleteMember(member);
 	}
+
+//============================ admin/orderList 미주 ===========================================
 	
+	// 관리자 - 주문 관리 페이지
+	public List<AdminOrderListVO> getOrderList() {
+		return mapper.selectOrderList();
+	}
 	
+//============================ admin/orderList 미주 ===========================================	
 	
 
 }

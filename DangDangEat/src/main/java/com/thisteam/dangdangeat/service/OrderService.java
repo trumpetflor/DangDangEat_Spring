@@ -14,6 +14,7 @@ import com.thisteam.dangdangeat.vo.CartProductVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.OrderProductVO;
 import com.thisteam.dangdangeat.vo.OrdersBeanVO;
+import com.thisteam.dangdangeat.vo.PaymentsVO;
 
 @Service
 public class OrderService {
@@ -106,54 +107,52 @@ public class OrderService {
 	}
 
 	// 1-(2). 주문서에 장바구니 결제 상품 정보를 가져오는 메서드
-	public List<CartProductVO> getCartList(String id, int proCode, int cartCode) {
-		return mapper.selectCartList(id, proCode, cartCode);
+	public List<CartProductVO> getCartList(String id, int pro_code) {
+		return mapper.selectCartList(id, pro_code);
 	}
 
-	// 2-(1)-1. 카트번호가 중복되는 주문상품 조회 구문
-	public int selectCartOrder(int cartCode) {
-		return mapper.selectCartOrder(cartCode);
-	}
-	
-	// 2-(1)-2. 카트번호가 중복되는 주문상품 삭제 구문
-	public void deleteCartOrder() {
-		
-		int deleteCount = mapper.deleteCartOrder();
-		
-		if(deleteCount >= 0) {
-			mapper.deleteOrderStatusEqZero();
-		}
-		
-	}
-	
-	//------------ 2-(1)-1,2가 완료된 후 실행되는 2-(1)---------
 	
 	// 2-(1). 주문자 정보 & 주문상품 등록 구문 (orders & order_product table)
-	public int insertOrder(OrdersBeanVO order, OrderProductVO orderProduct, int cartCode) {
-		int insertOrderCount = mapper.insertOrder(order, orderProduct, cartCode);
+	public int insertOrder(OrdersBeanVO order, OrderProductVO orderProduct, String id) {
+		// 1. 중복 주문 처리 구문
+		mapper.deleteUncompleteOrder(id);
+		
+		// 2. 주문자 정보 등록 (orders)
+		int insertOrderCount = mapper.insertOrder(order, id);
 		int insertOrderProductCount = 0;
 		
 		if(insertOrderCount > 0) { // 주문자 정보 입력 성공 후
-			// 주문상품 등록 구문 실행
-			insertOrderProductCount =mapper.insertOrderProduct(order, cartCode);
+			// 3. 주문상품 등록 (order_product)
+			insertOrderProductCount = mapper.insertOrderProduct(orderProduct, id);
+			System.out.println("주문자 정보 등록 성공");
 		}
 		
 		return insertOrderProductCount;
 	}
 
 	// 2-(2). 주문자 정보 리스트 (출력용)
-	public List<OrdersBeanVO> getOrderMemberList(String id, int cartCode) {
-		return mapper.selectOrderMemberList(id, cartCode);
+	public List<OrdersBeanVO> getOrderMemberList(String id) {
+		return mapper.selectOrderMemberList(id);
 	}
 
 	// 2-(3). 주문상품 정보 리스트 (출력용)
-	public List<CartProductVO> getOrderProductList(String id, int cartCode) {
-		return mapper.selectOrderProductList(id, cartCode);
+	public List<CartProductVO> getOrderProductList(String id, int pro_code) {
+		return mapper.selectOrderProductList(id, pro_code);
 	}
 
+	// 2-(4). 주문정보 등록 실패 시 실행하는 구문
+	public void deleteUncompletedOrder(String id, int pro_code) {
+		// 1. 주문 상태가 0인 경우(=미완료) orders 테이블에서 삭제 (= 중복 데이터 방지)
+		int deleteOrderCount = mapper.deleteUncompletedProduct(id, pro_code);
+		if(deleteOrderCount > 0) {
+				mapper.deleteUncompleteOrder(id);
+		}
+		
+	}
+	
 	// 3. 결제 페이지 : 쿠폰 페이지에서 받아온 쿠폰 코드로 할인금액 계산
-	public int getCouponDiscountPrice(int cart_code, String cp_code) {
-		int couponDiscountAmount = mapper.selectCouponDiscountPrice(cart_code, cp_code); // 쿠폰 적용 할인 금액 (주문마다 - 변동)
+	public int getCouponDiscountPrice(String cp_code) {
+		int couponDiscountAmount = mapper.selectCouponDiscountPrice(cp_code); // 쿠폰 적용 할인 금액 (주문마다 - 변동)
 		int couponMaxDiscount = mapper.selectCouponMaxDiscountPrice(cp_code); // 최대 할인 금액(쿠폰마다 정해진 상한선 - 고정)
 		
 		int finalCouponDiscount = 0; // 최종 리턴값
@@ -166,6 +165,91 @@ public class OrderService {
 		
 		return finalCouponDiscount;
 	}
+
+	// 4. 주문확인서 생성 및 결제 작업 진행 비즈니스 로직
+	
+	// 4-(1). 주문 테이블의 order_status = 1로 변경 시키기
+	public boolean updateOrderStatus(String id, int order_code) {
+		boolean isOrderStatusUpdate = false;
+		
+		int OrderStatusUpdateCount = mapper.UpdateOrderStatus(id, order_code);
+		
+		if(OrderStatusUpdateCount > 0 ) {
+			isOrderStatusUpdate = true; 
+		} 
+		return isOrderStatusUpdate;
+	}
+	
+	// 4-(2). 결제 테이블에 정보 입력
+	public int paymentInsertPro(PaymentsVO payments, int pay_number, int pro_amount) {
+		int paymentInsertCount = 0;
+		
+		paymentInsertCount = mapper.paymentInsertPro(payments, pay_number, pro_amount);
+		
+		return paymentInsertCount;
+	}
+
+	// 4-(3). 결제완료시 상품 테이블에서 수량변경
+	public int productQtyUpdate(int order_code, int pro_code) {
+		int productQtyUpdateCount = 0;
+		
+		productQtyUpdateCount = mapper.UpdateProductQty(order_code, pro_code);
+		
+		return productQtyUpdateCount;
+	}
+
+	// 4-(4). 카트에서 주문한 상품 삭제
+	public int cartDelete(String id, int pro_code) {
+		int cartDeleteCount = 0;
+		
+		cartDeleteCount = mapper.DeleteCart(id, pro_code);
+		
+		return cartDeleteCount;
+	}
+
+	// 4-(5). 사용한 쿠폰 mc_used = 'N' > 'Y'
+	public int getCouponUpdateCount(PaymentsVO payments, String id) {
+		int couponUpdateCount = 0;
+		
+		// 'cp_target = event'
+		couponUpdateCount = mapper.updateCouponStatusE(payments, id);
+		
+		// 'cp_target = new_member'
+		if(couponUpdateCount >= 0) {
+			couponUpdateCount = mapper.updateCouponStatusM(payments, id);
+		}
+		return couponUpdateCount;
+	}
+
+   // 4-(6). 결제 정보 리스트 생성
+	public List<PaymentsVO> getPaymentsList(int pay_number, int order_code) {
+		List<PaymentsVO> paymentsList = null;
+		
+		paymentsList = mapper.SelectOrderPaymentsList(pay_number, order_code);
+		System.out.println("service로 잘넘어온 결제 정보 : " + paymentsList);
+		
+		return paymentsList;
+	}
+
+	// 4-(7). 결제 상품 정보 리스트 생성 
+	public List<CartProductVO> getPaymentProductList(String id, int pro_code) {
+		List<CartProductVO> paymentProductList= null;
+		
+		paymentProductList = mapper.selectPaymentProductList(id, pro_code);
+		
+		return paymentProductList;
+	}
+	
+	// 4-(8). 배송 정보 및 주문자 정보 리스트 생성
+	public List<OrdersBeanVO> getOrderPaymentInfoList(String id, int order_code) {
+		List<OrdersBeanVO> orderPaymentInfoList= null;
+		
+		orderPaymentInfoList = mapper.selectOrderPaymentInfoList(id, order_code);
+		
+		return orderPaymentInfoList;
+	}
+
+	
 	
 	//---------------------주문/결제 작업------------------------
   

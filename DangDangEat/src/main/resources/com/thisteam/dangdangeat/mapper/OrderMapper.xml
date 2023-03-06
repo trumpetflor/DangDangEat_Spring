@@ -9,42 +9,17 @@
 	<select id="selectMemberList" resultType="com.thisteam.dangdangeat.vo.MemberVO">
 		SELECT *
 		 	FROM member 
-		 	WHERE member_id = ${id}
+		 	WHERE member_id = #{id}
 	</select>
 	<!--  1-(2). 주문서에 장바구니 결제 상품 정보를 가져오는 메서드 -->
-	<select id="selectCartList" resultType="com.thisteam.dangdangeat.vo.CartVO">
+	<select id="selectCartList" resultType="com.thisteam.dangdangeat.vo.CartProductVO">
 		SELECT * 
-			FROM cart_product_view
+			FROM cart_view
 			WHERE
-				cart_code = ${cartCode}
-				AND member_id = ${id}
-				AND pro_code = ${proCode} 
+				member_id = #{id}
+				AND pro_code = #{pro_code} 
 	</select>
 	
-	<!-- 2-(1)-1. 카트번호가 중복되는 주문상품 조회 구문 -->
-	<select id="selectCartOrder" resultType="integer">
-		SELECT *
-			FROM order_product 
-			WHERE cart_code = ${cartCode}
-	</select>
-	
-	<!-- 2-(1)-2. 카트번호가 중복되는 주문상품 삭제 구문 - 1 -->
-	<delete id="deleteCartOrder">
-		DELETE 
-			FROM order_product
-			WHERE order_code 
-				IN 
-				 (SELECT order_code 
-				 	FROM orders
-				 	WHERE order_status = 0)	 
-	</delete>
-	
-	<!-- 2-(1)-2. 카트번호가 중복되는 주문상품 삭제 구문 - 2 -->
-	<delete id="deleteOrderStatusEqZero">
-		DELETE 
-			FROM orders
-			WHERE order_status = 0 	 
-	</delete>
 	
 	<!-- 2-(1). 주문자 정보 등록 구문 (orders) -->
 	<insert id="insertOrder">
@@ -53,16 +28,16 @@
 				FROM orders 
 		</selectKey>
 		INSERT 
-			INTO board
+			INTO orders
 			VALUES (
-				#{order_code}
-				, #{member_id}
-				, #{order_name}
-				, #{order_postcode}
-				, #{order_address1}
-				, #{order_address2}
-				, #{order_mobile}
-				, #{order_comment}
+				(#{order_code} + 1)
+				, #{id}
+				, #{order.order_name}
+				, #{order.order_postcode}
+				, #{order.order_address1}
+				, #{order.order_address2}
+				, #{order.order_mobile}
+				, #{order.order_comment}
 				,0
 				,now()			
 			)
@@ -70,44 +45,61 @@
 	
 	<!-- 2-(1). 주문상품 등록 구문 (order_product) -->
 	<insert id="insertOrderProduct">
+		<selectKey keyProperty="order_code" resultType="integer" order="BEFORE">
+			SELECT o.order_code
+				FROM orders o NATURAL JOIN cart c
+				WHERE o.member_id = #{id} AND c.pro_code = #{orderProduct.pro_code}
+				AND c.cart_amount = #{orderProduct.order_stock} AND o.order_status = 0
+		</selectKey>
 		INSERT
 			INTO order_product 
-				(order_code, pro_code, order_stock, cart_code)
-				SELECT o.order_code, c.pro_code, c.cart_amount, c.cart_code
-					FROM orders o NATURAL JOIN cart c
-					WHERE c.cart_code = ${cartCode} 
-						AND o.order_code = ${order.order_code}
+			VALUES
+				(#{order_code}, #{orderProduct.pro_code}, #{orderProduct.order_stock})
 	</insert>
+	
 	
 	<!-- 2-(2). 주문자 정보 리스트 (출력용) -->
 	<select id="selectOrderMemberList" resultType="com.thisteam.dangdangeat.vo.OrdersBeanVO">
 		SELECT *
 			FROM orders 
 			WHERE order_code = (SELECT order_code 
-									FROM order_product
-									WHERE cart_code = ${cartCode} 
-										AND member_id = ${id})
+									FROM orders o NATURAL JOIN order_product op
+									WHERE o.order_code = op.order_code
+									AND member_id = #{id} AND o.order_status = 0) 
 	</select>
 	
 	<!-- 2-(3). 주문상품 정보 리스트 (출력용) -->
 	<select id="selectOrderProductList" resultType="com.thisteam.dangdangeat.vo.CartProductVO">
 		SELECT *
-			FROM cart_product_view
-			WHERE member_id = ${id} 
-				AND cart_code = ${cartCode}
+			FROM cart_view
+			WHERE member_id = #{id} AND pro_code = #{pro_code}
 	</select>
+	
+	<!-- 2-(4). 주문 상태가 0인 경우(=미완료) orders 테이블에서 삭제 (= 중복 데이터 방지) -->
+	<delete id="deleteUncompleteOrder">
+		DELETE FROM orders 
+			WHERE order_status = 0 AND member_id = #{id}
+	</delete>
+	<delete id="deleteUncompletedProduct">
+		DELETE FROM order_product
+			WHERE pro_code = #{pro_codd} AND
+				 order_code = (SELECT order_code 
+									FROM orders o NATURAL JOIN order_product op
+									WHERE o.order_code = op.order_code AND member_id = #{id})
+	</delete>
+	
 	
 	<!-- 3. 결제 페이지 : 쿠폰 페이지에서 받아온 쿠폰 코드로 할인금액 계산 -->
 	<select id="selectCouponDiscountPrice" resultType="integer">
 		SELECT TRUNCATE (((pro_price * cart_amount) * 
 	 		(SELECT cp_discount_value 
 	 			FROM coupon 
-	 			WHERE cp_code = ${cpCode}) / 100 ), 0)
-		 	FROM cart_product_view WHERE cart_code = ${cartCode}
+	 			WHERE cp_code = #{cpCode}) / 100 ), 0)
+		 	FROM cart_product_view WHERE cart_code = #{cartCode}
 		 	<if test="">
 		 		SELECT cp_max_discount 
 		 			FROM coupon
-		 			WHERE cp_code = ${cpCode}
+		 			WHERE cp_code = #{cpCode}
 		 	</if>
 	</select>
 	
@@ -115,8 +107,81 @@
 	<select id="selectCouponMaxDiscountPrice" resultType="integer">
 		SELECT cp_max_discount 
  			FROM coupon
- 			WHERE cp_code = ${cpCode}
+ 			WHERE cp_code = #{cpCode}
 	</select>
+	
+	<!-- 4. 주문확인서 생성 및 결제 작업 진행 비즈니스 로직 -->
+	
+	<!-- 4-(1). 주문 테이블의 order_status = 1로 변경 시키기 -->
+	<update id="UpdateOrderStatus">
+		UPDATE orders
+			 SET order_status = 1 
+			 WHERE order_code = #{order_code} AND member_id = #{id}
+	</update> 
+	
+	<!-- 4-(2). 결제 테이블에 정보 입력 -->
+	<insert id="paymentInsertPro">
+		INSERT INTO payments
+			VALUES (
+				#{pay_number},
+				#{payments.order_code},
+				#{pro_amount},
+				#{payments.cp_code},
+				#{payments.cp_discount_amount}
+			)
+	</insert>
+	
+	<!-- 4-(3). 결제완료시 상품 테이블에서 수량변경 -->
+	<update id="UpdateProductQty">
+		UPDATE product 
+			SET pro_qty = 
+						((SELECT pro_qty FROM 
+							(SELECT pro_qty, pro_code FROM product) AS pro_update_sample 
+								WHERE pro_code = #{pro_code}) 
+						- (SELECT order_stock FROM order_product 
+							WHERE order_code = #{order_code})) 
+						WHERE pro_code = 
+							(SELECT pro_code FROM order_product 
+								WHERE order_code = #{order_code})
+				
+	</update>
+	
+	<!-- 4-(4). 카트에서 주문한 상품 삭제 -->
+	<delete id="DeleteCart">
+		DELETE FROM cart
+			WHERE member_id = #{id} AND pro_code = #{pro_code}
+	</delete>
+	
+	<!-- 4-(5). 사용한 쿠폰 mc_used = 'N' > 'Y' -->
+	<update id="updateCouponStatusE">
+		UPDATE member_coupon_view 
+			SET mc_used = 'Y' 
+			WHERE (cp_code, member_id, cp_target) = (#{payments.cp_code}, #{id} , 'event')
+	</update>
+	<update id="updateCouponStatusM">
+		UPDATE member_coupon_view 
+			SET mc_used = 'Y' 
+			WHERE (cp_code, member_id, cp_target) = (#{payments.cp_code}, #{id} , 'new_member')
+	</update>
+	
+	<!-- 4-(6). 결제 정보 리스트 생성 -->
+	<select id="SelectOrderPaymentsList" resultType="com.thisteam.dangdangeat.vo.PaymentsVO">
+		SELECT * FROM payments
+		 	WHERE pay_number = #{pay_number} AND order_code = #{order_code}
+	</select>
+	
+	<!-- 4-(7). 결제 상품 정보 리스트 생성  -->
+	<select id="selectPaymentProductList" resultType="com.thisteam.dangdangeat.vo.CartProductVO">
+		SELECT * FROM cart_view 
+			WHERE member_id = #{id} AND pro_code = #{pro_code}
+	</select>	
+	
+	<!-- 4-(8). 배송 정보 및 주문자 정보 리스트 생성  -->
+	<select id="selectOrderPaymentInfoList" resultType="com.thisteam.dangdangeat.vo.OrdersBeanVO">
+		SELECT * FROM orders 
+			WHERE order_code = #{order_code} AND member_id = #{id}
+	</select>
+	
 	
 	<!--               주문/결제 작업                -->
 </mapper>

@@ -9,9 +9,9 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DangDangEat - OrderPayment</title>
-  <link href="css/styles.css" rel="stylesheet" />
-  <link href="css/orderForm.css" rel="stylesheet" type="text/css">
-  <link href="css/orderForm2.css" rel="stylesheet" type="text/css">
+  <link href="${pageContext.request.contextPath}/resources/css/styles.css" rel="stylesheet" />
+  <link href="${pageContext.request.contextPath}/resources/css/orderForm.css" rel="stylesheet" type="text/css">
+  <link href="${pageContext.request.contextPath}/resources/css/orderForm2.css" rel="stylesheet" type="text/css">
   <style type="text/css">
 		@font-face {
 		    font-family: 'GmarketSansMedium';
@@ -57,7 +57,6 @@
 		                  url: "OrderPaymentPro", 
 		                  data: {
 				                   pro_code : $('#pro_code').val(),
-				           		   cart_code : $('#cart_code').val(),
 				           		   pro_amount : $('#pro_amount').val(),
 				           		   order_code : $('#order_code').val(),
 				           		   cp_code : $('#cp_code').val(),
@@ -66,9 +65,7 @@
 					 	 }); // ajax
 					 	 
 			               var msg = '결제가 완료되었습니다.';
-// 			                msg += 'DangDangEat: ' + rsp.imp_uid;
 			                msg += '결제 금액 : ' + rsp.paid_amount;
-// 			                msg += '상점 거래ID : ' + rsp.merchant_uid;
 
 					 	 $('#orderPaymentForm').submit(); // 폼 제출하여 결제 & 주문서 생성 작업 진행
 					  
@@ -95,7 +92,6 @@
 				data: {
 					cp_code : couponCode, 
 					pro_amount : $('#pro_amount').val(),
-					cart_code : $('#cart_code').val(),
 					order_code : $('#order_code').val()
 					},
 				success: function (data) {
@@ -124,7 +120,6 @@
   <div id="resultArea"></div>
   	<form action="OrderPaymentPro" method="post" id="orderPaymentForm" >
   	<c:forEach var="cart" items="${orderProductList }" varStatus="status">
-  		<input type="hidden" name="cart_code" id="cart_code" value="${cart.cart_code }">
   		<input type="hidden" name="pro_code"  value="${cart.pro_code }">
   		<input type="hidden" name="pro_amount" id ="pro_amount" value="${cart.pro_price * cart.cart_amount + 3500 }">
   	</c:forEach>
@@ -149,13 +144,12 @@
 		        <div class="item">
 			          <div class="product-image">
 			          		<a href="ProductDetail.pd?pro_code=${cart.pro_code}">
-			            	<img src="http://localhost:8080/DangDangEat/upload/${cart.pro_real_thumb }" alt="${cart.pro_name }" 
-			            	class="product-frame" height="130" width="140" onerror="this.src='./img/sample1_thumb.png';"  >
+			            	<img src="${pageContext.request.contextPath}/resources/upload/${cart.pro_real_thumb }" alt="${cart.pro_name }" 
+			            	class="product-frame" height="130" width="140" onerror="this.src='${pageContext.request.contextPath}/resources/img/sample1_thumb.png';"  >
 			            	</a>
 			          </div>
 			          <div class="product-details">
 			            <h1><strong><span class="item-quantity" >상품명 : ${cart.pro_name }</span></strong></h1>
-<%-- 			            <p><strong>브랜드명 : ${cart.pro_brand }</strong></p> --%>
 			            <p>Product Code : ${cart.pro_code }</p>
 			          </div>
 		        </div>
@@ -222,7 +216,7 @@
 		        <label for="promo-code">Enter a promotional code</label>
 		        <input id="promo-code" type="text"  maxlength="5" class="promo-code-field">
 	         <c:forEach var="price" items="${orderProductList }" varStatus="status">
-		        <button class="promo-code-cta" type="button" onclick = "window.open('SelectCoupon.od?total=${price.pro_price * price.cart_amount }', '_blank', 'height=700, width=450, top=70, left=400')">Coupon</button>
+		        <button class="promo-code-cta" type="button" onclick = "window.open('SelectCoupon?total=${price.pro_price * price.cart_amount }', '_blank', 'height=700, width=450, top=70, left=400')">Coupon</button>
 	         </c:forEach>
 	      </div>
 	  	 <hr>

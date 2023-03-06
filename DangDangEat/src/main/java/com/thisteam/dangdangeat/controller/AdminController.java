@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.thisteam.dangdangeat.service.AdminService;
 import com.thisteam.dangdangeat.service.OrderService;
 import com.thisteam.dangdangeat.service.ProductService;
+import com.thisteam.dangdangeat.vo.AdminOrderListVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.PageInfo;
 import com.thisteam.dangdangeat.vo.ProductVO;
@@ -234,7 +235,29 @@ public class AdminController {
 		return "admi/admin_couponList";
 	}
   
-  
+//============================ admin/orderList 미주 ===========================================
+	
+	// 관리자 - 주문 관리 페이지 
+	@GetMapping(value = "AdminOrderList")
+	public String OrderList(Model model, HttpSession session) {
+		
+		String id = (String)session.getAttribute("sId");
+		
+		if(id == null || id.equals("") || !id.equals("admin")) { 
+			model.addAttribute("msg", "잘못된 접근입니다!");
+			return "redirect:/";
+		} else { 
+			// 전체 주문 목록 조회
+			List<AdminOrderListVO> adminOrderList = service.getOrderList();
+			
+			model.addAttribute("adminOrderList", adminOrderList);
+			
+			return "admin/admin_orderList";
+		}
+		
+		
+	}
+//============================ admin/orderList 미주 ===========================================
   
 
 }

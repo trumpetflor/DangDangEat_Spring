@@ -2,6 +2,7 @@ package com.thisteam.dangdangeat.mapper;
 
 import java.util.List;
 
+import com.thisteam.dangdangeat.vo.AdminOrderListVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 
 public interface AdminMapper {
@@ -14,8 +15,12 @@ public interface AdminMapper {
 
 	// 회원 삭제
 	int deleteMember(MemberVO member);
+//============================ admin/orderList 미주 ===========================================
 	
+	// 관리자 - 주문 관리 페이지
+	List<AdminOrderListVO> selectOrderList();
 	
+//============================ admin/orderList 미주 ===========================================
 
 }
 
