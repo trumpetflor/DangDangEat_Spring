@@ -14,7 +14,15 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
 <script src="//code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript">
-	
+	$(function() {
+		
+		var msg = '${msg}'; //컨트롤러에서 액션이후 msg값이 있을 경우 해당 msg alert창 실행하기 위한 용도
+		
+		if(msg==1){
+			alert('등록이 완료되었습니다');
+			 opener.location.reload();
+		}
+	});
 
 	//옵션 추가 폼 (사용안할예정이라 주석처리함)
 // 	function fn_addOption(obj){
@@ -74,8 +82,7 @@ body {
 	<h2>상품 등록</h2>
 	<br>
 	<div class="container mr-sm-2">
-		<form action="ProductInsertPro.pd" method="post" name="InsertForm"
-			enctype="multipart/form-data" style="width: 700px;">
+		<form action="ProdInsertPro" method="post" enctype="multipart/form-data" style="width: 700px;">
 			<table class="table table-bordered">
 				<tr>
 					<th>상품 코드</th>
@@ -90,8 +97,7 @@ body {
 					<th>카테고리</th>
 					<td><select class="form-select" size="1" id="cate_code"
 						name="cate_code">
-							<option value="" selected="selected">카테고리를 선택하세요</option>
-							<option value="1">사료</option>
+							<option value="1" selected="selected">사료</option>
 							<option value="2">간식</option>
 							<option value="3">파우더 · 토핑</option>
 							<option value="4">껌 · 츄르</option>
@@ -112,10 +118,9 @@ body {
 				</tr>
 				<tr>
 					<th>옵션</th>
-					<td><select class="form-select" size="1" id="pro_option"
-						name="pro_option">
+					<td><select class="form-select" size="1" id="pro_option" name="pro_option">
 							<option value="" selected="selected">옵션을 선택하세요</option>
-							<option value="1">강아지용</option>
+							<option value="1" >강아지용</option>
 							<option value="2">고양이용</option>
 							<option value="3">사람용</option>
 							<option value="4">호랑이용</option>
@@ -143,7 +148,7 @@ body {
 <!-- 				</tr> -->
 				<tr>
 					<th>상품 재고</th>
-					<td><input class="form-control" type="number" name="pro_qty" id="pro_qty" size="20" placeholder="상품 재고를 선택하세요 ex) 10"></td>
+					<td><input class="form-control" type="number" value="0" name="pro_qty" id="pro_qty" size="20"  required="required" placeholder="상품 재고를 선택하세요 ex) 10"></td>
 				</tr>
 				<tr>
 					<th>상품 가격</th>
@@ -161,13 +166,11 @@ body {
 				</tr>
 				<tr>
 					<th>상품 메인이미지</th>
-					<td><input class="form-control" type="file" name="pro_thumb"
-						id="pro_thumb" size="20"></td>
+					<td><input class="form-control" type="file" name="file_thumb" id="pro_thumb" size="20"></td>
 				</tr>
 				<tr>
 					<th>상품 상세이미지</th>
-					<td><input class="form-control" type="file" name="pro_img"
-						id="pro_img" size="20"></td>
+					<td><input class="form-control" type="file" name="file_img" id="pro_img" size="20"></td>
 				</tr>
 				<tr>
 					<th>상품 상세정보</th>
