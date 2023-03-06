@@ -50,7 +50,7 @@ public class MemberController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
-  @Autowired
+	@Autowired
 	private AdminService service_ad;
 
 

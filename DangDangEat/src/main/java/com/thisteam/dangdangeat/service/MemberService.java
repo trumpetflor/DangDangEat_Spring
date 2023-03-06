@@ -54,13 +54,41 @@ public class MemberService {
 	public int memberWithdraw(MemberVO member) {
 		return mapper.updateMember(member);
 	}
+
+	// 회원 이메일 수정
+	public int updateMemberEmail(String id, String email) {
+		// 회원 이메일 중복 조회
+		String memberEmail = mapper.selectEmailCheck(email);
+		
+		if(memberEmail == null || memberEmail.equals("")) {
+			return mapper.updateMemberEmail(id, email);
+		} else {
+			return 0;
+		}
+		
+	}
+
+	// 회원 아이디 찾기
+	public MemberVO findMemberId(MemberVO member) {
+		return mapper.selectMemberId(member);
+	}
+
+	// 회원 비밀번호 찾기
+	public MemberVO findMemberPass(MemberVO member) {
+		return mapper.selectMemberPass(member);
+	}
+
+	// 회원 임시 비밀번호 변경
+	public int updateMemberPass(MemberVO member) {
+		return mapper.updateMemberPass(member);
+	}
 	
 	//----------------------- sangwoo ---------------------// 
 	
 	// 회원 아이디 중복 체크
-//	public String idCheck(String id) {
-//		return mapper.selectidCheck(id);
-//	}
+	public String idCheck(String id) {
+		return mapper.selectidCheck(id);
+	}
 	
 	// 회원 이메일 중복 체크
 	public String emailCheck(String email) {
@@ -93,37 +121,6 @@ public class MemberService {
 	}
 	
 	//----------------------- sangwoo ---------------------// 
-
-
-	// 회원 이메일 수정
-	public int updateMemberEmail(String id, String email) {
-		// 회원 이메일 중복 조회
-		String memberEmail = mapper.selectEmailCheck(email);
-		
-		if(memberEmail == null || memberEmail.equals("")) {
-			return mapper.updateMemberEmail(id, email);
-		} else {
-			return 0;
-		}
-		
-	}
-
-	// 회원 아이디 찾기
-	public MemberVO findMemberId(MemberVO member) {
-		return mapper.selectMemberId(member);
-	}
-
-	// 회원 비밀번호 찾기
-	public MemberVO findMemberPass(MemberVO member) {
-		return mapper.selectMemberPass(member);
-	}
-
-	// 회원 임시 비밀번호 변경
-	public int updateMemberPass(MemberVO member) {
-		return mapper.updateMemberPass(member);
-	}
-	
-	
 	
 }
 

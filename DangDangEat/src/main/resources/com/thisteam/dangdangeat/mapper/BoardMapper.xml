@@ -75,7 +75,6 @@
   			FROM notice
   			WHERE notice_code = #{code}
   	</delete>
-</mapper>
 
 
 	<!-- ======================== sangwoo 끝 ============================== -->

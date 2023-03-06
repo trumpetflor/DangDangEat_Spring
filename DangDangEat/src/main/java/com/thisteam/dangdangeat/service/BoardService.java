@@ -39,6 +39,7 @@ public class BoardService {
 
 	public int deleteNotice(int notice_code) {
 		return mapper.deleteNotice(notice_code);
+	}
     
 	// ======================== sangwoo 끝 ===================================
   

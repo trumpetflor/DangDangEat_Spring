@@ -38,9 +38,6 @@ public interface MemberMapper {
 	// 회원 이메일 수정
 	int updateMemberEmail(@Param("id") String id, @Param("email") String email);
 
-	// 회원 이메일 중복 조회
-	String selectEmailCheck(String email);
-
 	// 회원 아이디 조회
 	MemberVO selectMemberId(MemberVO member);
 
