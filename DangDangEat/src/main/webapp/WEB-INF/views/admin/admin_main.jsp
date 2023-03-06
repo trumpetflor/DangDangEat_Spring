@@ -405,7 +405,7 @@ body {
 										</tr>
 									</thead>
 									<tbody>
-										<c:forEach var="wish" items="${wishproduct }">
+										<c:forEach var="wish" items="${wishlist }">
 											<tr>
 												<td>${wish.wish_count }</td>
 												<td class="pro_code">${wish.pro_code }</td>

@@ -8,19 +8,19 @@
 		INSERT
 			INTO cart
 			VALUES (
-				null,
+				0,
 				#{member_id},
 				#{pro_code},
-				#{cart_amount},
-				null
+				#{cart_amount}
 			)
 	</insert>
 	
 	<!-- 장바구니 목록 -->
 	<select id="selectCartList" resultType="com.thisteam.dangdangeat.vo.CartVO">
-		SELECT cart_amount, pro_name, pro_price, pro_real_thumb, pro_code
+		SELECT cart_amount, pro_code, pro_name, pro_price, pro_real_thumb
 			FROM cart_view
 			WHERE member_id = #{member_id}
+			LIMIT #{startRow} , #{listLimit}
 	</select>
 	
 	<!-- 장바구니 중복 상품 확인 -->
@@ -30,7 +30,90 @@
 			WHERE member_id = #{member_id}
 			AND pro_code = #{pro_code}
 	</select>
-
+	
+	<!-- 장바구니 수량 수정 -->
+	<update id="updateAmount">
+		UPDATE cart
+			SET cart_amount = #{cart_amount}
+			WHERE member_id = #{sId}
+			AND pro_code = #{pro_code}
+	</update>
+	
+	<!-- 장바구니 개별 삭제 -->
+	<delete id="deleteCart">
+		DELETE FROM cart
+			WHERE member_id = #{sId}
+			AND pro_code = #{pro_code}
+	</delete>
+	
+	<!-- 장바구니 목록 갯수 -->
+	<select id="selectCartListCount" resultType="int">
+		SELECT count(pro_code)
+			FROM cart
+			WHERE member_id = #{sId}
+	</select>
+	
+	<!-- 장바구니 다중 삭제 -->
+	<delete id="deleteCheckCart">
+		DELETE FROM cart
+			WHERE member_id = #{sId}
+			AND pro_code IN
+			<foreach collection="cartList" item="cart" open="(" close=")" separator=",">
+				#{cart.pro_code}
+			</foreach>
+	</delete>
+	
+	<!-- 위시리스트 담기 -->
+	<insert id="insertWishlist">
+		INSERT INTO wishlist
+			VALUES (
+				#{member_id},
+				#{pro_code}
+			)
+	</insert>
+	
+	<!-- 위시리스트 중복상품 확인 -->
+	<select id="isWishlistExist" resultType="string">
+		SELECT pro_code
+			FROM wishlist
+			WHERE member_id = #{member_id}
+			AND pro_code = #{pro_code}
+	</select>
+	
+	<!-- 위시리스트 목록 -->
+	<select id="selectWishlist" resultType="com.thisteam.dangdangeat.vo.WishlistVO">
+		SELECT pro_code, pro_name, pro_price, pro_real_thumb
+			FROM wishlist_view
+			WHERE member_id = #{member_id}
+			LIMIT #{startRow} , #{listLimit}
+	</select>
+	
+	<!-- 위시리스트 개별 삭제 -->
+	<delete id="deleteWishlist">
+		DELETE FROM wishlist
+			WHERE member_id = #{member_id}
+			AND pro_code = #{pro_code}
+	</delete>
+	
+	<!-- 장바구니 다중 삭제 -->
+	<delete id="deleteCheckWish">
+		DELETE FROM wishlist
+			WHERE member_id = #{sId}
+			AND pro_code IN
+			<foreach collection="wishlist" item="wish" open="(" close=")" separator=",">
+				#{wish.pro_code}
+			</foreach>
+	</delete>
+	
+	<!-- 위시리스트 목록 갯수 -->
+	<select id="selectWishlistCount" resultType="int">
+		SELECT count(pro_code)
+			FROM wishlist
+			WHERE member_id = #{sId}
+	</select>
+	
+	
+	
 </mapper>
 
 

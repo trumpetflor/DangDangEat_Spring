@@ -30,6 +30,7 @@ import com.thisteam.dangdangeat.vo.Cp_target;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.PageInfo;
 import com.thisteam.dangdangeat.vo.ProductVO;
+import com.thisteam.dangdangeat.vo.WishlistVO;
 
 
 @Controller
@@ -49,7 +50,30 @@ public class AdminController {
 	
 	// 관리자 메인페이지
 	@GetMapping(value = "/AdminMain")
-	public String main() {
+	public String main(Model model) {
+		
+		// Wish Top
+		List<WishlistVO> wishlist = service.getWishlistTop();
+		model.addAttribute("wishlist", wishlist);
+		
+		// 한 달 가입 수
+		int joinCount = service.getMemberMonthlyJoin();
+		model.addAttribute("joinCount", joinCount);
+		
+		// 한 달 매출액 == null
+//		int salestotal = service.getSalesTotalMonthly();
+//		model.addAttribute("salestotal", salestotal);
+		
+		// 한 달 주문 건 수
+		int orderCount = service.getOrderMonthly();
+		model.addAttribute("orderCount", orderCount);
+		
+		// 한 달 리뷰 수
+		int reviewCount = service.getReviewCountMonthly();
+		model.addAttribute("reviewCount", reviewCount);
+		
+		
+		
 		return "admin/admin_main";
 	}
 

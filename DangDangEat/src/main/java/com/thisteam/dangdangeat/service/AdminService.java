@@ -11,6 +11,7 @@ import com.thisteam.dangdangeat.vo.AdminOrderListVO;
 import com.thisteam.dangdangeat.vo.CouponVO;
 import com.thisteam.dangdangeat.vo.Coupon_viewVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
+import com.thisteam.dangdangeat.vo.WishlistVO;
 
 @Service
 public class AdminService {
@@ -32,6 +33,35 @@ public class AdminService {
 	public int memberDelete(MemberVO member) {
 		return mapper.deleteMember(member);
 	}
+  
+  // ============================================== yeram ================================================
+	// Wish Top
+	public List<WishlistVO> getWishlistTop() {
+		return mapper.selectWishlistTop();
+	}
+
+	// 한 달 가입 수
+	public int getMemberMonthlyJoin() {
+		return mapper.selectMemberMonthlyJoin();
+	}
+	
+	// 한 달 매출액
+	public int getSalesTotalMonthly() {
+		return mapper.selectSalesTotalMonthly();
+	}
+
+	// 한 달 주문 건 수
+	public int getOrderMonthly() {
+		return mapper.selectOrderMonthly();
+	}
+	
+	// 한 달 리뷰 수
+	public int getReviewCountMonthly() {
+		return mapper.selectReviewCountMonthly();
+	}
+	
+	// ============================================== yeram ================================================
+
 
 	// ======================================== hawon =============================================
 	//쿠폰 수정
@@ -77,14 +107,16 @@ public class AdminService {
 		return mapper.insertAutoCouponForNewMem(member_id);
 	}
 
+
 //============================ admin/orderList 미주 ===========================================
 
 	// 관리자 - 주문 관리 페이지
 	public List<AdminOrderListVO> getOrderList() {
 		return mapper.selectOrderList();
 	}
-	
+
 //============================ admin/orderList 미주 ===========================================	
+
 	
 
 }
