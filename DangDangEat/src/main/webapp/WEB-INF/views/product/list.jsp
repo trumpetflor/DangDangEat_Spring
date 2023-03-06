@@ -99,6 +99,43 @@ body {
 		$(".totalPrice").text(totalPrice+" 원");
 	}
 
+	function cartInsert(pro_code){
+		$.ajax({
+			type: "GET",
+			url: "CartInsert",
+			data: {
+				pro_code : pro_code
+			},
+			success: function(result){
+	        	 if(result == "true"){
+		             alert("장바구니에 상품이 담겼습니다.");
+	        	 } else if(result == "false") {
+		             alert("상품 담기가 실패했습니다.");
+	        	 } else if(result == "duplication"){
+	        		 alert("이미 담겨있는 상품입니다.")
+	        	 }
+			}
+		});
+	}
+	
+	function wishlistInsert(pro_code){
+		$.ajax({
+			type: "GET",
+			url: "WishlistInsert",
+			data: {
+				pro_code : pro_code
+			},
+			success: function(result){
+	        	 if(result == "true"){
+		             alert("위시리스트에 상품이 담겼습니다.");
+	        	 } else if(result == "false") {
+		             alert("상품 담기가 실패했습니다.");
+	        	 } else if(result == "duplication"){
+	        		 alert("이미 담겨있는 상품입니다.")
+	        	 }
+			}
+		});
+	}
 	
 </script>
 
@@ -179,7 +216,7 @@ body {
 								</c:when>
 								<c:otherwise>
 								<!-- 검색결과가 있을 경우 결과 도출  -->
-								<c:forEach var="product" items="${productList }">
+								<c:forEach var="product" items="${productList }" varStatus="i">
 									<div class="col-lg-4 col-md-6 col-sm-6">
 										<div class="product__item">
 											<div class="product__item__pic set-bg">
@@ -226,21 +263,15 @@ body {
 												<!-- 									</div> -->
 											</div>
 											<div>
-												<!-- 장바구니 -->
-												<form action="CartInsert.ct" method="post" style="display: inline">
-													<input type="hidden" name="pro_code" value=${product.pro_code }>
-													<input type="hidden" name="path" value="product_list">
-													<input type="hidden" name="amount" value="1">
-													<input type="submit" class="btn btn-outline-dark flex-shrink-0" value="Add to Cart">
-												</form>
+												<!-- cart -->
+												<button class="btn btn-outline-dark flex-shrink-0" type="button" id="cart" onclick="cartInsert(${product.pro_code})">
+													<i class="bi-cart-fill me-1"></i> Add to cart
+												</button>
 												&nbsp;
 												<!-- wishList -->
-												<form action="WishlistInsert.ct" method="post" style="display: inline">
-													<input type="hidden" name="pro_code" value=${product.pro_code }>
-													<input type="hidden" name="path" value="product_list">
-													<input type="hidden" name="amount" value="1">
-													<input type="submit" class="btn btn-outline-dark flex-shrink-0" value="Wishlist">
-												</form>
+												<button class="btn btn-outline-dark flex-shrink-0" type="button" id="wishlist" onclick="wishlistInsert(${product.pro_code})">
+													<i class="bi bi-heart-fill"></i> Wishlist
+												</button>
 											</div>
 										</div>
 									</div>

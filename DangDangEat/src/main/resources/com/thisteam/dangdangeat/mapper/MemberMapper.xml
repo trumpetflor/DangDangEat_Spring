@@ -46,6 +46,7 @@
   		SELECT COUNT(*)
   			FROM orders
   			WHERE member_id = #{id}
+  				AND order_status = '1'
   	</select>
   	
   	<!-- 회원 쿠폰 수 조회 -->
@@ -78,8 +79,71 @@
   			SET member_status = #{member_status}
   			WHERE member_id = #{member_id}
   	</update>
+
+  	<!-- 멤버 마이페이지 조회(주문, 쿠폰, 리뷰, 질문 수) -->
+  	<select id="selectMemberMypageView" resultType="com.thisteam.dangdangeat.vo.Member_Mypage_ViewVO">
+  		SELECT *
+  			FROM member_mypage_view
+  			WHERE member_id = #{id}
+  	</select>
   	
-  	<!--===================== sangwoo =========================-->
+  	<!-- 회원 정보 이메일 수정 -->
+  	<update id="updateMemberEmail">
+  		<!-- 이미 존재하는 이메일인지 확인 -->
+<!--   		<selectKey resultType="string" order="BEFORE" keyProperty="memberName"> -->
+<!--   			SELECT IFNULL(member_name, 'NotExist') -->
+<!--   				FROM member -->
+<!--   				WHERE  -->
+<!--   					member_id = #{id} -->
+<!--   					AND member_email = #{email} -->
+<!--   		</selectKey> -->
+  		<!-- 이미 존재하거나 탈퇴한 회원의 이메일이 아닐 때 -->
+<!--   		<if test="!memberName.equals('NotExist')"> -->
+  			UPDATE member
+  				SET	member_email = #{email}
+  					, member_authStatus = 'N'
+  				WHERE member_id = #{id}
+<!--   		</if> -->
+  	</update>
+  	
+  	<!-- 회원 마스킹 아이디 조회 -->
+  	<select id="selectMemberId" resultType="com.thisteam.dangdangeat.vo.MemberVO">
+  		SELECT 
+  			<![CDATA[REGEXP_REPLACE(member_id, '(?<=.{3}).', '*') AS masking_member_id]]>
+			, member_name
+			, member_email
+  			FROM member
+  			WHERE member_name = #{member_name}
+  				AND member_email = #{member_email}
+  				AND member_status = 'Y'
+  	</select>
+  	
+  	<!-- 회원 정보 일치하는 비밀번호 조회 -->
+  	<select id="selectMemberPass" resultType="com.thisteam.dangdangeat.vo.MemberVO">
+  		SELECT
+  			member_id
+  			, member_pass
+  			, member_name
+  			, member_email
+  			FROM member
+  			WHERE member_id = #{member_id}
+  				AND member_name = #{member_name}
+  				AND member_email = #{member_email}
+  				AND member_status = 'Y'
+  	</select>
+  	
+  	<!-- 회원 임시 비밀번호 변경 -->
+  	<update id="updateMemberPass">
+  		UPDATE
+  			member
+  			SET member_pass = #{member_pass}
+  			WHERE member_id = #{member_id}
+  	</update>
+    
+    
+    
+ 
+   	<!--===================== sangwoo =========================-->
   	
   	<!-- 회원 아이디 중복 조회 -->
   	<select id="selectidCheck" resultType="String">
@@ -142,6 +206,7 @@
   	</update>
   	
   	<!--===================== sangwoo =========================-->
+  	
 </mapper>
 
 

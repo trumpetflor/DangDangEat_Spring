@@ -168,7 +168,7 @@ body {
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminCouponList.ad">
+                <a class="nav-link" href="AdminCouponList">
                     <i class="fas fa-fw fa-clipboard-list"></i>
                     <span>쿠폰 관리</span></a>
             </li>
@@ -405,7 +405,7 @@ body {
 										</tr>
 									</thead>
 									<tbody>
-										<c:forEach var="wish" items="${wishproduct }">
+										<c:forEach var="wish" items="${wishlist }">
 											<tr>
 												<td>${wish.wish_count }</td>
 												<td class="pro_code">${wish.pro_code }</td>

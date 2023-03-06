@@ -28,6 +28,15 @@ public interface ProductMapper {
 	// => 파라미터 : 상품번호  리턴타입 : ProductVO(product)
 	ProductVO selectProductDetail(int pro_code);
 
+	//4. 상품 등록
+	int insertProduct(ProductVO product);
+
+	//5. 상품 수정
+	int updateProdUpdate(ProductVO product);
+
+	//6. 상품 삭제
+	int deleteProdDelete(ProductVO product);
+
 	
 	
 

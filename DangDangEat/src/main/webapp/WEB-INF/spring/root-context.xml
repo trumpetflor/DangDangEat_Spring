@@ -20,7 +20,7 @@
 		<!-- SQL 로그를 위한 log4jdbc 라이브러리 관련 DBCP 정보 변경(driverClassName, jdbcUrl) -->
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
-		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://db.itwillbs.dev:3306/class5_220823_team2"></property>
+		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://db.itwillbs.dev:3306/class5_220823_team2?validationQuery=select 1"></property>
 		<property name="username" value="class5_220823_team2"></property>
 		<property name="password" value="1234"></property>
 	</bean>	
@@ -30,6 +30,7 @@
 	<!-- 태그 사이에 constructor-arg 태그 ref 속성값으로 1번의 id 속성값 지정 -->
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
 		<constructor-arg ref="hikariConfig"></constructor-arg>
+<!-- 		<property name="validationQuery" value="SELECT 1"/> -->
 	</bean>
 	
 	<!-- 3. Connection 객체 생성 및 쿼리 전달, 결과 리턴 등의 작업 수행할 SQLSessionFactory 객체 설정 -->

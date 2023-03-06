@@ -40,18 +40,22 @@
 			   
 		      var url_href = window.location.href;
 		      var url = new URL(url_href);
-//		      alert($("#amount").val());
 		       
 		       $.ajax({
-		          url: "CartInsert.ct",
+		    	  type: "GET",
+		          url: "CartInsert",
 		          data: {
 		             pro_code : url.searchParams.get("pro_code"),
 		             amount : $("#amount").val(),
-		             path : "product_detail"
-// 		             pro_name : $("#pro_name").val()
 		          },
 		          success: function(result) {
-		             alert("장바구니에 상품이 담겼습니다.");
+		        	 if(result == "true"){
+			             alert("장바구니에 상품이 담겼습니다.");
+		        	 } else if(result == "false") {
+			             alert("상품 담기가 실패했습니다.");
+		        	 } else if(result == "duplication"){
+		        		 alert("이미 담겨있는 상품입니다.")
+		        	 }
 		          }
 		       }); // ajax
 		}); //cart
@@ -60,18 +64,21 @@
 			   
 		      var url_href = window.location.href;
 		      var url = new URL(url_href);
-//  		      alert($("#amount").val());
 		       
 		       $.ajax({
-		          url: "WishlistInsert.ct",
+		    	  type: "GET",
+		          url: "WishlistInsert",
 		          data: {
 		             pro_code : url.searchParams.get("pro_code"),
-		             amount : 1,
-		             path : "product_detail"
-//  		             pro_name : $("#pro_name").val()
 		          },
 		          success: function(result) {
-		             alert("위시리스트에 상품이 담겼습니다.");
+			        	 if(result == "true"){
+				             alert("위시리스트에 상품이 담겼습니다.");
+			        	 } else if(result == "false") {
+				             alert("상품 담기가 실패했습니다.");
+			        	 } else if(result == "duplication"){
+			        		 alert("이미 담겨있는 상품입니다.")
+			        	 }
 		          }
 		          
 		          
@@ -81,6 +88,9 @@
 		
 		$("#qna_button").on("click", function() {
 			let sendData = $("form").serialize();
+			
+			$("#resultArea").css("display", "none");
+			
 			$.ajax({
 				type: "post", // AJAX 로 요청 시
 				url: "QnaList.bo?pd=1",
@@ -90,6 +100,7 @@
 				success: function(response) { // 요청에 대한 처리 성공 시 이벤트 호출
 					// 익명 함수 파라미터로 응답 데이터가 전달됨(처리 페이지의 응답 결과)
 					// id 선택자 resultArea 영역에 응답 데이터(response) 출력
+					$("#resultArea").css("display", "block");
 					$("#resultArea").html(response);
 					$("#productDIV").css("hight",productDIV);
 					$("#productDIV").css("text-align", "left");
@@ -105,21 +116,76 @@
 		
 		
 		$("#review_button").on("click", function() {
+			let pageNum = 1;
+			let keyword = $("#keyword").val(); // 검색어
 			let sendData = $("form").serialize();
+			
+			$("#resultArea").css("display", "none");
+			
 			$.ajax({
-				type: "post", // AJAX 로 요청 시
-				url: "ReviewList.bo?pd=1",
+				type: "get", // AJAX 로 요청 시
+				url: "ReviewList?pd=" + ${product.pro_code},
 				// serialize() 함수를 통해 가져온 폼 데이터를 전송할 데이터로 지정
 				data: sendData,
-				dataType: "text", // 전송되는 데이터에 대한 타입 지정(일반 데이터는 text)
-				success: function(response) { // 요청에 대한 처리 성공 시 이벤트 호출
+				dataType: "json", // 전송되는 데이터에 대한 타입 지정
+				success: function(jsonArray) { // 요청에 대한 처리 성공 시 이벤트 호출
 					// 익명 함수 파라미터로 응답 데이터가 전달됨(처리 페이지의 응답 결과)
 					// id 선택자 resultArea 영역에 응답 데이터(response) 출력
-					$("#resultArea").html(response);
-					$("#productDIV").css("hight",productDIV);
-					$("#productDIV").css("text-align", "left");
-					$("#pro_name").css("text-align", "left");
-					$("#pro_nameSize").css("text-align", "left");
+// 					$("#resultArea").html(response);
+// 					$("#productDIV").css("hight",productDIV);
+// 					$("#productDIV").css("text-align", "left");
+// 					$("#pro_name").css("text-align", "left");
+// 					$("#pro_nameSize").css("text-align", "left");
+
+					$("#resultArea").css("display", "block");
+					$("#review_table > tbody").empty(); // 리뷰 출력 구역 비우기
+					$("#pageArea").empty(); // 페이지 번호 구역 비우기
+					let pageList = ''; // 페이지 번호 출력 코드 변수 선언 (블록 외부에서 사용하기 위해서!)
+					
+					// jsonList(json 배열) ReviewVO 객체 목록만 돌도록 설정 (맨 마지막 PageInfo 객체 접근 X)
+					for(let index = 0; index < jsonArray.length - 1; index++) { 
+						// 자바 스크립트 함수 파라미터 용 변수 선언 (숫자를 문자열로 보내기 위함)
+						let strRc = '"' + jsonArray[index].review_code + '"'; // 파라미터 문자열로 보내려면 "" 결합해주기ㅠㅠㅠ!! - by. 킹갓제너럴영진
+						// 뿌릴 내용
+						// 받아온jsonArray변수명[인덱스명].접근할컬럼변수명 => 각 VO 객체의 변수에 접근)
+						let result = "<tr>"
+									+ "<td>" + jsonArray[index].review_code + "</td>"
+									+ "<td class='click' onclick='openReviewModal(" + strRc + ", "+ pageNum + ")'>" + jsonArray[index].review_subject + "</td>"
+									+ "<td>" + jsonArray[index].member_id + "</td>"
+									+ "<td>" + jsonArray[index].review_date + "</td>"
+									+ "<td>" + jsonArray[index].review_readcount + "</td>"
+									+ "</tr>";
+						$("#review_table").append(result); // 뿌릴 내용 테이블 영역에 넣기
+					}
+					
+					// 자바 스크립트 함수 파라미터 용 변수 선언(문자열)
+					let valKey = "'" + keyword + "'";
+					
+					// PageInfo 객체 접근 (jsonArray 의 맨 마지막 인덱스) 해서 startPage 와 endPage 얻어오기 -> 차례대로 숫자 목록 저장
+					if(pageNum > 1) {
+						pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum - 1) + ', ' + valKey + ')">이전</a>';
+					} else {
+						pageList += '&nbsp;&nbsp;<a href="javascript:(0)">이전</a>';
+					}
+					
+					for(let i = jsonArray[jsonArray.length - 1].startPage; i <= jsonArray[jsonArray.length - 1].endPage; i++) {
+						if(i == pageNum) { // 현재 페이지와 같을 경우 작동 X
+							pageList += '&nbsp;&nbsp;<a href="javascript:(0)" style="color: #212529; font-weight: bold;">' + i +'</a>'; 
+						} else { // 현재 페이지와 다를 경우 ajax 를 호출하는 함수가 동작하도록
+							pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + i + ', ' + valKey + ')">' + i + '</a>';
+						}
+					}
+					
+					if(pageNum < jsonArray[jsonArray.length - 1].endPage) {
+						pageList += '&nbsp;&nbsp;<a href="javascript:load_list(' + (pageNum + 1) + ', ' + valKey + ')">다음</a>';
+					} else {
+						pageList += '&nbsp;&nbsp;<a href="javascript:(0)">다음</a>';
+					}
+
+//		 			alert(pageList);
+					
+					$("#pageArea").append(pageList); // 페이지 번호 표출 div(id="pageArea") 에 페이지 숫자 목록(pageList) 넣기
+
 				},
 				error: function(xhr, textStatus, errorThrown) {
 					$("#resultArea").html("xhr = " + xhr + "<br>textStatus =  " + textStatus + "<br>errorThrown =  " + errorThrown );
@@ -158,7 +224,9 @@ body {
     padding-bottom: 0rem;
 }
 
-
+#resultArea {
+	display: none;
+}
 
 </style>
 </head>
@@ -215,7 +283,7 @@ body {
 					      <td id="pro_nameSize">${product.pro_name }</td>
 					      <!-- 상품 수량 -->
 					      <td class="text-center">
-					      <input class="form-control text-center me-3" id="amount" type="number" value="1" MIN="1" MAX="${product.pro_qty}" 
+					      <input class="form-control text-center me-3" id="amount" name="amount" type="number" value="1" MIN="1" MAX="${product.pro_qty}" 
 					      				onchange="fn_count_qty(this,${product.pro_price})" /></td>
 						  <!-- 상품 가격 -->		
 					      <td class="text-center totalPrice"><fmt:formatNumber value="${product.pro_price}" pattern="#,###"/> 원</td>
@@ -229,28 +297,15 @@ body {
 					
 					<div class="fs-5 mb-5">
 						<div class="d-flex">
-							<!-- 장바구니 추가 -->	
-<!-- 							<button class="btn btn-outline-dark flex-shrink-0" type="button" id="cart"> -->
-<!-- 								<i class="bi-cart-fill me-1"></i> Add to cart -->
-<!-- 							</button> -->
-							<form action="CartInsert" method="post">
-								<input type="hidden" name="pro_code" value=${product.pro_code }>
-								<input type="hidden" name="path" value="product">
-								<input type="hidden" name="amount" value=${amount }>
-								<i class="bi-cart-fill me-1"></i>
-								<input type="submit" class="btn btn-outline-dark flex-shrink-0" value="Add to Cart">
-							</form>
+							<!-- cart -->	
+							<button class="btn btn-outline-dark flex-shrink-0" type="button" id="cart">
+								<i class="bi-cart-fill me-1"></i> Add to cart
+							</button>
 							&nbsp;&nbsp;&nbsp;
-							<!-- wishList -->
-<!-- 							<button class="btn btn-outline-dark flex-shrink-0" type="button" id="wishlist"> -->
-<!-- 								<i class="bi bi-heart-fill"></i> Wishlist -->
-<!-- 							</button> -->
-							<form action="WishlistInsert.ct" method="post">
-								<input type="hidden" name="pro_code" value=${product.pro_code }>
-								<input type="hidden" name="amount" value="1">
-								<i class="bi bi-heart-fill"></i> 
-								<input type="submit" class="btn btn-outline-dark flex-shrink-0" value="Wishlist">
-							</form>
+							<!-- wishlist -->
+							<button class="btn btn-outline-dark flex-shrink-0" type="button" id="wishlist">
+								<i class="bi bi-heart-fill"></i> Wishlist
+							</button>
 							<div>
 <!-- 							총 합계 <input type="text" id="count" value="1"> -->
 							</div>
@@ -273,7 +328,39 @@ body {
 			</div>
 		</nav>
 	 </div>	
-	 <div id="resultArea"><%-- 리뷰,상품문의 게시판 보여주는곳 --%></div>
+	 <div id="resultArea" class="container px-4 px-lg-5 mt-3 content">
+		 <%-- 리뷰,상품문의 게시판 보여주는곳 --%>
+		 <section id="searchSection" class="mx-1 d-flex justify-content-end">
+		 	<form>
+				<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword" value="${param.keyword }"> 
+				<input type="button" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
+			</form>
+		 </section>
+		 <table id="review_table" class="table ">
+			<thead>
+			    <tr>
+			        <th>No.</th>
+			        <th>제목</th>
+			        <th>작성자</th>
+			        <th>작성일</th>
+			        <th>조회수</th>
+			    </tr>
+			</thead>
+			<tbody>
+			    <!-- AJAX를 통해 얻은 JSON 데이터 뿌려짐 -->
+			</tbody>
+		</table>
+		<!-- 페이징처리 -->
+		<div class="row" id="pageList">
+			<div class="col-lg-12">
+				<div class="product_pagenation" id="pageArea">
+				</div>
+			</div>
+		</div>
+		<c:if test="${sId ne null }">
+			<button type="button" class="mx-1 btn btn-sm btn-dark rounded-1" style="float: right;" onclick="location.href=''">상품평 작성</button>
+       	</c:if>
+	 </div>
 	<!-- 상품 상세 -->	
 	<section class="py-2">
 		<div class="container px-4 px-lg-5 mt-3">

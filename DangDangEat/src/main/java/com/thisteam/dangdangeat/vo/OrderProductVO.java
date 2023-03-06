@@ -4,10 +4,9 @@ package com.thisteam.dangdangeat.vo;
 
 public class OrderProductVO {
 	
-	private int order_code;// 주문번호(fk)
-	private int pro_code; //상품번호(fk)
-	private int order_stock; //주문수량
-	private int cart_code; // 카트 코드
+	private int order_code;//   주문번호(fk)
+	private int pro_code; //    상품번호(fk)
+	private int order_stock; // 주문수량
 	
 	public int getOrder_code() {
 		return order_code;
@@ -27,19 +26,14 @@ public class OrderProductVO {
 	public void setOrder_stock(int order_stock) {
 		this.order_stock = order_stock;
 	}
-	public int getCart_code() {
-		return cart_code;
-	}
-	public void setCart_code(int cart_code) {
-		this.cart_code = cart_code;
-	}
 	
 	@Override
 	public String toString() {
-		return "OrderProductVO [order_code=" + order_code + ", pro_code=" + pro_code + ", order_stock=" + order_stock
-				+ ", cart_code=" + cart_code + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("OrderProductVO [order_code=").append(order_code).append(", pro_code=").append(pro_code)
+				.append(", order_stock=").append(order_stock).append("]");
+		return builder.toString();
 	}
-	
 	
 }
 

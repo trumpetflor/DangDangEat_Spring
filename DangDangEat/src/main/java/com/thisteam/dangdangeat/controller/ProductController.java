@@ -1,12 +1,21 @@
 package com.thisteam.dangdangeat.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import com.thisteam.dangdangeat.service.OrderService;
 import com.thisteam.dangdangeat.service.ProductService;
@@ -19,11 +28,173 @@ public class ProductController {
 	@Autowired
 	private ProductService service;
 	
-	//상품 등록
+	//상품 등록 화면
 	@GetMapping(value = "/ProductInsertForm.pd")
-	public String insert() {
+	public String insert(@RequestParam(defaultValue = "") String msg,
+			Model model) {
+		model.addAttribute("msg", msg);
 		return "product/product_insertForm";
 	}
+	
+	//상품 등록 Action
+	@PostMapping(value = "/ProdInsertPro")
+	public String prodInsertPro(@ModelAttribute ProductVO product, Model model, HttpSession session,
+		 @RequestParam("file_thumb") MultipartFile thumb_file,
+		 @RequestParam("file_img") MultipartFile img_file, MultipartRequest request) {
+		//파일업로드 시작
+		String uploadPath = "/resources/upload"; // 업로드 가상디렉토리(이클립스)
+		String realPath = session.getServletContext().getRealPath(uploadPath);
+		//실제 업로드 경로 
+		System.out.println("실제 업로드 경로 : " + realPath);
+		 
+		String pro_thumb = thumb_file.getOriginalFilename().toString(); // 실제 등록 썸네일 파일명
+		product.setPro_thumb(pro_thumb);
+		product.setPro_real_thumb(pro_thumb);
+		
+		String pro_img = img_file.getOriginalFilename().toString(); // 실제 등록 이미지 파일명
+		product.setPro_img(pro_img);
+		product.setPro_real_img(pro_img);
+		
+		// 썸네일 파일 생성
+		File thumb_f = new File(realPath, pro_thumb); 
+		try {
+			thumb_file.transferTo(thumb_f);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		// 파일 경로가 존재하지 않을 경우 파일 경로 생성
+		if(!thumb_f.exists()) {
+			thumb_f.mkdirs();
+		}
+		// 썸네일 파일 생성 끝
+
+		// 이미지 파일 생성
+		File img_f = new File(realPath, pro_img); 
+		try {
+			img_file.transferTo(img_f);
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		// 파일 경로가 존재하지 않을 경우 파일 경로 생성
+		if(!img_f.exists()) {
+			img_f.mkdirs();
+		}
+		// 이미지 파일 생성 끝
+		
+		
+		int insertCount = service.prodInsertPro(product);
+		if(insertCount > 0) { // 등록 성공 시
+			return "redirect:/ProductInsertForm.pd?msg="+"1"; 
+		}else {
+			model.addAttribute("msg", "상품 등록 실패!");
+			return "fail_back";
+		}
+		
+		
+	} 
+	
+	//상품 수정 화면
+	@GetMapping(value = "/ProductModifyForm.pd")
+	public	String ProdUpdateForm(
+			@RequestParam(defaultValue = "") int pro_code, 
+			@RequestParam(defaultValue = "") String msg,
+			Model model) {
+		
+		if(!"2".equals(msg)) {
+			ProductVO product = service.getProductDetail(pro_code);	
+			model.addAttribute("product", product);
+		}
+		model.addAttribute("msg", msg);
+		
+		return "product/product_modifyForm";
+	}
+
+	//상품 상세정보 수정 진행(update)
+	@PostMapping(value = "/ProdUpdatePro")
+		public String prodDetailUpdatePro(
+				@ModelAttribute ProductVO product, 
+				@RequestParam("file_thumb") MultipartFile thumb_file,
+				@RequestParam("file_img") MultipartFile img_file, 
+				Model model, HttpSession session){
+			
+				//파일업로드 시작
+				String uploadPath = "/resources/upload"; // 업로드 가상디렉토리(이클립스)
+				String realPath = session.getServletContext().getRealPath(uploadPath);
+				//실제 업로드 경로 
+				System.out.println("실제 업로드 경로 : " + realPath);
+				
+				String pro_thumb = thumb_file.getOriginalFilename().toString(); // 실제 등록 썸네일 파일명
+				product.setPro_thumb(pro_thumb);
+				product.setPro_real_thumb(pro_thumb);
+				
+				String pro_img = img_file.getOriginalFilename().toString(); // 실제 등록 이미지 파일명
+				product.setPro_img(pro_img);
+				product.setPro_real_img(pro_img);
+				
+				// 썸네일 파일 생성
+				File thumb_f = new File(realPath, pro_thumb); 
+				try {
+					thumb_file.transferTo(thumb_f);
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					
+				// 파일 경로가 존재하지 않을 경우 파일 경로 생성
+				if(!thumb_f.exists()) {
+					thumb_f.mkdirs();
+				}
+				// 썸네일 파일 생성 끝
+		
+				// 이미지 파일 생성
+				File img_f = new File(realPath, pro_img); 
+				try {
+					img_file.transferTo(img_f);
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					
+				// 파일 경로가 존재하지 않을 경우 파일 경로 생성
+				if(!img_f.exists()) {
+					img_f.mkdirs();
+				}
+				// 이미지 파일 생성 끝
+				
+				
+				int updateCount  = service.ProdUpdatePro(product);
+				return "redirect:/ProductModifyForm.pd?pro_code="+product.getPro_code() 
+				+ "&msg="+"1";
+	
+		}	
+
+	//상품 상세정보 삭제 진행(delete)
+	@PostMapping(value = "/ProdDeletePro")
+		public String prodDetailDeletePro(
+				@ModelAttribute ProductVO product,
+				Model model, HttpSession session){
+		
+			int deleteCount  = service.ProdDeletePro(product);
+			return "redirect:/ProductModifyForm.pd?pro_code="+product.getPro_code() 
+			+ "&msg="+"2";
+	
+		}	
 	
 	//상품 리스트
 	@GetMapping(value = "/ProductList.pd")
