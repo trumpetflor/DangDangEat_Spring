@@ -76,6 +76,72 @@
 		WHERE
 			pro_code = #{pro_code}
 	</select>
+	
+	<!-- 상품 등록 (insert) -->
+	<insert id="insertProduct" >
+			INSERT INTO PRODUCT
+				(PRO_NAME,
+				CATE_CODE,
+				PRO_BRAND,
+				PRO_OPTION,
+				PRO_QTY,
+				PRO_PRICE,
+				PRO_YN,
+				PRO_THUMB,
+				PRO_REAL_THUMB,
+				PRO_IMG,
+				PRO_REAL_IMG,
+				PRO_INFO,
+				PRO_DATE)
+			VALUES(
+				#{pro_name}
+				,#{cate_code}
+				,#{pro_brand}
+				,#{pro_option}
+				,#{pro_qty}
+				,#{pro_price}
+				,#{pro_yn}
+				,#{pro_thumb}
+				,#{pro_real_thumb}
+				,#{pro_img}
+				,#{pro_real_img}
+				,#{pro_name}
+				,now()
+			)
+		</insert>	
+		
+	<update id="updateProdUpdate">
+		UPDATE
+			PRODUCT
+		SET
+			PRO_NAME =  #{pro_name}
+			,CATE_CODE =  #{cate_code}
+			,PRO_BRAND =  #{pro_brand}
+			,PRO_OPTION =  #{pro_option}
+			,PRO_QTY =  #{pro_qty}
+			,PRO_PRICE =  #{pro_price}
+			,PRO_YN =  #{pro_yn}
+			<if test='pro_thumb != null and pro_thumb != ""'>
+				,PRO_THUMB =  #{pro_thumb}
+				,PRO_REAL_THUMB =  #{pro_real_thumb}
+			</if>
+			<if test='pro_img != null and pro_img != ""'>
+				,PRO_IMG =  #{pro_img}
+				,PRO_REAL_IMG =  #{pro_real_img}
+			</if>
+			,PRO_INFO =  #{pro_info}
+		WHERE
+			PRO_CODE =  #{pro_code}
+	</update>	
+		
+	<delete id="deleteProdDelete">
+		DELETE
+		FROM
+			PRODUCT
+		WHERE
+			PRO_CODE = #{pro_code}
+	</delete>
+	
 </mapper>
 
 

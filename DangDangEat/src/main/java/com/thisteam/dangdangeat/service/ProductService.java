@@ -32,6 +32,20 @@ public class ProductService {
 		return mapper.selectProductDetail(pro_code);
 	}
 
+	//상품 등록
+	public int prodInsertPro(ProductVO product) {
+		return mapper.insertProduct(product);
+	}
+
+	//상품 수정
+	public int ProdUpdatePro(ProductVO product) {
+		return mapper.updateProdUpdate(product);
+	}
+
+	//상품 삭제
+	public int ProdDeletePro(ProductVO product) {
+		return mapper.deleteProdDelete(product);
+	}
 
 	
 

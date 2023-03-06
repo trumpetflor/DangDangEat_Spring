@@ -265,7 +265,7 @@ function amountModify(pro_code, index){
 					<td>
 					<div style="text-align: center;">
                       <img class="card-img-top" style="width: 100px; height: 100px;"
-		                src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/upload/${cart.pro_real_thumb }"
+		                src="${pageContext.request.contextPath}/resources/upload/${cart.pro_real_thumb }"
         		        alt="..." onerror="this.src='${pageContext.request.contextPath}/resources/img/sample1_thumb.png';" />
         		        </div>
 					</td>
@@ -289,7 +289,7 @@ function amountModify(pro_code, index){
 					<td>
 						<div id="buttonBox">
 						<input type="button" value="위시리스트" id="wishlist" onclick="wishlistInsert(${cart.pro_code})">
-						<input type="button" value="주문하기" id="order" onclick="location.href='OrderForm.od?pro_code=${cart.pro_code}&cart_code=${cart.cart_code}'">
+						<input type="button" value="주문하기" id="order" onclick="location.href='OrderForm?pro_code=${cart.pro_code}'">
 						<input type="button" value="삭제" id="delete" onclick="cartDelete(${cart.pro_code})">
 						</div>
 					</td>
@@ -303,6 +303,7 @@ function amountModify(pro_code, index){
 	<div class="container">
 		<input type="button" value="삭제" id="checkDeleteBtn">
 		<input type="button" value="위시리스트 추가" id="checkWishBtn">
+		<input type="button" value="주문하기" id="order" onclick="location.href='OrderForm?pro_code=${cart.pro_code}'">
 	</div>
 	<div class="container" id="total">
 		Total : <fmt:formatNumber value="${finalTotal }" pattern="###,###,###"/> 원

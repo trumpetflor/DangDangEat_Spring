@@ -1,10 +1,9 @@
 package com.thisteam.dangdangeat.vo;
 
-//장바구니의 상품에 대한 정보를 가져오는 view (cart_product_view)
+//장바구니의 상품에 대한 정보를 가져오는 view (cart_view)
 
 public class CartProductVO {
 	
-	private int cart_code; // 장바구니 코드
 	private String member_id; // 주문회원 아이디
 	private int pro_code; // 장바구니에 담긴 상품코드
 	private int cart_amount; // 장바구니 수량
@@ -12,12 +11,7 @@ public class CartProductVO {
 	private String pro_brand; // 장바구니 상품브랜드
 	private int pro_price; // 장바구니 상품가격
 	private String pro_real_thumb; // 장바구니 상품썸네일
-	public int getCart_code() {
-		return cart_code;
-	}
-	public void setCart_code(int cart_code) {
-		this.cart_code = cart_code;
-	}
+	
 	public String getMember_id() {
 		return member_id;
 	}
@@ -60,12 +54,17 @@ public class CartProductVO {
 	public void setPro_real_thumb(String pro_real_thumb) {
 		this.pro_real_thumb = pro_real_thumb;
 	}
+	
 	@Override
 	public String toString() {
-		return "CartProductVO [cart_code=" + cart_code + ", member_id=" + member_id + ", pro_code=" + pro_code
-				+ ", cart_amount=" + cart_amount + ", pro_name=" + pro_name + ", pro_brand=" + pro_brand
-				+ ", pro_price=" + pro_price + ", pro_real_thumb=" + pro_real_thumb + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("CartProductVO [member_id=").append(member_id).append(", pro_code=").append(pro_code)
+				.append(", cart_amount=").append(cart_amount).append(", pro_name=").append(pro_name)
+				.append(", pro_brand=").append(pro_brand).append(", pro_price=").append(pro_price)
+				.append(", pro_real_thumb=").append(pro_real_thumb).append("]");
+		return builder.toString();
 	}
+	
 	
 }
 

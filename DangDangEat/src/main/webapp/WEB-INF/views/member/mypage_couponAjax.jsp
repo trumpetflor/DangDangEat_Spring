@@ -10,22 +10,22 @@
 
 //쿠폰검색 버튼 클릭 시 ajax로 쿠폰 검색 
 $(document).on("click","#c-search-btn",function(){
-	
+	console.log("#c-search-btn 클릭됨");
 		if($("#search_coupon_code").val() == ""){
 			alert("쿠폰 코드를 입력해주세요 !");
 			$("#search_coupon_code").focus();
 			return;
 		}
-
+	
 		$.ajax({
 			type: "get",
-			url: "SearchCouponCode.od",
+			url: "SearchCouponCode.ajax",
 			dataType: "json",
 			data: {"cp_code": $("#search_coupon_code").val()}
 			
-			
 		}).done(function(result){
-			
+// 			alert("result: "+result);
+// 			alert("result: "+JSON.stringify(result));
 			if(result == false){
 				alert("사용가능한 쿠폰이 아닙니다.")
 			}else if(result == true ){
@@ -51,7 +51,7 @@ $(document).on("click","#c-search-btn",function(){
 			}//end of else
 			
 		}).fail(function(data){
-			$("#resultArea").html("요청실패").css("color","red");
+			alert("요청실패 : " + data);
 		});
 		
 });//$(document)
@@ -78,7 +78,7 @@ $(document).on("click","#c-search-btn",function(){
 				<% if (request.getAttribute("couponList").toString().compareTo("[]")  == 0){%>
 				
 							<div class='d-flex py-2 border border-dark rounded-2'>
-								<div class='align-self-center p-2'><img src='img/no_coupon.png' width='100px'></div>
+								<div class='align-self-center p-2'><img src='${pageContext.request.contextPath}/resources/img/no_coupon.png' width='100px'></div>
 								<div class='align-self-center p-2'>사용가능한 쿠폰이 없습니다.</div>
 							</div>
 					<% }else{%> 
@@ -100,10 +100,59 @@ $(document).on("click","#c-search-btn",function(){
 					</div> 
 			
 					
-			
 				
 	</div>
 	</div>
+		<div class="card" id="">
+			<div class="card-header">
+				<strong>쿠폰 사용 내역</strong><small> (*최근 10개까지만 표시됩니다)</small>
+			</div>
+		<div id="in-container">
+			<div class="m-3">
+				<table class="table">
+					<tr>
+						<th>쿠폰명</th>
+						<th>사용 유무</th>
+						<th>상태</th>
+					</tr>
+					<c:forEach items="${couponHistory}" var="cp_his">
+					<c:choose>
+						<c:when test="${cp_his.mc_stat eq 1 }">
+							<tr>
+						</c:when>
+						<c:otherwise>
+							<tr style="color: gray;">
+						</c:otherwise>
+					</c:choose>
+					
+							<td>${cp_his.cp_name }
+								<br><small>${cp_his.target_sd  } - ${cp_his.target_ed  }</small>
+							</td>
+							<!-- 사용유무 -->
+							<c:choose>
+								<c:when test="${cp_his.mc_used eq 'N' }">
+									<td>미사용</td>
+								</c:when>
+								<c:otherwise>
+									<td>사용완료</td>
+								</c:otherwise>
+							</c:choose>
+							<!-- 상태 -->
+							<c:choose>
+								<c:when test="${cp_his.mc_stat eq 1 }">
+									<td>사용가능</td>
+								</c:when>
+								<c:otherwise>
+									<td>기한만료</td>
+								</c:otherwise>
+							</c:choose>
+						</tr>
+					</c:forEach>
+				</table>
+			</div>
+		</div><!-- div #in-container -->
+		
+		</div>
 	</div>
 
 	

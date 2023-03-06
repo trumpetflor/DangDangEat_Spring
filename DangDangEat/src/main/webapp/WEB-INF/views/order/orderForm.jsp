@@ -9,10 +9,10 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DangDangEat - OrderForm</title>
-  <link href="css/styles.css" rel="stylesheet" />
-  <link href="css/orderForm.css" rel="stylesheet" type="text/css">
+  <link href="${pageContext.request.contextPath}/resources/css/styles.css" rel="stylesheet" />
+  <link href="${pageContext.request.contextPath}/resources/css/orderForm.css" rel="stylesheet" type="text/css">
   <!-- top.jsp 랑 중복되는 container  : orderForm2.css -->
-  <link href="css/orderForm2.css" rel="stylesheet" type="text/css">
+  <link href="${pageContext.request.contextPath}/resources/css/orderForm2.css" rel="stylesheet" type="text/css">
   <style type="text/css">
 		@font-face {
 		    font-family: 'GmarketSansMedium';
@@ -65,7 +65,6 @@
   <main>
   	<form action="OrderInsertPro" method="post">
   		<!-- order_product 에 들어갈 정보 -->
-  		<input type="hidden" name="cart_code" value="${param.cart_code }"> 
   		<input type="hidden" name="pro_code" value="${param.pro_code }">
   		<!--  -->
 	    <div class="basket">
@@ -80,11 +79,13 @@
 	   
 	      <div class="basket-product">
 	         <c:forEach var="cart" items="${cartList }" varStatus="status">
+	         	<input type="hidden" name="pro_code" value="${cart.pro_code }">
+	         	<input type="hidden" name="order_stock" value="${cart.cart_amount }">
 		        <div class="item">
 			          <div class="product-image">
 			            <a href="ProductDetail.pd?pro_code=${cart.pro_code}">
-			            	<img src="http://localhost:8080/DangDangEat/upload/${cart.pro_real_thumb }" alt="${cart.pro_name }" 
-			            	class="product-frame" height="130" width="140" onerror="this.src='./img/sample1_thumb.png';" >
+			            	<img src="${pageContext.request.contextPath}/resources/upload/${cart.pro_real_thumb }" alt="${cart.pro_name }" 
+			            	class="product-frame" height="130" width="140" onerror="this.src='${pageContext.request.contextPath}/resources/img/sample1_thumb.png';" >
 			           	</a>
 			          </div>
 			          <div class="product-details">
@@ -111,14 +112,14 @@
 			  <div class="fields fields--2">
 			    <label class="field">
 			      <span class="field__label" >이름</span>
-			      <input class="field__input" type="text" id="order_name" name="order_name" value="${member.member_name }">
+			      <input class="field__input" type="text" id="order_name" value="${member.member_name }">
 			    </label>
 			  </div>
 			      
 			  <div class="fields fields--2">
 			  	<label class="field">
 			      <span class="field__label">연락처</span>
-			      <input class="field__input" type="text" id="order_mobile" name="order_mobile" value="${member.member_mobile }">
+			      <input class="field__input" type="text" id="order_mobile"  value="${member.member_mobile }">
 			    </label>
 			   </div>
 			   
@@ -159,38 +160,38 @@
 			  <div class="fields fields--2">
 			    <label class="field">
 			      <span class="field__label" >이름</span>
-			      <input class="field__input" type="text" id="shipment_name" name="shipment_name" placeholder="김댕댕" required="required">
+			      <input class="field__input" type="text" id="shipment_name" name="order_name" placeholder="김댕댕" required="required">
 			    </label>
 			  </div>
 			      
 			  <div class="fields fields--2">
 			  	<label class="field">
 			      <span class="field__label">연락처</span>
-			      <input class="field__input" type="text" id="shipment_mobile" name="shipment_mobile" placeholder="010-1234-5678" required="required">
+			      <input class="field__input" type="text" id="shipment_mobile" name="order_mobile" placeholder="010-1234-5678" required="required">
 			    </label>
 			  </div>
 		      <div class="fields fields--2">
 				    <label class="field">
 				      <span class="field__label" >우편번호</span>
-				      <input class="field__input" type="text" id="shipment_zipcode" name="shipment_zipcode" required="required">
+				      <input class="field__input" type="text" id="shipment_zipcode" name="order_postcode" required="required">
 			    	</label>
 			       <input type="button" value="주소 검색" onclick="kakaoAddr()">
 		      </div>
 			   
 			  <label class="field">
 				    <span class="field__label" >Address1</span>
-				    <input class="field__input" type="text" id="shipment_address1" name="shipment_address1"  required="required">
+				    <input class="field__input" type="text" id="shipment_address1" name="order_address1"  required="required">
 			  </label>
 			  
 			  <label class="field">
 				    <span class="field__label" >Address2(상세주소)</span>
-				    <input class="field__input" type="text" id="shipment_address2" name ="shipment_address2" required="required">
+				    <input class="field__input" type="text" id="shipment_address2" name ="order_address2" required="required">
 			  </label>
 			  
 		  	  <div class="fields fields--2">
 			     <label class="field">
 			       	  <span class="field__label" >배송 메시지 선택</span>
-				      <select id="message" name="message">
+				      <select id="message" name="order_comment">
 				      	<option>선택하세요</option>
 				      	<option value="배송 전 미리 연락 바랍니다.">배송 전 미리 연락바랍니다.</option>
 				      	<option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>

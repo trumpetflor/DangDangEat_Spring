@@ -3,8 +3,9 @@
 <configuration>
 
 
-<!-- 	<typeAliases> -->
-<!-- 		<typeAlias type="com.thisteam.dangdangeat.vo.CouponVO" alias="CouponVO"/> -->
-<!-- 	</typeAliases> -->
+	<typeAliases>
+		<typeAlias type="com.thisteam.dangdangeat.vo.CouponVO" alias="CouponVO"/>
+		<typeAlias type="com.thisteam.dangdangeat.vo.Coupon_viewVO" alias="Coupon_viewVO"/>
+	</typeAliases>
 
 </configuration>

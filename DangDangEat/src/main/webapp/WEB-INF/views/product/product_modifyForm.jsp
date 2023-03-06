@@ -13,8 +13,22 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" >
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+<script src="//code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript">
 
+	$(function() {
+		var msg = '${msg}'; //컨트롤러에서 액션이후 msg값이 있을 경우 해당 msg alert창 실행하기 위한 용도
+		if(msg==1){
+			alert('수정이 완료되었습니다');
+			 opener.location.reload();
+		}
+		if(msg==2){
+			alert('삭제 완료되었습니다');
+			 opener.location.reload();
+			 top.window.close();
+		}
+	});
+	
 	//상품 수정 클릭 시 확인창
 	function confirm_modify() {
 		let result = confirm("상품을 수정하시겠습니까?");
@@ -30,18 +44,12 @@
 	function confirm_delete() {
 		// Confirm Dialog 를 활용하여 "상품을 삭제하시겠습니까?" 질문 처리
 		let result = confirm("상품을 삭제하시겠습니까?");	
-		
-		// 선택된 결과값이 true 일 경우 페이지로 이동
-		// 단, multi로 설정했기때문에(=> 첨부파일 등록이 아니므로) 
-		// form.enctype을 기본값으로 재설정하는 과정이 필요하다!
+
 		if(result) {
 			const form = document.getElementById('ProductModifyForm');
-			form.action = 'ProductDeletePro.pd';
-			form.enctype = 'application/x-www-form-urlencoded';
+			form.action = 'ProdDeletePro';
 			form.submit();
-			alert("상품 삭제가 완료되었습니다")
 		}
-// 			location.href = "ProductList.pd";
 	}
 
 	//radio(판매여부 pro_yn)에서 선택된 value값 가져오기
@@ -91,7 +99,7 @@ body {
 	<h2>상품 수정</h2>
 	<br>
 	<div class="container mr-sm-2">
-		<form action="ProductModifyPro.pd" method="post" name="ModifyForm" id="ProductModifyForm" enctype="multipart/form-data">
+		<form action="ProdUpdatePro" method="post" name="ModifyForm" id="ProductModifyForm" enctype="multipart/form-data">
 			<!-- 파일 수정 시 기존파일 삭제를 위해 실제 파일명도 파라미터로 전달 필요 -->
 			<input type="hidden" name="">
 			<table class="table table-bordered">
@@ -154,13 +162,13 @@ body {
 				</tr>
 				<tr>
 					<th>상품 메인이미지</th>
-					<td><input class="form-control" type="file" name="pro_thumb" id="pro_thumb"
+					<td><input class="form-control" type="file" name="file_thumb" id="pro_thumb"
 						size="20" value="${product.pro_thumb }">
 						<br>(기존파일 : ${product.pro_thumb })</td>
 				</tr>
 				<tr>
 					<th>상품 상세이미지</th>
-					<td><input class="form-control" type="file" name="pro_img" id="pro_img" size="20">
+					<td><input class="form-control" type="file" name="file_img" id="pro_img" size="20">
 					<br>(기존파일 : ${product.pro_img })</td>
 				</tr> 
 			

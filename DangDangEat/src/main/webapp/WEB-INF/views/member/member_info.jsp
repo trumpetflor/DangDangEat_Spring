@@ -197,11 +197,15 @@ body {
 				},
 				dataType: "text",
 				success: function(result) {
-					//작업이 성공적으로 발생했을 경우
-					alert("인증 메일이 발송되었습니다.");
+					if(result == 'false') {
+						alert("잘못된 접근입니다.");
+					} else {
+						//작업이 성공적으로 발생했을 경우
+						alert("인증 메일이 발송되었습니다.");
+					}
 					location.reload();
 				},
-				error:function() {  
+				error:function(result) {  
 		            //에러가 났을 경우 실행시킬 코드
 		            alert("인증 메일 전송 실패");
 				}

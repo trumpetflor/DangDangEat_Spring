@@ -13,17 +13,17 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>DangDangEat Admin - MemberList</title>
+    <title>DangDangEat Admin - OrderList</title>
 
     <!-- Custom fonts for this template -->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="${pageContext.request.contextPath}/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
     <!-- Custom styles for this template -->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
     <!-- Custom styles for this page -->
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
+    <link href="${pageContext.request.contextPath}/resources/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
 <!-- 폰트 설정 (23/01/12 일괄 수정 완료)-->
 <style>
 @font-face {
@@ -80,9 +80,7 @@ if(sId == null || !sId.equals("admin")) {
 %>
 
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
-<script type="text/javascript">
-      
-</script>
+
 </head>
 
 <body id="page-top">
@@ -96,9 +94,9 @@ if(sId == null || !sId.equals("admin")) {
 
             <!-- Sidebar - Brand -->
 
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="AdminMain.ad">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="AdminMain">
                 <div class="div-top-icon">
-                <img class="main-icon" src="img/maindog_white.png">
+                <img class="main-icon" src="${pageContext.request.contextPath}/resources/img/maindog_white.png">
 <!--                     <i class="fas fa-laugh-wink"></i> -->
                 </div>
 
@@ -111,7 +109,7 @@ if(sId == null || !sId.equals("admin")) {
             <!-- Nav Item - Dashboard -->
 
             <li class="nav-item active">
-                <a class="nav-link" href="AdminMain.ad">
+                <a class="nav-link" href="AdminMain">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>관리자 메인 페이지</span></a>
             </li>
@@ -128,31 +126,31 @@ if(sId == null || !sId.equals("admin")) {
 
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminProductList.ad">
+                <a class="nav-link" href="AdminProductList">
                     <i class="fas fa-fw fa-calendar"></i>
                     <span>상품 관리</span></a>
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminMemberList.ad">
+                <a class="nav-link" href="AdminMemberList">
                     <i class="fas fa-fw fa-table"></i>
                     <span>회원 관리</span></a>
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminOrderList.ad">
+                <a class="nav-link" href="AdminOrderList">
                     <i class="fas fa-fw fa-dollar-sign"></i>
                     <span>주문 관리</span></a>
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminCouponList.ad">
+                <a class="nav-link" href="AdminCouponList">
                     <i class="fas fa-fw fa-clipboard-list"></i>
                     <span>쿠폰 관리</span></a>
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminBoardList.ad">
+                <a class="nav-link" href="AdminBoardList">
                     <i class="fas fa-fw fa-comments"></i>
                     <span>게시판 관리</span></a>
             </li>
@@ -231,7 +229,7 @@ if(sId == null || !sId.equals("admin")) {
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 font-weight-bold">Admin</span>
                                 <img class="img-profile rounded-circle"
-                                    src="img/dangprofile.png">
+                                    src="${pageContext.request.contextPath}/resources/img/dangprofile.png">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -262,8 +260,7 @@ if(sId == null || !sId.equals("admin")) {
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800 font-weight-bold">주문 관리</h1>
-                    <p class="mb-4">주문 목록 페이지 <a target="_blank"
-                            href="https://datatables.net">주문 검색, 필터 기능 등 필요</a>.</p>
+                    <p class="mb-4">주문 목록 페이지</p>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -319,7 +316,7 @@ if(sId == null || !sId.equals("admin")) {
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; DangDangEat 2023</span>
                     </div>
                 </div>
             </footer>
@@ -357,21 +354,21 @@ if(sId == null || !sId.equals("admin")) {
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/vendor/jquery/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/demo/datatables-demo.js"></script>
 
 </body>
 
