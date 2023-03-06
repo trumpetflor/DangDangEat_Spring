@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.thisteam.dangdangeat.vo.CartProductVO;
+import com.thisteam.dangdangeat.vo.Mc_viewVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.OrderProductVO;
 import com.thisteam.dangdangeat.vo.OrdersBeanVO;
@@ -82,6 +83,8 @@ public interface OrderMapper {
 	
 
 	
+
+	List<Mc_viewVO> selectCouponHistory(String sId);
 
 
 

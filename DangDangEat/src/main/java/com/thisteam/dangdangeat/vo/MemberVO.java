@@ -38,6 +38,7 @@ public class MemberVO {
 	private String member_admin;
 	private String member_status;
 	private String member_authStatus;
+	private String masking_member_id; // 마스킹 된 아이디
 
 	public String getMember_id() {
 		return member_id;
@@ -123,6 +124,12 @@ public class MemberVO {
 	public void setMember_authStatus(String member_authStatus) {
 		this.member_authStatus = member_authStatus;
 	}
+	public String getMasking_member_id() {
+		return masking_member_id;
+	}
+	public void setMasking_member_id(String masking_member_id) {
+		this.masking_member_id = masking_member_id;
+	}
 	
 	@Override
 	public String toString() {
@@ -130,8 +137,11 @@ public class MemberVO {
 				+ ", member_name=" + member_name + ", member_mobile=" + member_mobile + ", member_addr1=" + member_addr1
 				+ ", member_addr2=" + member_addr2 + ", member_postcode=" + member_postcode + ", member_date="
 				+ member_date + ", member_point=" + member_point + ", member_birth=" + member_birth + ", member_admin="
-				+ member_admin + ", member_status=" + member_status + ", member_authStatus=" + member_authStatus + "]";
+				+ member_admin + ", member_status=" + member_status + ", member_authStatus=" + member_authStatus
+				+ ", masking_member_id=" + masking_member_id + "]";
 	}
+	
+	
 	
 }
 

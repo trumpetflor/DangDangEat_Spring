@@ -168,7 +168,7 @@ body {
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminCouponList.ad">
+                <a class="nav-link" href="AdminCouponList">
                     <i class="fas fa-fw fa-clipboard-list"></i>
                     <span>쿠폰 관리</span></a>
             </li>

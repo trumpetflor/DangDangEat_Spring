@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>쿠폰 적용</title>
-  	 <link href="resources/css/styles.css" rel="stylesheet" />
+  	 <link href="${pageContext.request.contextPath}/resources/css/styles.css" rel="stylesheet" />
    	 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
   	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  	 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
@@ -76,10 +76,10 @@ $(function(){
 				
 				$("#coupon_list").html(
 						"<div class='d-flex py-2 border border-dark rounded-2'>"+
-							"<div class='align-self-center p-2'><img src='img/no_coupon.png' width='100px'></div>"+
+							"<div class='align-self-center p-2'><img src='${pageContext.request.contextPath}/resources/img/no_coupon.png' width='100px'></div>"+
 							"<div class='align-self-center p-2'>사용가능한 쿠폰이 없습니다.</div>"+
 						"</div>");
-			}else{
+			}else{ 
 		
 
 				

@@ -22,9 +22,77 @@
   			FROM member
   			WHERE member_id = #{member_id}
   	</delete>
+  	<!-- ================================ hawon =======================================-->
+  	<!-- 관리자 페이지 쿠폰 리스트 -->
+  	<select id="selectCoupon" resultType="Coupon_viewVO">
+  	SELECT *  
+	FROM coupon_view 
+		WHERE cp_status = 1
+			AND cp_code = #{cp_code}
+  	</select>
   	
-  	<!-- ============================ admin/orderList 미주 ===================== -->
+  	<!-- 관리자 페이지 쿠폰 수정 -->
+  	<update id="updateCoupon">
+  	UPDATE coupon 
+			 SET cp_name = #{coupon.cp_name}
+			     , cp_period = #{coupon.cp_period}
+				 , cp_min_price = #{coupon.cp_min_price}
+			     , cp_max_discount =#{coupon.cp_max_discount}
+			WHERE cp_code = #{coupon.cp_code}
   	
+  	</update>
+
+	<!-- 쿠폰 삭제 -->
+    <update id="deleteCoupon">
+    	UPDATE coupon 
+    		 SET cp_status = 0
+			 WHERE cp_code = #{cp_code}
+    </update>
+  	
+  	<!-- 일반쿠폰 등록(이벤트쿠폰) -->
+  	<insert id="insertCoupon">
+  	INSERT INTO coupon values(
+  			TRIM(#{coupon.cp_code})
+  			,TRIM(#{coupon.cp_name})
+  			,#{coupon.cp_target.name}
+  			,#{coupon.cp_discount_value}
+  			,#{coupon.cp_startdate}
+  			,#{coupon.cp_period}
+  			,#{coupon.cp_min_price}
+  			,#{coupon.cp_max_discount}
+  			, 1 -- 쿠폰상태(default 1, / 삭제시 0)
+  	)
+  	</insert>
+
+    <!-- 전 회원에게 생일쿠폰 발급 -->
+    <insert id="insertBirthCouponToMc">
+    INSERT INTO member_coupon (member_id , cp_code  , mc_used )
+		 SELECT member_id, #{cp_code} as 'cp_code',  'N'  as 'mc_used' 
+		 FROM member 
+		 WHERE member_id NOT IN (Select member_id FROM member_coupon WHERE cp_code = #{cp_code} )
+    </insert>
+    
+    <!-- 중복쿠폰코드 체크 -->
+	<select id="isExistCode" resultType="String">
+	SELECT cp_code 
+	FROM coupon 
+	 	WHERE cp_code = #{cp_code}
+	</select>
+	
+    
+    <!-- 회원가입 시 , 자동발급쿠폰이 있는 경우 자동 발급 -->
+    <insert id="insertAutoCouponForNewMem">
+    INSERT INTO member_coupon (member_id , cp_code  , mc_used )
+		 SELECT  #{member_id}  as'member_id' ,  cp_code ,  'N'  as 'mc_used' 
+				FROM coupon 
+				WHERE cp_status = 1 and (cp_target != 'event' )
+    </insert>
+    
+	<!-- ================================================================================ -->
+
+
+    <!-- ============================ admin/orderList 미주 ===================== -->	
+    
   	<!-- 관리자 주문 관리 페이지 -->
   	<select id="selectOrderList" resultType="com.thisteam.dangdangeat.vo.AdminOrderListVO" >
   		SELECT * FROM admin_order_list_view
