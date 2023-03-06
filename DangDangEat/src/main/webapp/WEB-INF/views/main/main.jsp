@@ -9,14 +9,14 @@
 <title>DangDangEAT</title>
 
 <!-- <link href="css/styles.css" rel="stylesheet" /> -->
-<link href="${path}/resources/css/styles.css" rel="stylesheet"/> 
+<link href="${path }/resources/css/styles.css" rel="stylesheet"/> 
 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 	<link href="jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
-<script src="../js/jquery-3.6.3.js"></script>
+<%-- <script src="${path }/resources/js/jquery-3.6.3.js"></script> --%>
 <script type="text/javascript">
 
 
@@ -63,7 +63,7 @@ $(document).ready(function(){
 							let decodingImg = decodeURI(product.pro_real_thumb);
 							
 							$("#new_eat").append(
-							 "<img class='bg-light main_rec m-3' onclick=\"location.href='ProductDetail.pd?pro_code=" + product.pro_code + "'\" src='" + $imgPath +  "/upload/" + decodingImg  + "'></img>"
+							 "<img class='bg-light main_rec m-3' onclick=\"location.href='ProductDetail.pd?pro_code=" + product.pro_code + "'\" src='${pageContext.request.contextPath}/resources/upload/" + decodingImg  + "'></img>"
 							);
 						}
 						
@@ -80,7 +80,7 @@ $(document).ready(function(){
 function couponDown() {
 let ok = prompt('할인 쿠폰 발급 완료!\n (확인을 누르면 쿠폰등록창으로 넘어갑니다. ) \n↓↓↓할인코드↓↓↓',"2023년도_잘_부탁한댕")
 if(ok){
-	location.href="MyPage.me?cp_code="+ ok ;
+	location.href="MyPage?cp_code="+ ok ;
 	
 	}
 } 

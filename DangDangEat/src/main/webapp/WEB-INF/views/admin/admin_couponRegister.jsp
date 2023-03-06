@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>관리자 쿠폰 등록</title>
-   <link href="css/styles.css" rel="stylesheet" />
+   <link href="${pageContext.request.contextPath}/resources/css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
@@ -14,13 +14,13 @@
   
   
 <!-- Custom fonts for this template -->
-<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
 <!-- Custom styles for this template -->
-<link href="css/sb-admin-2.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
 <!-- Custom styles for this page -->
-<link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
      <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style type="text/css">
    @font-face { /*지마켓 산스*/
@@ -192,26 +192,22 @@ $(document).on("change","select[name=coupon_target]",function(){
 
 		//쿠폰코드: 중복된 쿠폰코드인지 확인
 		$("#coupon_code").on("change",function() {
-
-	
-	
+		
 				$.ajax({
-						url: "CheckExistCouponCode.ad",
+						url: "CheckExistCouponCode",
 						data: {
-							coupon_code: $("#coupon_code").val()
+							cp_code: $("#coupon_code").val()
 							},
 						contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 						success: function(result) {
-							
-									if(result == "true"){ //이미 존재하는 쿠폰코드
-										$("input[type=submit]").attr("disabled", true);
-										$("#code_check").html("<small>이미 사용했던 쿠폰코드입니다.</small>").css("color", "red").focus();
-									
-									}else{
-										
+// 									alert("result:"+result);
+									if(result == 0){
 										submitCheckCount_canUseCode = true;
 										$("#code_check").html("<small>사용가능한 쿠폰 코드입니다.</small>").css("color", "royalblue").focus();
 										$("input[type=submit]").attr("disabled", false);
+									}else{//이미 존재하는 쿠폰코드
+										$("input[type=submit]").attr("disabled", true);
+										$("#code_check").html("<small>이미 사용했던 쿠폰코드입니다.</small>").css("color", "red").focus();
 									
 									}//end of else
 									
@@ -231,11 +227,9 @@ $(document).on("change","select[name=coupon_target]",function(){
 // 			alert("submitCheckRegex_code : "+ submitCheckRegex_name);
 // 			alert("submitCheckCount_canUseCode : "+ submitCheckCount_canUseCode);
 				if(submitCheckRegex_name && submitCheckRegex_code && submitCheckCount_canUseCode){
-					 alert("쿠폰 등록에 성공했습니다.\n쿠폰 리스트 페이지로 이동합니다.");
+// 					 alert("쿠폰 등록에 성공했습니다.\n쿠폰 리스트 페이지로 이동합니다.");
 					return true;
-				
 				}else{
-					
 						switch(false){
 							case submitCheckRegex_name: $("#coupon_name").css("backgroundColor", "rgba(255, 0, 0 , 0.5)") ;
 							case submitCheckRegex_code: $("#coupon_code").css("backgroundColor", "rgba(255, 0, 0, 0.5)"); 
@@ -312,7 +306,7 @@ $(document).on("change","select[name=coupon_target]",function(){
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminCouponList.ad">
+                <a class="nav-link" href="AdminCouponList">
                     <i class="fas fa-fw fa-clipboard-list"></i>
                     <span>쿠폰 관리</span></a>
             </li>
@@ -458,7 +452,7 @@ $(document).on("change","select[name=coupon_target]",function(){
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
+                                        <img class="rounded-circle" src="${pageContext.request.contextPath}/resources/img/undraw_profile_1.svg"
                                             alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
@@ -470,7 +464,7 @@ $(document).on("change","select[name=coupon_target]",function(){
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
+                                        <img class="rounded-circle" src="${pageContext.request.contextPath}/resources/img/undraw_profile_2.svg"
                                             alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
@@ -482,7 +476,7 @@ $(document).on("change","select[name=coupon_target]",function(){
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
+                                        <img class="rounded-circle" src="${pageContext.request.contextPath}/resources/img/undraw_profile_3.svg"
                                             alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
@@ -516,7 +510,7 @@ $(document).on("change","select[name=coupon_target]",function(){
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
                                 <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                    src="${pageContext.request.contextPath}/resources/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -557,19 +551,19 @@ $(document).on("change","select[name=coupon_target]",function(){
   </a>
 
   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-    <li><a class="dropdown-item" href="CouponRegister.ad">쿠폰 등록</a></li>
-    <li><a class="dropdown-item" href="AdminCouponList.ad">등록된 쿠폰 관리</a></li>
+    <li><a class="dropdown-item" href="AdminCouponRegister">쿠폰 등록</a></li>
+    <li><a class="dropdown-item" href="AdminCouponList">등록된 쿠폰 관리</a></li>
   </ul>
 </div>
  	  > &#127903; 쿠폰등록
  		<div class="m-3"> <h2>쿠폰 정보 &#127903;</h2> </div>
  		<hr>
- 		<form action="CouponRegisterPro.ad">
+ 		<form action="CouponRegisterPro" method="post">
  		
 	 		<table class="table table-hove">
 	 			<tr>
 	 				<td style="width: 300px" >쿠폰명</td>
-	 				<td><input type="text" id="coupon_name" name="coupon_name" required="required" ><span id="coupon_name-span"></span></td>
+	 				<td><input type="text" id="coupon_name" name="cp_name" required="required" ><span id="coupon_name-span"></span></td>
 	 			</tr>
 	 			<tr>
 	 				<td>쿠폰 형식</td>
@@ -582,29 +576,29 @@ $(document).on("change","select[name=coupon_target]",function(){
 	 			</tr>
 	 			<tr id="tr_coupon_code">
 	 				<td>쿠폰 코드</td>
-	 				<td><input type="text" id="coupon_code" name="coupon_code" required="required"><span id="code_check-span"></span><div id="code_check"></div></td>
+	 				<td><input type="text" id="coupon_code" name="cp_code" required="required"><span id="code_check-span"></span><div id="code_check"></div></td>
 	 			</tr>
 	 			<tr>
 	 				 <td>할인 범위(단위: %)</td>
-	 				<td><input type="number" id="discount_unit_input" name="discount_value" min="0" max="100" required="required" ></td>
+	 				<td><input type="number" id="discount_unit_input" name="cp_discount_value" min="0" max="100" required="required" ></td>
 	 			</tr>
 	 			<tr>
 	 				<td>쿠폰 시작일</td>
-	 				<td><input type="date" id="coupon_start" name="coupon_start" required="required"><div id="coupon_start_div"></div></td>
+	 				<td><input type="date" id="coupon_start" name="cp_startdate" required="required"><div id="coupon_start_div"></div></td>
 	 			</tr>
 	 			<tr>
 	 				<td>쿠폰 유효기간 (일)</td>
-	 				<td><input min="0" type="number" id="coupon_period" name ="coupon_period" placeholder="숫자만 입력하세요." required="required">&nbsp;
+	 				<td><input min="0" type="number" id="coupon_period" name ="cp_period" placeholder="숫자만 입력하세요." required="required">&nbsp;
 	 			<tr align="right">
 	 				<td colspan="2" ><div id="coupon_date_result"></div></td>
 	 			</tr>
 	 			<tr>
 	 				<td>최소 구매액</td>
-	 				<td><input type="number" id="min_amount" name="min_amount" min="0" placeholder="숫자만 입력하세요." required="required"></td>
+	 				<td><input type="number" id="min_amount" name="cp_min_price" min="0" placeholder="숫자만 입력하세요." required="required"></td>
 	 			</tr>
 	 			<tr>
 	 				<td>최대 할인액</td>
-	 				<td><input type="number" id="max_discount" name="max_discount" min="0" placeholder="숫자만 입력하세요." required="required"></td>
+	 				<td><input type="number" id="max_discount" name="cp_max_discount" min="0" placeholder="숫자만 입력하세요." required="required"></td>
 	 			</tr>
 	 			
 	 			
@@ -659,14 +653,14 @@ $(document).on("change","select[name=coupon_target]",function(){
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/vendor/jquery/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
 
@@ -676,11 +670,11 @@ $(document).on("change","select[name=coupon_target]",function(){
 <!--     <script src="js/demo/chart-area-demo.js"></script> -->
 <!--     <script src="js/demo/chart-pie-demo.js"></script> -->
 
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/demo/datatables-demo.js"></script>
 
 
 </body>
