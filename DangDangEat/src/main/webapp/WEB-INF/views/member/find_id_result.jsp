@@ -85,7 +85,7 @@ body {
 											<div class="card-body">
 												<div class="mx-auto d-block">
 													<div class="location text-sm-center">조회된 아이디</div>
-													<h5 class="text-sm-center mt-2 mb-1">${member.member_id }</h5>
+													<h5 class="text-sm-center mt-2 mb-1">${member.masking_member_id }</h5>
 												</div>
 												<hr>
 												<div class="card-text text-sm-center">
