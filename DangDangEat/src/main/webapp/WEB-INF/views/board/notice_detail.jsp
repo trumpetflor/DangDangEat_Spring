@@ -56,7 +56,7 @@
 		margin-bottom: 30px;
 		background: #D3D3D3;
 		margin-top: 20px;
-		height: 350px;
+		height: auto;
 		text-align: center;
 		overflow: auto;
 		white-space: pre-line;
@@ -87,7 +87,7 @@
 <!-- 		<h2>Notice</h2> -->
 		<section >
 			<table class="table">
-			<tr><th width="70">제 목</th><td colspan="5">${notice.notice_subject }</td></tr>
+			<tr><th width="70">제 목</th><td colspan="5" style="text-align: left;">${notice.notice_subject }</td></tr>
 			<tr>
 				<th width="70">작성자</th><td>${notice.member_id }</td>
 				<th width="70">작성일</th>
@@ -104,10 +104,10 @@
 	</div>
 	<section id="commandList">
 	    <c:if test="${not empty sessionScope.sId and sessionScope.sId eq 'admin'}"> 
-		<input type="button" value="수정" onclick="location.href='NoticeModifyForm.bo?notice_code=${param.notice_code}&pageNum=${param.pageNum }'">
-		<input type="button" value="삭제" onclick="location.href='NoticeDeletePro.bo?notice_code=${param.notice_code}&pageNum=${param.pageNum }'">
+		<input type="button" value="수정" onclick="location.href='NoticeModifyForm?notice_code=${param.notice_code}&pageNum=${param.pageNum }'">
+		<input type="button" value="삭제" onclick="location.href='NoticeDeletePro?notice_code=${param.notice_code}&pageNum=${param.pageNum }'">
 		</c:if>
-		<input type="button" value="목록" onclick="location.href='NoticeList.bo?pageNum=${param.pageNum}'">
+		<input type="button" value="목록" onclick="location.href='NoticeList?pageNum=${param.pageNum}'">
 	</section>
        
      <footer class="py-5 bg-dark">

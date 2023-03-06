@@ -62,14 +62,14 @@
 	
 </style>
 </head>	
-		<jsp:include page="/inc/top.jsp"></jsp:include>
+		<jsp:include page="../inc/top.jsp"></jsp:include>
 	<body>
 	<!-- 게시판 글 수정 -->
 	<section id="writeForm">
 		<h2>Notice modify</h2>
-		<form action="NoticeModifyPro.bo" name="noticeForm" method="post">
+		<form action="NoticeModifyPro" name="noticeForm" method="post">
 		    <input type="hidden" name="notice_code" value="${param.notice_code }" >
-		    <input type="hidden" name="member_id" value="${param.member_id }" >
+<%-- 		    <input type="hidden" name="member_id" value="${param.member_id }" > --%>
 			<input type="hidden" name="pageNum" value="${param.pageNum }" >
 			<table class="table container">
 			<tbody>
@@ -87,7 +87,7 @@
 					<td class="td_left"><label for="notice_content">내용</label></td>
 					<td class="td_right">
 <!-- 					<input type="textaria" id="notice_content" style="width: 500px"> -->
-						<textarea id="notice_content" name="notice_content" required="required" style="width: 1224px; height: 500px;"></textarea>
+						<textarea id="notice_content" name="notice_content" required="required" style="width: 1224px; height: 500px;">${notice.notice_content }</textarea>
 					</td>
 				</tr>
 			</table>

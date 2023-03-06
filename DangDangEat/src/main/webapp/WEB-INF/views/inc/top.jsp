@@ -246,7 +246,7 @@ header > div {
       <li>/</li>
       <li><a href="ProductList.pd">Shop</a></li>
       <li>/</li>
-      <li><a href="NoticeList.bo">Notice</a></li>
+      <li><a href="NoticeList">Notice</a></li>
       <li>/</li>
       <li><a href="QnaList.bo">Q&A</a></li>
     </ul>

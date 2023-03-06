@@ -86,7 +86,7 @@
        
     <!-- Header-->
         <!-- top.jsp -->
-		<jsp:include page="/inc/top.jsp"></jsp:include>
+		<jsp:include page="../inc/top.jsp"></jsp:include>
 		<!-- Section-->
 		
   <section id="listForm">
@@ -113,7 +113,7 @@
 					</c:otherwise>
 				</c:choose>
 				<td id="subject">
-					<a href="NoticeDetail.bo?notice_code=${notice.notice_code }&pageNum=${pageNum }">
+					<a href="NoticeDetail?notice_code=${notice.notice_code }&pageNum=${pageNum }">
 						${notice.notice_subject }
 					</a>
 				</td>
@@ -130,12 +130,12 @@
 	</section>
 
 <section id="buttonArea">
-<form action="NoticeList.bo">
+<form action="NoticeList">
 			<input type="text" name="keyword">
 			<input type="submit"  value="검색">
 			&nbsp;&nbsp;
 			<c:if test="${not empty sessionScope.sId and sessionScope.sId eq 'admin'}">
-            <input type="button" value="글쓰기" onclick="location.href='NoticeWriteForm.bo'" />   
+            <input type="button" value="글쓰기" onclick="location.href='NoticeWriteForm'" />   
             </c:if>     
 		</form>
 	</section>
@@ -144,7 +144,7 @@
 <section id="pageList">
 		<c:choose>
 			<c:when test="${pageNum > 1}">
-				<input type="button" value="이전" onclick="location.href='NoticeList.bo?pageNum=${pageNum - 1}'">
+				<input type="button" value="이전" onclick="location.href='NoticeList?pageNum=${pageNum - 1}'">
 			</c:when>
 			<c:otherwise>
 				<input type="button" value="이전">
@@ -157,14 +157,14 @@
 					${i }
 				</c:when>
 				<c:otherwise>
-					<a href="NoticeList.bo?pageNum=${i }">${i }</a>
+					<a href="NoticeList?pageNum=${i }">${i }</a>
 				</c:otherwise>
 			</c:choose>
 		</c:forEach>
 
 		<c:choose>
 			<c:when test="${pageNum < pageInfo.maxPage}">
-				<input type="button" value="다음" onclick="location.href='NoticeList.bo?pageNum=${pageNum + 1}'">
+				<input type="button" value="다음" onclick="location.href='NoticeList?pageNum=${pageNum + 1}'">
 			</c:when>
 			<c:otherwise>
 				<input type="button" value="다음">
@@ -175,7 +175,7 @@
  <!-- Footer-->
    <footer class="py-5 bg-dark">
       <div class="container">
-         <p class="m-0 text-center text-white">Copyright &copy; DangDangEat 2023</p>
+         <p class="m-0 text-center text-white" style="text-align: center;">Copyright &copy; DangDangEat 2023</p>
       </div>
    </footer>
    </body>

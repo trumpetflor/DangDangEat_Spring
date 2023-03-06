@@ -79,21 +79,7 @@
   			SET member_status = #{member_status}
   			WHERE member_id = #{member_id}
   	</update>
-  	
-  	<!-- 회원 아이디 중복 조회 -->
-  	<select id="selectidCheck" resultType="String">
-  		SELECT member_id
-  			FROM member
-  			WHERE member_id = #{id}
-  	</select>
-  	
-  	<!-- 회원 이메일 중복 조회 -->
-  	<select id="selectEmailCheck" resultType="String">
-  		SELECT member_email
-  			FROM member
-  			WHERE member_email = #{email}
-  	</select>
-  	
+
   	<!-- 멤버 마이페이지 조회(주문, 쿠폰, 리뷰, 질문 수) -->
   	<select id="selectMemberMypageView" resultType="com.thisteam.dangdangeat.vo.Member_Mypage_ViewVO">
   		SELECT *
@@ -153,7 +139,73 @@
   			SET member_pass = #{member_pass}
   			WHERE member_id = #{member_id}
   	</update>
+    
+    
+    
+ 
+   	<!--===================== sangwoo =========================-->
   	
+  	<!-- 회원 아이디 중복 조회 -->
+  	<select id="selectidCheck" resultType="String">
+  		SELECT member_id
+  			FROM member
+  			WHERE member_id = #{id}
+  	</select>
+  	
+  	<!-- 회원 이메일 중복 조회 -->
+  	<select id="selectEmailCheck" resultType="String">
+  		SELECT member_email
+  			FROM member
+  			WHERE member_email = #{email}
+  	</select>
+  	
+  	<!-- 회원 가입 -->
+  	<insert id="insertMemberJoin">
+  		INSERT
+  			INTO member
+  			VALUES (
+  				#{member_id}
+  				,#{member_pass}
+  				,#{member_email}
+  				,#{member_name}
+  				,#{member_mobile}
+  				,#{member_addr1}
+  				,#{member_addr2}
+  				,#{member_postcode}
+  				,now()
+  				,0
+  				,#{member_birth}
+  				,'N'
+  				,'N'
+  				,'N'
+  			)
+  	</insert>
+  	
+  	<!-- 메일 인증 정보 등록 -->
+  	<insert id="insertAuthMail">
+  		INSERT
+  			INTO auth
+  			VALUES (
+  				#{auth_id}
+  				,#{auth_code}
+  			)
+  	</insert>
+  	
+  	<!-- 인증 메일 확인 업데이트 -->
+  	<delete id="checkAuthMail">
+  		DELETE
+  			FROM auth
+  			WHERE auth_code = #{auth_code} AND auth_id = #{auth_id}
+  	</delete>
+  	
+  	<!-- 회원 메일 인증 상태 업데이트 -->
+  	<update id="updateMemberAuth">
+  		UPDATE member
+  			SET member_authStatus = 'Y'
+  			WHERE member_id = #{auth_id}
+  	</update>
+  	
+  	<!--===================== sangwoo =========================-->
   	
 </mapper>
 

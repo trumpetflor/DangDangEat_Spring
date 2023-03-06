@@ -1,9 +1,10 @@
 package com.thisteam.dangdangeat.mapper;
 
-import org.apache.ibatis.annotations.Param;
-
+import com.thisteam.dangdangeat.vo.AuthVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.Member_Mypage_ViewVO;
+
+import org.apache.ibatis.annotations.Param;
 
 public interface MemberMapper {
 
@@ -50,6 +51,27 @@ public interface MemberMapper {
 	int updateMemberPass(MemberVO member);
 	
 	
+	//----------------------- sangwoo ---------------------// 
+	
+	// 회원 아이디 중복 체크
+	String selectidCheck(String id);
+	
+	// 회원 이메일 중복 체크
+	String selectEmailCheck(String email);
+	
+	// 회원 가입
+	int insertMemberJoin(MemberVO member);
+	
+	// 인증 메일 정보 등록
+	void insertAuthMail(AuthVO auth);
+	
+	// 메일 인증 확인
+	int checkAuthMail(AuthVO auth);
+	
+	// 회원 메일 인증 상태 업데이트
+	void updateMemberAuth(AuthVO auth);
+
+	//----------------------- sangwoo ---------------------// 
 
 }
 

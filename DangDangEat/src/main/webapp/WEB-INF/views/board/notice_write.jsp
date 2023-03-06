@@ -31,6 +31,8 @@
 	table {
 	    border-collapse: collapse; 
 	 	width: 1224px;
+	 	margin-left: auto;
+	 	margin-right: auto;
 	   }
 	
 	
@@ -61,20 +63,21 @@
 	
 	table > tbody {
 		border-style: none;
+		
 	}
 		
 	
 </style>
     </head>
    
-		<jsp:include page="/inc/top.jsp"></jsp:include>
+		<jsp:include page="../inc/top.jsp"></jsp:include>
 	
     <body>
 
 	<!-- 게시판 등록 -->
 	<section id="writeForm">
 		<h2>Notice Write</h2>
-		<form action="NoticeWritePro.bo" name="noticeForm" method="post">
+		<form action="NoticeWritePro" name="noticeForm" method="post">
 			<table class="table container">
 			<tbody>
 <!-- 				<tr> -->
@@ -90,7 +93,7 @@
 					<td class="td_left"><label for="notice_content">내용</label></td>
 					<td class="td_right">
 <!-- 						<input type="textarea" id="notice_content" style="width: 500px"> -->
-						<textarea id="notice_content" name="notice_content" required="required" style="width: 1224px; height: 500px;"></textarea>
+						<textarea id="notice_content" name="notice_content" required="required" style="width: 1224px; height: 400px;"></textarea>
 					</td>
 				</tr>	
 			</table>			
@@ -99,11 +102,12 @@
 				<input type="reset" value="다시쓰기">&nbsp;&nbsp;
 				<input type="button" value="취소" onclick="history.back()">
 			</section>
-		</form>	
+		</form>
+	</section>	
 <!-- Footer-->
    <footer class="py-5 bg-dark">
       <div class="container">
-         <p class="m-0 text-center text-white">Copyright &copy; DangDangEat 2023</p>
+         <p class="m-0 text-center text-white" style="text-align: center; position: relative; top: 200px;">Copyright &copy; DangDangEat 2023</p>
       </div>
    </footer>		
    </body>
