@@ -72,14 +72,14 @@ body {
 									<div class="text-center">
 										<h1 class="h4 text-gray-900 mb-4">아이디 찾기</h1>
 									</div>
-									<form class="user" action="MemberFindIdPro" method="post">
+									<form class="user" action="MemberFindIdResult" method="post">
 										<div class="form-group">
-											<input type="text" name="name" required="required"
+											<input type="text" name="member_name" required="required"
 												class="form-control form-control-user" id="name"
 												aria-describedby="emailHelp" placeholder="이름">
 										</div>
 										<div class="form-group">
-											<input type="email" name="email" required="required"
+											<input type="email" name="member_email" required="required"
 												class="form-control form-control-user" id="email"
 												placeholder="이메일">
 										</div>

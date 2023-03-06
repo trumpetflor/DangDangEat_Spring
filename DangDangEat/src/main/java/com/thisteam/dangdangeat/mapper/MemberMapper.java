@@ -1,6 +1,9 @@
 package com.thisteam.dangdangeat.mapper;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.thisteam.dangdangeat.vo.MemberVO;
+import com.thisteam.dangdangeat.vo.Member_Mypage_ViewVO;
 
 public interface MemberMapper {
 
@@ -28,6 +31,24 @@ public interface MemberMapper {
 	// 회원 탈퇴 및 상태 업데이트
 	int updateMember(MemberVO member);
 
+	// 멤버 마이페이지 조회(주문, 쿠폰, 리뷰, 질문 수)
+	Member_Mypage_ViewVO selectMemberMypageView(String id);
+	
+	// 회원 이메일 수정
+	int updateMemberEmail(@Param("id") String id, @Param("email") String email);
+
+	// 회원 이메일 중복 조회
+	String selectEmailCheck(String email);
+
+	// 회원 아이디 조회
+	MemberVO selectMemberId(MemberVO member);
+
+	// 회원 비밀번호 조회
+	MemberVO selectMemberPass(MemberVO member);
+
+	// 회원 비밀번호 변경
+	int updateMemberPass(MemberVO member);
+	
 	
 
 }

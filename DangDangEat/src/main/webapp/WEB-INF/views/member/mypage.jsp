@@ -173,7 +173,7 @@ body {
 								<div class="text-left dib">
 									<div class="stat-heading">주문</div>
 									<div class="stat-text">
-										<span>${order_count } 건</span>
+										<span>${mypageView.order_count } 건</span>
 									</div>
 								</div>
 							</div>
@@ -193,7 +193,7 @@ body {
 								<div class="text-left dib">
 									<div class="stat-heading">쿠폰</div>
 									<div class="stat-text">
-										<span>${coupon_count } 개</span>
+										<span>${mypageView.coupon_count } 개</span>
 									</div>
 								</div>
 							</div>
@@ -213,7 +213,7 @@ body {
 								<div class="text-left dib">
 									<div class="stat-heading">리뷰</div>
 									<div class="stat-text">
-										<span>${review_count } 개</span>
+										<span>${mypageView.review_count } 개</span>
 									</div>
 								</div>
 							</div>
@@ -233,7 +233,7 @@ body {
 								<div class="text-left dib">
 									<div class="stat-heading">Q&A</div>
 									<div class="stat-text">
-										<span>${qna_count } 건</span>
+										<span>${mypageView.qna_count } 건</span>
 									</div>
 								</div>
 							</div>
