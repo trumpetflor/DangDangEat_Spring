@@ -220,7 +220,7 @@ $(function() {
 							<td>
 							<div style="text-align: center;">
 		                      <img class="card-img-top" style="width: 100px; height: 100px;"
-				                src="<%=request.getScheme()+"://"+request.getServerName() + ":" + request.getServerPort() +"/"+request.getContextPath()%>/upload/${cart.pro_real_thumb }"
+				                src="${pageContext.request.contextPath}/resources/upload/${wishlist.pro_real_thumb }"
 		        		        alt="..." onerror="this.src='${pageContext.request.contextPath}/resources/img/sample1_thumb.png';" />
 		        		        </div>
 							</td>

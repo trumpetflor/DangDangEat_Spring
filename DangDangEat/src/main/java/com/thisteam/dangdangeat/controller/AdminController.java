@@ -50,7 +50,16 @@ public class AdminController {
 	
 	// 관리자 메인페이지
 	@GetMapping(value = "/AdminMain")
-	public String main(Model model) {
+	public String main(Model model,
+						HttpSession session) {
+		
+		String sId = (String)session.getAttribute("sId");
+		
+		// 관리자만 접근 가능
+		if(sId == null || sId.equals("") || !sId.equals("admin")) { // 세션 아이디가 null 이거나 "" 이거나 admin 이 아닐 경우
+			model.addAttribute("msg", "잘못된 접근입니다!");
+			return "fail_back";
+		} else {
 		
 		// Wish Top
 		List<WishlistVO> wishlist = service.getWishlistTop();
@@ -75,6 +84,8 @@ public class AdminController {
 		
 		
 		return "admin/admin_main";
+		
+		}
 	}
 
 	// ============================================== sewon ================================================
