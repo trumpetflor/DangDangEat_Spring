@@ -8,7 +8,6 @@
 		INSERT
 			INTO cart
 			VALUES (
-				0,
 				#{member_id},
 				#{pro_code},
 				#{cart_amount}
