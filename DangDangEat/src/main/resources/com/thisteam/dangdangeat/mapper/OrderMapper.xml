@@ -80,34 +80,31 @@
 		DELETE FROM orders 
 			WHERE order_status = 0 AND member_id = #{id}
 	</delete>
+	
 	<delete id="deleteUncompletedProduct">
 		DELETE FROM order_product
-			WHERE pro_code = #{pro_codd} AND
-				 order_code = (SELECT order_code 
-									FROM orders o NATURAL JOIN order_product op
-									WHERE o.order_code = op.order_code AND member_id = #{id})
+			WHERE pro_code = #{pro_code} AND
+				 order_code = (SELECT order_code FROM 
+				 					(SELECT op.order_code FROM orders o NATURAL JOIN order_product op
+									 WHERE o.order_code = op.order_code AND member_id = #{id} AND o.order_status = 0) AS tempTable)
 	</delete>
 	
 	
 	<!-- 3. 결제 페이지 : 쿠폰 페이지에서 받아온 쿠폰 코드로 할인금액 계산 -->
 	<select id="selectCouponDiscountPrice" resultType="integer">
-		SELECT TRUNCATE (((pro_price * cart_amount) * 
-	 		(SELECT cp_discount_value 
-	 			FROM coupon 
-	 			WHERE cp_code = #{cpCode}) / 100 ), 0)
-		 	FROM cart_product_view WHERE cart_code = #{cartCode}
-		 	<if test="">
-		 		SELECT cp_max_discount 
-		 			FROM coupon
-		 			WHERE cp_code = #{cpCode}
-		 	</if>
+		SELECT TRUNCATE 
+				((#{pro_amount} * 
+				(SELECT cp_discount_value 
+		 			FROM coupon 
+		 			WHERE cp_code = #{cp_code}) / 100 ), 0)
+		 		FROM orders WHERE order_code = #{order_code}
 	</select>
 	
 	<!-- 3. 결제 페이지 : 최대 할인금액 계산 -->
 	<select id="selectCouponMaxDiscountPrice" resultType="integer">
 		SELECT cp_max_discount 
  			FROM coupon
- 			WHERE cp_code = #{cpCode}
+ 			WHERE cp_code = #{cp_code}
 	</select>
 	
 	<!-- 4. 주문확인서 생성 및 결제 작업 진행 비즈니스 로직 -->
@@ -125,7 +122,7 @@
 			VALUES (
 				#{pay_number},
 				#{payments.order_code},
-				#{pro_amount},
+				#{pay_amount},
 				#{payments.cp_code},
 				#{payments.cp_discount_amount}
 			)

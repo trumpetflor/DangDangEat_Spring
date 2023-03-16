@@ -39,11 +39,14 @@ public interface OrderMapper {
 	List<CartProductVO> selectOrderProductList(@Param("id") String id, @Param("pro_code") int pro_code);
 	
 	// 2-(4). 주문 상태가 0인 경우(=미완료) orders & order_product 테이블에서 삭제 (= 중복 데이터 방지)
-	int deleteUncompleteOrder(String id);
 	int deleteUncompletedProduct(@Param("id") String id, @Param("pro_code") int pro_code);
+	int deleteUncompleteOrder(String id);
 	
 	// 3. 결제 페이지 : 쿠폰 페이지에서 받아온 쿠폰 코드로 할인금액 계산
-	int selectCouponDiscountPrice(String cp_code);
+	int selectCouponDiscountPrice(
+				@Param("cp_code") String cp_code, 
+				@Param("pro_amount") int pro_amount, 
+				@Param("order_code") int order_code);
 
 	// 3. 결제 페이지 : 최대 할인금액 계산
 	int selectCouponMaxDiscountPrice(String cp_code);
@@ -56,7 +59,7 @@ public interface OrderMapper {
 
 	// 4-(2). 결제 테이블에 정보 입력
 	int paymentInsertPro(@Param("payments") PaymentsVO payments,
-			 @Param("pay_number") int pay_number,@Param("pro_amount") int pro_amount);
+			 @Param("pay_number") int pay_number,@Param("pay_amount") int pay_amount);
 
 	// 4-(3). 결제완료시 상품 테이블에서 수량변경
 	int UpdateProductQty(@Param("order_code") int order_code, @Param("pro_code") int pro_code);

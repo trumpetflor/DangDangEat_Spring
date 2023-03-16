@@ -166,7 +166,7 @@ public class OrderController {
 	 * 3.(완료)장바구니 상품 결제 페이지
 	 * "/OrderPaymentForm" - order/order_payment.jsp 
 	 * 
-	 * 3-(1).(진행중) 쿠폰 페이지에서 받아온 쿠폰코드로 할인금액 계산하는 페이지
+	 * 3-(1).(완료) 쿠폰 페이지에서 받아온 쿠폰코드로 할인금액 계산하는 페이지
 	 * "/OrderCouponPro" 
 	 * 
 	 * 4.(완료) 주문확인서 생성 및 결제 작업 진행 페이지
@@ -239,11 +239,24 @@ public class OrderController {
 	
 	// 3. 결제 페이지 : 쿠폰 페이지에서 받아온 쿠폰 코드로 할인금액 계산
 	@GetMapping(value = "/OrderCouponPro")
-	public void couponPro(Model model, String cp_code) {
+	public void couponPro(Model model, String cp_code, int pro_amount, int order_code, HttpServletResponse response) {
+		System.out.println("쿠폰 코드로 할인금액 계산 : " + cp_code);
+		System.out.println("쿠폰 코드로 pro_amount 계산 : " + pro_amount);
+		System.out.println("쿠폰 코드로 order_code 계산 : " + order_code);
 		
 		// 쿠폰 적용한 할인금액 계산
-		int cp_discount_price = service.getCouponDiscountPrice(cp_code);
+		int cp_discount_price = service.getCouponDiscountPrice(cp_code, pro_amount, order_code);
+		System.out.println("잘 계산된 discount price" + cp_discount_price);
 		model.addAttribute("cp_discount_price", cp_discount_price);
+		
+		try {
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println(cp_discount_price);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	} // couponPro
 	
@@ -267,6 +280,8 @@ public class OrderController {
 		System.out.println("상품금액 잘넘어 옵니까" + pro_amount);
 		System.out.println("주문번호 잘넘어 옵니까" + order_code);
 		System.out.println("payments 잘넘어 옵니까" + payments);
+		int pay_amount = pro_amount - payments.getCp_discount_amount() + 3500;
+		System.out.println("잘 계산된 pay_amount" + pay_amount);
 		
 		// 주문번호 생성 구문------------------------------------------
 		
@@ -283,7 +298,7 @@ public class OrderController {
         // 1. 주문 테이블의 order_status = 1로 변경 시키기
 	       boolean isOrderStatusUpdate = service.updateOrderStatus(id, order_code);
 	    // 2. 결제 테이블에 정보 입력
-	       int paymentInsertCount = service.paymentInsertPro(payments, pay_number, pro_amount);
+	       int paymentInsertCount = service.paymentInsertPro(payments, pay_number, pay_amount);
         // 3. 결제 정보 리스트 생성
            List<PaymentsVO> paymentList = service.getPaymentsList(pay_number, order_code);
            model.addAttribute("paymentList", paymentList);

@@ -96,8 +96,8 @@
 		<c:forEach var="pay" items="${paymentList }" varStatus="status">
 			<tbody class="totals">
 			<tr>
-				<td><div class="text-left"><span class="text-muted">주문금액</span></div></td>
-				<td><div class="text-right"><span class="price"><fmt:formatNumber pattern="#,###">${pay.pay_amount - 3500}</fmt:formatNumber>원</span></div></td>
+				<td><div class="text-left"><span class="text-muted">총상품금액</span></div></td>
+				<td><div class="text-right"><span class="price"><fmt:formatNumber pattern="#,###">${pay.pay_amount + pay.cp_discount_amount - 3500}</fmt:formatNumber>원</span></div></td>
 			</tr>
 			<tr>
 				<td><div class="text-left"> <span class="text-muted">배송비</span> </div></td>
@@ -109,7 +109,7 @@
 			</tr>
 			<tr class="border-top border-bottom">
 				<td><div class="text-left"> <span class="font-weight-bold">총주문금액</span> </div></td>
-				<td><div class="text-right"><span class="font-weight-bold"><fmt:formatNumber pattern="#,###">${pay.pay_amount - pay.cp_discount_amount}</fmt:formatNumber>원</span> </div></td>
+				<td><div class="text-right"><span class="font-weight-bold"><fmt:formatNumber pattern="#,###">${pay.pay_amount}</fmt:formatNumber>원</span> </div></td>
 			</tr>
 			</tbody>
 		</c:forEach>	

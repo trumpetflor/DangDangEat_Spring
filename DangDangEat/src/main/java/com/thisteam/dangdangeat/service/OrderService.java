@@ -116,7 +116,9 @@ public class OrderService {
 	// 2-(1). 주문자 정보 & 주문상품 등록 구문 (orders & order_product table)
 	public int insertOrder(OrdersBeanVO order, OrderProductVO orderProduct, String id) {
 		// 1. 중복 주문 처리 구문
-		mapper.deleteUncompleteOrder(id);
+		int pro_code = orderProduct.getPro_code();
+		mapper.deleteUncompletedProduct(id, pro_code); // 미완료 주문상품 삭제
+		mapper.deleteUncompleteOrder(id); // 미완료 주문자 정보 삭제
 		
 		// 2. 주문자 정보 등록 (orders)
 		int insertOrderCount = mapper.insertOrder(order, id);
@@ -152,10 +154,13 @@ public class OrderService {
 	}
 	
 	// 3. 결제 페이지 : 쿠폰 페이지에서 받아온 쿠폰 코드로 할인금액 계산
-	public int getCouponDiscountPrice(String cp_code) {
-		int couponDiscountAmount = mapper.selectCouponDiscountPrice(cp_code); // 쿠폰 적용 할인 금액 (주문마다 - 변동)
+	public int getCouponDiscountPrice(String cp_code, int pro_amount, int order_code) {
+		
+		int couponDiscountAmount = mapper.selectCouponDiscountPrice(cp_code, pro_amount, order_code); // 쿠폰 적용 할인 금액 (주문마다 - 변동)
 		int couponMaxDiscount = mapper.selectCouponMaxDiscountPrice(cp_code); // 최대 할인 금액(쿠폰마다 정해진 상한선 - 고정)
 		
+		System.out.println("서비스로 넘어온 할인 금액" + couponDiscountAmount);
+		System.out.println("서비스로 넘어온 최대 할인 금액" + couponMaxDiscount);
 		int finalCouponDiscount = 0; // 최종 리턴값
 		
 		if(couponDiscountAmount > couponMaxDiscount) {
@@ -183,10 +188,10 @@ public class OrderService {
 	}
 	
 	// 4-(2). 결제 테이블에 정보 입력
-	public int paymentInsertPro(PaymentsVO payments, int pay_number, int pro_amount) {
+	public int paymentInsertPro(PaymentsVO payments, int pay_number, int pay_amount) {
 		int paymentInsertCount = 0;
 		
-		paymentInsertCount = mapper.paymentInsertPro(payments, pay_number, pro_amount);
+		paymentInsertCount = mapper.paymentInsertPro(payments, pay_number, pay_amount);
 		
 		return paymentInsertCount;
 	}

@@ -156,13 +156,13 @@ body {
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminMemberList.ad">
+                <a class="nav-link" href="AdminMemberList">
                     <i class="fas fa-fw fa-table"></i>
                     <span>회원 관리</span></a>
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminOrderList.ad">
+                <a class="nav-link" href="AdminOrderList">
                     <i class="fas fa-fw fa-dollar-sign"></i>
                     <span>주문 관리</span></a>
             </li>
