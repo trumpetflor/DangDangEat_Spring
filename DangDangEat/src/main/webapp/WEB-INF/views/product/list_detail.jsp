@@ -159,10 +159,13 @@
 						// 받아온jsonArray변수명[인덱스명].접근할컬럼변수명 => 각 VO 객체의 변수에 접근)
 						let result = "<tr>"
 									+ "<td>" + jsonArray[index].review_code + "</td>"
-									+ "<td class='click' onclick='openReviewModal(" + strRc + ", "+ pageNum + ")'>" + jsonArray[index].review_subject + "</td>"
+									+ "<td class='click' onclick='openReviewDetail(" + strRc + ", "+ pageNum + ")'>" + jsonArray[index].review_subject + "</td>"
 									+ "<td>" + jsonArray[index].member_id + "</td>"
 									+ "<td>" + jsonArray[index].review_date + "</td>"
 									+ "<td>" + jsonArray[index].review_readcount + "</td>"
+									+ "</tr>"
+									+ "<tr>"
+									+ "<td colspan='5'>" + jsonArray[index].review_content + "</td>"
 									+ "</tr>";
 						$("#review_table").append(result); // 뿌릴 내용 테이블 영역에 넣기
 					}
