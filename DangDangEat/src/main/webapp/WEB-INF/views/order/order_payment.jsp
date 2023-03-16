@@ -88,13 +88,13 @@
 				type: "get",
 				url: "OrderCouponPro",
 				dataType : "text",
-				async:false,
 				data: {
 					cp_code : couponCode, 
 					pro_amount : $('#pro_amount').val(),
 					order_code : $('#order_code').val()
 					},
-				success: function (data) {
+				success: function(data){
+					console.log(data);
 					alert("쿠폰을 사용한 할인금액이 적용되었습니다!");
 					
 					 $('#basket-promo').text(parseInt(data)).css("color","red"); // action을 통해 계산 완료 후 전달받은 할인금액 입력
@@ -121,7 +121,7 @@
   	<form action="OrderPaymentPro" method="post" id="orderPaymentForm" >
   	<c:forEach var="cart" items="${orderProductList }" varStatus="status">
   		<input type="hidden" name="pro_code"  value="${cart.pro_code }">
-  		<input type="hidden" name="pro_amount" id ="pro_amount" value="${cart.pro_price * cart.cart_amount + 3500 }">
+  		<input type="hidden" name="pro_amount" id ="pro_amount" value="${cart.pro_price * cart.cart_amount}">
   	</c:forEach>
   		<!-- 쿠폰을 사용하지 않을 경우 오류 발생 / 쿠폰 테이블에 쿠폰코드 null 기본값 0인 쿠폰 추가해야 함(임시방편) -->
   		<input type="hidden" name="cp_code"  id="cp_code" value="Test">
@@ -243,7 +243,7 @@
 	      	</c:forEach>
 		      	  <div class="summary-checkout">
 		             <button class="button" id="checkout" type="submit" >Checkout</button><hr>
-		             <button class="button" id="iamportPayment" type="button" >iamport</button><hr>
+		             <button class="button" id="iamportPayment" type="button" >kakaopay</button><hr>
 		     	  </div>
 		      </div><!-- basket div 태그 -->
 	   </form>   
