@@ -22,6 +22,14 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script src="https://kit.fontawesome.com/9e19a1717c.js" ></script>
+<!-- 모달창 -->
+<!-- Remember to include jQuery :) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+
+<!-- jQuery Modal -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
 <script type="text/javascript">
 
 	function fn_count_qty(obj,price) {
@@ -114,6 +122,7 @@
 			});
 		}); // qna_button
 		
+		// ============================= jquery jakyoung 시작 ==================================
 		
 		$("#review_button").on("click", function() {
 			let pageNum = 1;
@@ -150,10 +159,13 @@
 						// 받아온jsonArray변수명[인덱스명].접근할컬럼변수명 => 각 VO 객체의 변수에 접근)
 						let result = "<tr>"
 									+ "<td>" + jsonArray[index].review_code + "</td>"
-									+ "<td class='click' onclick='openReviewModal(" + strRc + ", "+ pageNum + ")'>" + jsonArray[index].review_subject + "</td>"
+									+ "<td class='click' onclick='openReviewDetail(" + strRc + ", "+ pageNum + ")'>" + jsonArray[index].review_subject + "</td>"
 									+ "<td>" + jsonArray[index].member_id + "</td>"
 									+ "<td>" + jsonArray[index].review_date + "</td>"
 									+ "<td>" + jsonArray[index].review_readcount + "</td>"
+									+ "</tr>"
+									+ "<tr>"
+									+ "<td colspan='5'>" + jsonArray[index].review_content + "</td>"
 									+ "</tr>";
 						$("#review_table").append(result); // 뿌릴 내용 테이블 영역에 넣기
 					}
@@ -192,7 +204,84 @@
 				}
 			});
 		}); // review_button
-	 });
+
+		// ============================= jquery jakyoung 끝 ==================================
+	
+  	});
+	
+	// ================================ 자바스크립트 jk 시작 =============================
+	
+	function openReviewModal(review_code, pageNum) {
+		
+		$("#out_table > tbody").empty();
+		$("#input_qty_sum").empty();
+		
+		let inputQtySum = 0; // 출고 지시 수량 합계 변수 선언
+		
+		$('input[name=outScheduleChecked]:checked').each(function(i, elements) {
+			
+// 			console.log('나와랏');
+// //	 		alert("모달창 열리네요~ 출고가 들어오죠");
+// 			//모달창 열기
+// 			$('#out_naga_modal').modal('show');
+// 			$('#out_naga_modal').show();
+			
+			let index = $(elements).index('input[name=outScheduleChecked]:checked');
+			
+			let out_list = ''; // 출력문 비우기
+			let result = 0; // 결과 초기화
+			
+			let tr_id = $(this).closest("tr").attr("id"); // 해당 <tr> id 값 저장
+			
+			console.log(tr_id);
+			
+			let out_schedule_cd = $(this).val().split("/")[0]; // 출고 예정 코드
+			let product_name = $(this).val().split("/")[1]; // 품목명
+			let not_out_qty = $(this).val().split("/")[2]; // 미출고수량
+			let input_out_qty = $("#" + tr_id).find("input[name=input_out_qty]").val(); // 출고 지시수량
+			let stock_cd = $(this).val().split("/")[3]; // 재고 코드
+			let wh_loc_in_area = ''; // 위치명
+			
+// 			alert(input_out_qty);
+			result = not_out_qty - input_out_qty;
+			console.log(not_out_qty + " - " + input_out_qty + " = " + result);
+			
+			if(result >= 0 && input_out_qty >= 1) { // 출고 지시 수량이 미출고 수량보다 작거나 같고, 1보다 크거나 같을 때
+// 				console.log('나와랏');
+//		 		alert("모달창 열리네요~ 출고가 들어오죠");
+				
+				// 출고 수량 합계 계산
+				inputQtySum = Number(inputQtySum) + Number(input_out_qty);
+
+				//모달창 열기
+				$('#out_naga_modal').modal('show');
+				$('#out_naga_modal').show();
+				
+				out_list += '<tr id="outList' + index + '">';
+				out_list += '<td>' + out_schedule_cd + '</td>';
+				out_list += '<td>' + product_name + '</td>';
+				out_list += '<td>' + input_out_qty + '</td>';
+				out_list += '<td class="stock_cd"><a href="javascript:findWhLocArea(' + stock_cd + ', ' + index + ')">' + stock_cd + '</a></td>';
+	// 			out_list += '<button type="button" class="btn-sm btn-dark " onclick="">확인</button>';
+	// 			out_list += '<div class="card select_stock_cd" id="select_' + stock_cd + '"></div></td>';
+				out_list += '<td class="wh_loc_in_area">' + wh_loc_in_area + '</td>';
+				out_list += '</tr>';
+				
+				$("#out_table").append(out_list);
+				
+			} else {
+				alert(out_schedule_cd + " 은(는) 출고 불가능한 수량입니다.");
+				return; // 왜 안 빠져나가지..? (함수 두 개 빠져나와야 함.. 어떻게..?)
+			}
+			
+		});
+		
+		$("#input_qty_sum").append("<b>출고 수량 합계 : " + inputQtySum + "</b>");
+	
+	}
+		
+		
+	// ================================ 자바스크립트 jk 끝 =============================
 		
 </script>
 <style type="text/css">
@@ -227,6 +316,29 @@ body {
 #resultArea {
 	display: none;
 }
+
+/* *********************** CSS jakyoung 시작 *************************** */	
+
+	/* 리뷰 모달창 */
+	#out_naga_modal table tbody tr :hover{
+	cursor: pointer;
+	}
+	
+	#out_naga_modal::-webkit-scrollbar {
+    width: 2px;
+ 	}
+	
+	#out_naga_modal{
+	max-width: 750px !important;
+	height: 500px !important;
+	position: absolute;
+	top: 20%;
+	left: 35%;
+	overflow-y: scroll;
+	
+	}
+
+/* *********************** CSS jakyoung 끝 *************************** */	
 
 </style>
 </head>
@@ -330,12 +442,6 @@ body {
 	 </div>	
 	 <div id="resultArea" class="container px-4 px-lg-5 mt-3 content">
 		 <%-- 리뷰,상품문의 게시판 보여주는곳 --%>
-		 <section id="searchSection" class="mx-1 d-flex justify-content-end">
-		 	<form>
-				<input type="text"  class="col-sm-5 bg-light border border-secondary rounded-1 px-1" name="keyword" id="keyword" value="${param.keyword }"> 
-				<input type="button" value="검색"  class=" mx-1 btn btn-sm btn-dark rounded-1" >
-			</form>
-		 </section>
 		 <table id="review_table" class="table ">
 			<thead>
 			    <tr>
@@ -343,7 +449,7 @@ body {
 			        <th>제목</th>
 			        <th>작성자</th>
 			        <th>작성일</th>
-			        <th>조회수</th>
+			        <th>추천수</th>
 			    </tr>
 			</thead>
 			<tbody>
@@ -437,6 +543,47 @@ body {
 		</div>
 	</section>
 	<!-- Related items section-->
+	<!-- -------------------------- jakyoung 시작 ------------------------------------- -->
+	<!-- 리뷰 내용 모달 -->
+	
+		<div id="out_naga_modal" class="modal" data-backdrop="static">
+			<form class="">
+			
+				<div class=" m-3 border border-light border-top-0 rounded-2 border border-1"> 
+					<div class="p-2 bg-light text-black well rounded-2" >출고</div>
+					
+					<div class="row form-group">
+					<div class="form"><label for="out_date" class=" form-control-label">일자</label></div>
+					<div class="col-12 col-md-9"><input type="date" id="currentDate" class="form-control rounded-start" name="out_date" required="required"></div>
+					</div>
+						<table class="mt-3 table table-hover" id="out_table">
+							<thead>
+								<tr>
+									<th>출고예정번호</th>
+									<th>품목명</th>
+									<th>출고 수량</th>
+									<th>출고할 재고번호</th>
+									<th>위치명</th>
+								</tr>
+							</thead>
+							<tbody>
+							
+							
+							</tbody>
+						</table>		
+					</div>
+				<div class="float-right">
+			  		<button type="button" class="btn btn-dark mx-3" id="naga" >출고 처리</button>
+				</div>
+				<div class="float-right" id="input_qty_sum">
+				</div>
+			</form>
+			
+		</div>
+	<!-- 리뷰 모달 끝 -->
+	
+	<!-- -------------------------- jakyoung 끝 ------------------------------------- -->
+	
 	<%-- <section class="py-5 bg-light">
 		<div class="container px-4 px-lg-5 mt-5">
 			<h2 class="fw-bolder mb-4">Related products</h2>
