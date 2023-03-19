@@ -157,15 +157,16 @@
 						let strRc = '"' + jsonArray[index].review_code + '"'; // 파라미터 문자열로 보내려면 "" 결합해주기ㅠㅠㅠ!! - by. 킹갓제너럴영진
 						// 뿌릴 내용
 						// 받아온jsonArray변수명[인덱스명].접근할컬럼변수명 => 각 VO 객체의 변수에 접근)
-						let result = "<tr>"
-									+ "<td>" + jsonArray[index].review_code + "</td>"
-									+ "<td class='click' onclick='openReviewDetail(" + strRc + ", "+ pageNum + ")'>" + jsonArray[index].review_subject + "</td>"
+						let result = "<tr class='review_subject_tr'>"
+									+ "<td>" + (index + 1) + "</td>"
+									+ "<td>" + jsonArray[index].review_subject + "</td>"
 									+ "<td>" + jsonArray[index].member_id + "</td>"
 									+ "<td>" + jsonArray[index].review_date + "</td>"
 									+ "<td>" + jsonArray[index].review_readcount + "</td>"
 									+ "</tr>"
-									+ "<tr>"
-									+ "<td colspan='5'>" + jsonArray[index].review_content + "</td>"
+									+ "<tr class='review_content_tr'>"
+									+ "<td></td>"
+									+ "<td colspan='4'>" + jsonArray[index].review_content + "</td>"
 									+ "</tr>";
 						$("#review_table").append(result); // 뿌릴 내용 테이블 영역에 넣기
 					}
@@ -210,75 +211,87 @@
   	});
 	
 	// ================================ 자바스크립트 jk 시작 =============================
+		
+	$(document).on("click", ".review_subject_tr", function() {
+		
+		if($(this).next().is(":visible")) {
+			
+			$(this).next().hide(); 
+		} else {
+			$(this).next().show(); 
+		}
+		
+	});
 	
-	function openReviewModal(review_code, pageNum) {
+	
+// 	function openReviewModal(review_code, pageNum) {
 		
-		$("#out_table > tbody").empty();
-		$("#input_qty_sum").empty();
+// 		$("#out_table > tbody").empty();
+// 		$("#input_qty_sum").empty();
 		
-		let inputQtySum = 0; // 출고 지시 수량 합계 변수 선언
+// 		let inputQtySum = 0; // 출고 지시 수량 합계 변수 선언
 		
-		$('input[name=outScheduleChecked]:checked').each(function(i, elements) {
+// 		$('input[name=outScheduleChecked]:checked').each(function(i, elements) {
 			
-// 			console.log('나와랏');
-// //	 		alert("모달창 열리네요~ 출고가 들어오죠");
-// 			//모달창 열기
-// 			$('#out_naga_modal').modal('show');
-// 			$('#out_naga_modal').show();
+// // 			console.log('나와랏');
+// // //	 		alert("모달창 열리네요~ 출고가 들어오죠");
+// // 			//모달창 열기
+// // 			$('#out_naga_modal').modal('show');
+// // 			$('#out_naga_modal').show();
 			
-			let index = $(elements).index('input[name=outScheduleChecked]:checked');
+// 			let index = $(elements).index('input[name=outScheduleChecked]:checked');
 			
-			let out_list = ''; // 출력문 비우기
-			let result = 0; // 결과 초기화
+// 			let out_list = ''; // 출력문 비우기
+// 			let result = 0; // 결과 초기화
 			
-			let tr_id = $(this).closest("tr").attr("id"); // 해당 <tr> id 값 저장
+// 			let tr_id = $(this).closest("tr").attr("id"); // 해당 <tr> id 값 저장
 			
-			console.log(tr_id);
+// 			console.log(tr_id);
 			
-			let out_schedule_cd = $(this).val().split("/")[0]; // 출고 예정 코드
-			let product_name = $(this).val().split("/")[1]; // 품목명
-			let not_out_qty = $(this).val().split("/")[2]; // 미출고수량
-			let input_out_qty = $("#" + tr_id).find("input[name=input_out_qty]").val(); // 출고 지시수량
-			let stock_cd = $(this).val().split("/")[3]; // 재고 코드
-			let wh_loc_in_area = ''; // 위치명
+// 			let out_schedule_cd = $(this).val().split("/")[0]; // 출고 예정 코드
+// 			let product_name = $(this).val().split("/")[1]; // 품목명
+// 			let not_out_qty = $(this).val().split("/")[2]; // 미출고수량
+// 			let input_out_qty = $("#" + tr_id).find("input[name=input_out_qty]").val(); // 출고 지시수량
+// 			let stock_cd = $(this).val().split("/")[3]; // 재고 코드
+// 			let wh_loc_in_area = ''; // 위치명
 			
-// 			alert(input_out_qty);
-			result = not_out_qty - input_out_qty;
-			console.log(not_out_qty + " - " + input_out_qty + " = " + result);
+// // 			alert(input_out_qty);
+// 			result = not_out_qty - input_out_qty;
+// 			console.log(not_out_qty + " - " + input_out_qty + " = " + result);
 			
-			if(result >= 0 && input_out_qty >= 1) { // 출고 지시 수량이 미출고 수량보다 작거나 같고, 1보다 크거나 같을 때
-// 				console.log('나와랏');
-//		 		alert("모달창 열리네요~ 출고가 들어오죠");
+// 			if(result >= 0 && input_out_qty >= 1) { // 출고 지시 수량이 미출고 수량보다 작거나 같고, 1보다 크거나 같을 때
+// // 				console.log('나와랏');
+// //		 		alert("모달창 열리네요~ 출고가 들어오죠");
 				
-				// 출고 수량 합계 계산
-				inputQtySum = Number(inputQtySum) + Number(input_out_qty);
+// 				// 출고 수량 합계 계산
+// 				inputQtySum = Number(inputQtySum) + Number(input_out_qty);
 
-				//모달창 열기
-				$('#out_naga_modal').modal('show');
-				$('#out_naga_modal').show();
+// 				//모달창 열기
+// 				$('#out_naga_modal').modal('show');
+// 				$('#out_naga_modal').show();
 				
-				out_list += '<tr id="outList' + index + '">';
-				out_list += '<td>' + out_schedule_cd + '</td>';
-				out_list += '<td>' + product_name + '</td>';
-				out_list += '<td>' + input_out_qty + '</td>';
-				out_list += '<td class="stock_cd"><a href="javascript:findWhLocArea(' + stock_cd + ', ' + index + ')">' + stock_cd + '</a></td>';
-	// 			out_list += '<button type="button" class="btn-sm btn-dark " onclick="">확인</button>';
-	// 			out_list += '<div class="card select_stock_cd" id="select_' + stock_cd + '"></div></td>';
-				out_list += '<td class="wh_loc_in_area">' + wh_loc_in_area + '</td>';
-				out_list += '</tr>';
+// 				out_list += '<tr id="outList' + index + '">';
+// 				out_list += '<td>' + out_schedule_cd + '</td>';
+// 				out_list += '<td>' + product_name + '</td>';
+// 				out_list += '<td>' + input_out_qty + '</td>';
+// 				out_list += '<td class="stock_cd"><a href="javascript:findWhLocArea(' + stock_cd + ', ' + index + ')">' + stock_cd + '</a></td>';
+// 	// 			out_list += '<button type="button" class="btn-sm btn-dark " onclick="">확인</button>';
+// 	// 			out_list += '<div class="card select_stock_cd" id="select_' + stock_cd + '"></div></td>';
+// 				out_list += '<td class="wh_loc_in_area">' + wh_loc_in_area + '</td>';
+// 				out_list += '</tr>';
 				
-				$("#out_table").append(out_list);
+// 				$("#out_table").append(out_list);
 				
-			} else {
-				alert(out_schedule_cd + " 은(는) 출고 불가능한 수량입니다.");
-				return; // 왜 안 빠져나가지..? (함수 두 개 빠져나와야 함.. 어떻게..?)
-			}
+// 			} else {
+// 				alert(out_schedule_cd + " 은(는) 출고 불가능한 수량입니다.");
+// 				return; // 왜 안 빠져나가지..? (함수 두 개 빠져나와야 함.. 어떻게..?)
+// 			}
 			
-		});
+// 		});
 		
-		$("#input_qty_sum").append("<b>출고 수량 합계 : " + inputQtySum + "</b>");
+// 		$("#input_qty_sum").append("<b>출고 수량 합계 : " + inputQtySum + "</b>");
 	
-	}
+// 	}
 		
 		
 	// ================================ 자바스크립트 jk 끝 =============================
@@ -336,6 +349,14 @@ body {
 	left: 35%;
 	overflow-y: scroll;
 	
+	}
+	
+	.review_subject_tr {
+		cursor: pointer;
+	}
+	
+	.review_content_tr {
+ 		display: none; 
 	}
 
 /* *********************** CSS jakyoung 끝 *************************** */	
