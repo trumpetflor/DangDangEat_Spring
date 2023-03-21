@@ -19,10 +19,14 @@
 	
 		<!-- SQL 로그를 위한 log4jdbc 라이브러리 관련 DBCP 정보 변경(driverClassName, jdbcUrl) -->
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
-		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
-		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://db.itwillbs.dev:3306/class5_220823_team2?validationQuery=select 1"></property>
-		<property name="username" value="class5_220823_team2"></property>
-		<property name="password" value="1234"></property>
+<!-- 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property> -->
+<!-- 		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://db.itwillbs.dev:3306/class5_220823_team2?validationQuery=select 1"></property> -->
+<!-- 		<property name="username" value="class5_220823_team2"></property> -->
+<!-- 		<property name="password" value="1234"></property> -->
+		<!-- cafe24 업데이트를 위하여 수정 (23/03/21) -->
+		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://localhost:3306/itwillbs4"></property>
+		<property name="username" value="itwillbs4"></property>
+		<property name="password" value="itwillbs8030909"></property>
 	</bean>	
 	
 	<!-- 2. HikariCP 의 DataSource 객체(HikariDataSource) 생성을 위해 HikariConfig 객체 전달 -->
