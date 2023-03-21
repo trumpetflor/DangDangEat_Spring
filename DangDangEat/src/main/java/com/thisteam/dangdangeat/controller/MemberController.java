@@ -4,8 +4,9 @@ package com.thisteam.dangdangeat.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.mail.Message;
@@ -13,18 +14,17 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.PageContext;
 
 import org.apache.ibatis.annotations.Param;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +38,8 @@ import com.thisteam.dangdangeat.service.MemberService;
 import com.thisteam.dangdangeat.vo.AuthVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.Member_Mypage_ViewVO;
+import com.thisteam.dangdangeat.vo.ReviewVO;
+import com.thisteam.dangdangeat.vo.Review_product_viewVO;
 
 
 
@@ -674,7 +676,28 @@ public class MemberController {
 		}
 		
 	}
-
+//====================================hawon 마이페이지_리뷰=============================================
+	@GetMapping(value = "/GetMyReviewList.ajax")
+	public String getReview(Model model,
+							HttpSession session) {
+		String id = (String)session.getAttribute("sId");
+		
+		//내가 쓴 리뷰 가져오기
+		List<Review_product_viewVO> reviewList = service.getMyReview(id);
+		
+		//줄바꿈처리할 후 저장할 객체 선언
+		List<Review_product_viewVO> convertedReviewList = new ArrayList<Review_product_viewVO>();
+		
+		//줄바꿈처리
+		for(Review_product_viewVO review : reviewList) {
+			review.setReview_content(review.getReview_content().replace("\r\n", "<br>")); // 출력 시 줄바꿈 처리
+			convertedReviewList.add(review);
+		}
+		model.addAttribute("reviewList",convertedReviewList);
+		
+		
+		return "member/mypage_reviewAjax";
+	}
 
 }
 

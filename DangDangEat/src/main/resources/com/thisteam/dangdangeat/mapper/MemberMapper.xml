@@ -206,6 +206,14 @@
   	</update>
   	
   	<!--===================== sangwoo =========================-->
+  	<!-- ====================hawon====================== -->
+	<select id="selectMyReview" resultType="com.thisteam.dangdangeat.vo.Review_product_viewVO">
+	  		SELECT *
+  			FROM review_product_view
+  			WHERE member_id = #{id}
+	</select>
+
+  	<!-- ====================hawon====================== -->
   	
 </mapper>
 

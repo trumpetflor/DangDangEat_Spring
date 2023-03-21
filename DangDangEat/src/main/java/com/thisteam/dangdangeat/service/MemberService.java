@@ -1,5 +1,7 @@
 package com.thisteam.dangdangeat.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +9,7 @@ import com.thisteam.dangdangeat.mapper.MemberMapper;
 import com.thisteam.dangdangeat.vo.AuthVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.Member_Mypage_ViewVO;
+import com.thisteam.dangdangeat.vo.Review_product_viewVO;
 
 @Service
 public class MemberService {
@@ -119,9 +122,17 @@ public class MemberService {
 	public void updateMemberAuth(AuthVO auth) {
 		mapper.updateMemberAuth(auth);
 	}
+
 	
 	//----------------------- sangwoo ---------------------// 
 	
+	//----------------------- hawon ---------------------//
+	//내가 쓴 리뷰 조회 함수
+	public List<Review_product_viewVO> getMyReview(String id) {
+	
+		return mapper.selectMyReview(id);
+		
+	}
 }
 
 

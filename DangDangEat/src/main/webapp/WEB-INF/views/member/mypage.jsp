@@ -96,8 +96,25 @@ body {
 											
 									}
 									
-		
-
+			// 내가 쓴 리뷰 ajax요청 함수
+			function getMyReviewList(){
+// 					alert("getMyReviewList"+${sessionScope.sId});
+					$.ajax({
+						type: "get",
+						url: "GetMyReviewList.ajax",
+						contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+						dataType: "HTML"
+					})
+					.done(function(result){
+// 			    		alert(result);
+						$("#ajax_changeDiv").html(result);
+						
+					})
+					.fail(function(data){
+						alert("ajax요청 실패");
+					});
+					
+			}
 		
 		
 		
@@ -115,8 +132,13 @@ body {
 			});//$("#CouponCount")
 			
 		}
-	});
+
+	//리뷰 클릭시 리뷰 ajax호출
+	$("#reviewCount").on("click", function (){
+		getMyReviewList();
+	});//$("#CouponCount")
 	
+});
 	
 	
 	//Mypage로 이동하는 버튼 - 동적할당된 버튼이므로 별도 정의
@@ -209,7 +231,7 @@ body {
 							<div class="stat-icon dib flat-color-3">
 								<i class="fa fa-question"></i>
 							</div>
-							<div class="stat-content">
+							<div class="stat-content" id="reviewCount">
 								<div class="text-left dib">
 									<div class="stat-heading">리뷰</div>
 									<div class="stat-text">
