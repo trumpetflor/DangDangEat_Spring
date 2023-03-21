@@ -2,6 +2,8 @@ package com.thisteam.dangdangeat.vo;
 
 import java.sql.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /*
 review_code	int	NO	PRI		
 member_id	varchar(20)	YES	MUL		
@@ -33,6 +35,11 @@ public class ReviewVO {
 	private int review_readcount;
 	private Date review_date;
 	private int pro_code;
+	
+	private MultipartFile[] files;
+	
+	private OrdersBeanVO OrdersBeanVO;
+	private OrderProductVO OrderProductVO;
 	
 	public int getReview_code() {
 		return review_code;
@@ -113,13 +120,33 @@ public class ReviewVO {
 		this.pro_code = pro_code;
 	}
 	
+	public MultipartFile[] getFiles() {
+		return files;
+	}
+	public void setFiles(MultipartFile[] files) {
+		this.files = files;
+	}
+	public OrdersBeanVO getOrdersBeanVO() {
+		return OrdersBeanVO;
+	}
+	public void setOrdersBeanVO(OrdersBeanVO ordersBeanVO) {
+		this.OrdersBeanVO = ordersBeanVO;
+	}
+	public OrderProductVO getOrderProductVO() {
+		return OrderProductVO;
+	}
+	public void setOrderProductVO(OrderProductVO orderProductVO) {
+		this.OrderProductVO = orderProductVO;
+	}
+	
 	@Override
 	public String toString() {
 		return "ReviewVO [review_code=" + review_code + ", member_id=" + member_id + ", review_pass=" + review_pass
 				+ ", review_subject=" + review_subject + ", review_content=" + review_content + ", review_file="
 				+ review_file + ", review_real_file=" + review_real_file + ", review_re_ref=" + review_re_ref
 				+ ", review_re_lev=" + review_re_lev + ", review_re_seq=" + review_re_seq + ", review_readcount="
-				+ review_readcount + ", review_date=" + review_date + ", pro_code=" + pro_code + "]";
+				+ review_readcount + ", review_date=" + review_date + ", pro_code=" + pro_code + ", OrdersBeanVO="
+				+ OrdersBeanVO + ", OrderProductVO=" + OrderProductVO + "]";
 	}
 	
 }

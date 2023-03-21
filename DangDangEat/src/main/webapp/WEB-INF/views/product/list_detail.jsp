@@ -124,6 +124,13 @@
 		
 		// ============================= jquery jakyoung 시작 ==================================
 		
+// 		var msg = '${msg}'; // 컨트롤러에서 액션이후 msg값이 있을 경우 해당 msg alert창 실행하기 위한 용도
+		
+// 		if(msg==1){
+// 			alert('리뷰가 성공적으로 등록되었습니다.');
+// 			 opener.location.reload();
+// 		}
+			
 		$("#review_button").on("click", function() {
 			let pageNum = 1;
 			let keyword = $("#keyword").val(); // 검색어
@@ -157,17 +164,27 @@
 						let strRc = '"' + jsonArray[index].review_code + '"'; // 파라미터 문자열로 보내려면 "" 결합해주기ㅠㅠㅠ!! - by. 킹갓제너럴영진
 						// 뿌릴 내용
 						// 받아온jsonArray변수명[인덱스명].접근할컬럼변수명 => 각 VO 객체의 변수에 접근)
-						let result = "<tr class='review_subject_tr'>"
-									+ "<td>" + (index + 1) + "</td>"
-									+ "<td>" + jsonArray[index].review_subject + "</td>"
-									+ "<td>" + jsonArray[index].member_id + "</td>"
-									+ "<td>" + jsonArray[index].review_date + "</td>"
-									+ "<td>" + jsonArray[index].review_readcount + "</td>"
-									+ "</tr>"
-									+ "<tr class='review_content_tr'>"
-									+ "<td></td>"
-									+ "<td colspan='4'>" + jsonArray[index].review_content + "</td>"
-									+ "</tr>";
+						let result = "";
+						result += "<tr class='review_subject_tr'>";
+						result += "<td>" + (index + 1) + "</td>";
+						result += "<td>" + jsonArray[index].review_subject + "</td>";
+						result += "<td>" + jsonArray[index].member_id + "</td>";
+						result += "<td>" + jsonArray[index].review_date + "</td>";
+						result += "<td>" + jsonArray[index].review_readcount + "</td>";
+						result += "</tr>";
+						result += "<tr class='review_content_tr'>";
+						result += "<td></td>";
+						<c:choose>
+							<c:when test = "${sId eq 'admin' }">
+								result += "<td colspan='3'>" + jsonArray[index].review_content + "</td>"
+								result += "<td><button class='btn btn-danger btn-circle btn-sm' onclick='confirmDelete(" + strRc + ")'><i class='fas fa-trash'></i></button></td>";
+							</c:when>
+							<c:otherwise>
+								result += "<td colspan='4'>" + jsonArray[index].review_content + "</td>"
+							</c:otherwise>
+						</c:choose>
+						result += "</tr>";
+						
 						$("#review_table").append(result); // 뿌릴 내용 테이블 영역에 넣기
 					}
 					
@@ -205,6 +222,27 @@
 				}
 			});
 		}); // review_button
+		
+		// 리뷰 작성 버튼
+		$("#reviewWriteBtn").on("click", function() {
+			// 구매한 상품인지 확인
+// 			$.ajax({
+// 				type: "get",
+// 				url: "checkOrderedProduct?pd=" + ${product.pro_code},
+// 				dataType: "text" // 전송되는 데이터에 대한 타입 지정
+// 			})
+// 			.done(function(result) {
+				
+// 				// 리뷰 작성 가능할 경우
+// 				if(result == "true") {
+					window.open("ReviewWrite?pro_code=" + ${product.pro_code}, "_blank", "width=880, height=650, top=50, left=1000");
+// 				}
+// 			})
+// 			.fail(function() {
+				
+// 			});
+			
+		});
 
 		// ============================= jquery jakyoung 끝 ==================================
 	
@@ -223,6 +261,14 @@
 		
 	});
 	
+	function confirmDelete(review_code) {
+		// confirm dialog 사용하여 "XXX 회원 기록을 삭제하시겠습니까?" 확인 요청
+		let result = confirm("해당 리뷰를 삭제하시겠습니까?");
+		
+		if(result) {
+			location.href = "AdminReviewDelete?review_code=" + review_code + "&pro_code=" + ${product.pro_code};
+		}
+	}
 	
 // 	function openReviewModal(review_code, pageNum) {
 		
@@ -485,7 +531,7 @@ body {
 			</div>
 		</div>
 		<c:if test="${sId ne null }">
-			<button type="button" class="mx-1 btn btn-sm btn-dark rounded-1" style="float: right;" onclick="location.href=''">상품평 작성</button>
+			<button type="button" id="reviewWriteBtn" class="mx-1 btn btn-sm btn-dark rounded-1" style="float: right;" >상품평 작성</button>
        	</c:if>
 	 </div>
 	<!-- 상품 상세 -->	
@@ -565,7 +611,7 @@ body {
 	</section>
 	<!-- Related items section-->
 	<!-- -------------------------- jakyoung 시작 ------------------------------------- -->
-	<!-- 리뷰 내용 모달 -->
+	<!-- 리뷰 사진 모달 -->
 	
 		<div id="out_naga_modal" class="modal" data-backdrop="static">
 			<form class="">

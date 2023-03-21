@@ -55,6 +55,16 @@ public class BoardService {
 	public int getReviewListCount(int pro_code, String keyword) {
 		return mapper.selectReviewListCount(pro_code, keyword);
 	}
+
+	// 주문 상품 중 리뷰 작성 여부 확인
+	public ReviewVO checkOrderProduct(String member_id, int pro_code) {
+		return mapper.selectProductReview(member_id, pro_code);
+	}
+
+	// 상품 리뷰 등록
+	public int registReview(ReviewVO review) {
+		return mapper.insertReview(review);
+	}
 	
 	// ======================== jakyoung 끝 ===================================
 	

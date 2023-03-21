@@ -1,7 +1,11 @@
 package com.thisteam.dangdangeat.controller;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,12 +25,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mysql.cj.Session;
 
 import com.thisteam.dangdangeat.service.BoardService;
+import com.thisteam.dangdangeat.service.ProductService;
 import com.thisteam.dangdangeat.vo.NoticeVO;
 import com.thisteam.dangdangeat.vo.PageInfo;
+import com.thisteam.dangdangeat.vo.ProductVO;
 import com.thisteam.dangdangeat.vo.ReviewVO;
 
 
@@ -35,6 +42,9 @@ public class BoardController {
 	
 	@Autowired
 	private BoardService service;
+	@Autowired
+	private ProductService proService;
+	
 	
 	// ======================== sangwoo 시작 ===================================
 	// 공지 리스트
@@ -238,6 +248,134 @@ public class BoardController {
 		}
 
 	}
+	
+	// 리뷰 작성 권한 확인
+	@ResponseBody
+	@GetMapping(value = "checkOrderedProduct")
+	public void checkOrderedProduct(
+			@RequestParam int pd
+			, Model model
+			, HttpSession session
+			, HttpServletResponse response
+			) {
+		// 세션 아이디 확인
+		String id = (String)session.getAttribute("sId");
+
+		if(id == null || id.equals("")) { // 세션 아이디가 null 이거나 "" 일 경우
+			model.addAttribute("result", "잘못된 접근입니다.");
+		} else { // 세션 아이디 있을 경우
+			// 주문 상품 중 리뷰 작성 여부 확인
+			ReviewVO review = service.checkOrderProduct(id, pd);
+			
+		}
+		
+		model.addAttribute("result", "true"); // 임시
+		
+	}
+	
+	// 리뷰 등록 폼
+	@GetMapping(value = "ReviewWrite")
+	public String ReviewWrite(
+			@RequestParam int pro_code
+			, Model model
+			, HttpSession session
+			, HttpServletResponse response
+			) {
+		
+		// 세션 아이디 확인
+		String id = (String)session.getAttribute("sId");
+
+		if(id == null || id.equals("")) { // 세션 아이디가 null 이거나 "" 일 경우
+			model.addAttribute("msg", "로그인이 필요한 페이지입니다.");
+			model.addAttribute("url", "/MemberLoginForm");
+			
+			return "redirect";
+		} else { // 세션 아이디 있을 경우
+			// Service 객체의 getProductDetail() 메서드를 호출하여 게시물 상세 정보 조회
+			// => 파라미터 : 상품번호  리턴타입 : ProductVO(product)
+			ProductVO product = proService.getProductDetail(pro_code);
+			
+			// Model 객체에 ProductVO 객체 추가
+			model.addAttribute("product", product);
+			
+			return "board/review_write_form";
+		}
+		
+	}
+	
+	@PostMapping(value = "ReviewWritePro")
+	public String reviewWritePro(
+			@ModelAttribute ReviewVO review
+			, Model model
+			, HttpSession session
+			, HttpServletResponse response
+			) {
+		
+		System.out.println(review);
+		
+		String uploadDir = "/resources/upload"; //가상 업로드 위치 지정
+		String saveDir = session.getServletContext().getRealPath(uploadDir); //실제 업로드 위치 설정
+		System.out.println("실제 업로드 경로 : " + saveDir);
+		System.out.println("리뷰 vo :"+review);
+
+		// -------------- java.nio 패키지(Files, Path, Paths) 객체 활용 ---------------------------
+		Path path = Paths.get(saveDir); // 실제 업로드 경로 지정
+
+		try {
+			Files.createDirectories(path);//실제 지정된 업로드 경로에 디렉토리 생성
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		//----------------------------------------
+
+		MultipartFile[] mFiles = review.getFiles();// 파일 객체에 파일 넣기
+
+		String originalFileNames = "";//서버에 등록 될 파일 이름
+		String realFileNames = "";//실제 저장될 파일 이름
+
+		// 복수개의 파일에 접근하기 위한 반복문
+		for(MultipartFile mFile : mFiles) {
+			String originalFileName = mFile.getOriginalFilename();
+			if(!originalFileName.equals("")) {
+				// 파일명 중복 방지 대책
+				String uuid = UUID.randomUUID().toString();
+				System.out.println("업로드 될 파일명 : " + uuid + "_" + originalFileName);
+
+				// 파일명을 결합하여 보관할 변수에 하나의 파일 문자열 결합
+				originalFileNames += originalFileName + "/";
+				realFileNames += uuid + "_" + originalFileName + "/";
+			} else {
+				// 파일이 존재하지 않을 경우 널스트링으로 대체(뒤에 슬래시 포함)
+				originalFileNames += "/";
+				realFileNames += "/";
+			}
+		}
+
+		// productVO 객체에 원본 파일명과 업로드 될 파일명 저장
+		//		  image.setImage_main_file(originalFileNames);
+		review.setReview_file(originalFileNames); // original 파일이름
+		review.setReview_real_file(realFileNames); // 실제 파일 이름
+		System.out.println("원본 파일명 : " +review.getReview_file() );
+		System.out.println("업로드 될 파일명 : " + review.getReview_real_file());
+		
+		// 상품 리뷰 등록
+		int insertCount = service.registReview(review);
+		
+		if(insertCount > 0) { // 등록 성공
+			model.addAttribute("msg", "리뷰가 성공적으로 등록되었습니다.");
+			model.addAttribute("url", "/ProductDetail.pd?pro_code=" + review.getPro_code());
+			
+			return "redirect";
+		} else { // 등록 실패
+			model.addAttribute("msg", "리뷰 등록에 실패하였습니다.");
+			return "fail_back";
+		}
+	}
+	
+	
+	
+	
+	
 	
 	// ======================== jakyoung 끝 ===================================
 	

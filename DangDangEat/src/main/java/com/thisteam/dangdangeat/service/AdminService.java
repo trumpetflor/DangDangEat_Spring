@@ -11,6 +11,7 @@ import com.thisteam.dangdangeat.vo.AdminOrderListVO;
 import com.thisteam.dangdangeat.vo.CouponVO;
 import com.thisteam.dangdangeat.vo.Coupon_viewVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
+import com.thisteam.dangdangeat.vo.ReviewVO;
 import com.thisteam.dangdangeat.vo.WishlistVO;
 
 @Service
@@ -34,6 +35,10 @@ public class AdminService {
 		return mapper.deleteMember(member);
 	}
   
+	// 리뷰 삭제
+	public int reviewDelete(ReviewVO review) {
+		return mapper.deleteReview(review);
+	}
   // ============================================== yeram ================================================
 	// Wish Top
 	public List<WishlistVO> getWishlistTop() {
@@ -114,6 +119,8 @@ public class AdminService {
 	public List<AdminOrderListVO> getOrderList() {
 		return mapper.selectOrderList();
 	}
+
+	
 
 //============================ admin/orderList 미주 ===========================================	
 
