@@ -81,16 +81,32 @@ int finalTotal = 0;
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script type="text/javascript">
 $(function() {
-	    // 주문
-	    $("#order").on("click", function() {
-	        $("#result").val();
-// 	       alert($("#result").val());
-	    });
-	    
-// 	    $("#amount").on("click", function(){
-// 	    	alert($("#amount").val());
-// // 	    	console.log()
-// 	    })
+	    // 선택상품 주문
+	    $("#checkOrderBtn").on("click", function() {
+	    	
+	    	if($('input:checkbox[name=inChecked]:checked').length == 0){
+	    		alert("선택된 주문상품이 없습니다.");
+	    	}else{
+	    		let pro_code = [];//배열 선언, 변수명 컨트롤러 파라미터명과 동일
+		     	$('input:checkbox[name=inChecked]').each(function() {
+		     		
+		     		if($(this).is(":checked")==true){
+		     			let index = $(this).val();
+		     			// index 번호에 따른 pro_code 구해오기
+		     	    	console.log("pro_code :"+ $("input[name=pro_code" + index + "]").val());
+		     	    	pro_code.push($("input[name=pro_code" + index + "]").val());//배열에 추가
+		     	    }
+		     	});
+				
+		    	console.log("pro_code[] : "+ pro_code);
+		    	let result = confirm($('input:checkbox[name=inChecked]:checked').length+ " 개의 상품을 구매하시겠습니까? ");
+		    	if(result){
+			    	location.href="OrderForm?pro_code="+pro_code
+		    	}
+			}
+			
+	    }); // 선택상품 주문
+
 
 
        
@@ -303,7 +319,7 @@ function amountModify(pro_code, index){
 	<div class="container">
 		<input type="button" value="삭제" id="checkDeleteBtn">
 		<input type="button" value="위시리스트 추가" id="checkWishBtn">
-		<input type="button" value="주문하기" id="order" onclick="location.href='OrderForm?pro_code=${cart.pro_code}'">
+		<input type="button" value="주문하기" id="checkOrderBtn" >
 	</div>
 	<div class="container" id="total">
 		Total : <fmt:formatNumber value="${finalTotal }" pattern="###,###,###"/> 원

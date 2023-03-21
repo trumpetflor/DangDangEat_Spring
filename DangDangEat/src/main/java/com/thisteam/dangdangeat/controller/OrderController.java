@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import com.thisteam.dangdangeat.vo.CartProductVO;
 import com.thisteam.dangdangeat.vo.CouponVO;
 import com.thisteam.dangdangeat.vo.Mc_viewVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
+import com.thisteam.dangdangeat.vo.OrderProductArrVO;
 import com.thisteam.dangdangeat.vo.OrderProductVO;
 import com.thisteam.dangdangeat.vo.OrdersBeanVO;
 import com.thisteam.dangdangeat.vo.PaymentsVO;
@@ -28,6 +30,7 @@ import com.thisteam.dangdangeat.vo.PaymentsVO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -179,11 +182,11 @@ public class OrderController {
 	
 	//---------------------주문/결제 작업------------------------
 	
-	// 23/03/06 수정된 CartCode 삭제 버전
+	// 복수데이터 처리 가능 버전 (23/03/16 이후 업데이트)
 	
 	// 1. 주문서 작성 페이지 
 	@GetMapping(value = "/OrderForm")
-	public String orderForm(HttpSession session, int pro_code, Model model) {
+	public String orderForm(HttpSession session,@RequestParam("pro_code") int[] proCodeArr, Model model) {
 		
 		String id = (String)session.getAttribute("sId");
 		
@@ -191,50 +194,86 @@ public class OrderController {
 		List<MemberVO> memberList = service.getMemberList(id);
 		
 		// 장바구니 정보 조회 
-		List<CartProductVO> cartList = service.getCartList(id, pro_code);
-		model.addAttribute("memberList", memberList);
-		model.addAttribute("cartList", cartList);
+		List<CartProductVO> cartList = new ArrayList<>(); 
+		
+		  for(int i=0; i < proCodeArr.length; i++) {
+			  int pro_code = proCodeArr[i];
+			  CartProductVO cart = service.getCartList(id, pro_code);
+			  System.out.println("cart 잘 진행되니 : " + cart);
+			  cartList.add(cart);
+		  }
+		  
+		  model.addAttribute("memberList", memberList);
+		  model.addAttribute("cartList", cartList);
 		
 		return "order/orderForm";
 		
 	} // orderForm
+
 	
-	// 2. DB에 주문정보 등록 (orders * order_product 테이블)
+	// 2. DB에 주문정보 등록 (orders * order_product 테이블) 
 	@PostMapping(value = "/OrderInsertPro")
 	public String OrderInsert(
 			@ModelAttribute OrdersBeanVO order,
-			@ModelAttribute OrderProductVO orderProduct,
-			HttpSession session, int pro_code, Model model) {
+			@ModelAttribute OrderProductArrVO orderProductArr,
+			HttpSession session,@RequestParam("pro_code") int[] proCodeArr, Model model) {
 	
 		String id = (String)session.getAttribute("sId");
 		System.out.println("컨트롤러로 넘어온 주문자 정보 : " + order);
-		System.out.println("컨트롤러로 넘어온 주문상품 정보 : " + orderProduct);
 		
-		// (1). 주문자 정보 & 주문상품 등록 구문 (orders & order_product table)
-		int insertCount = 0;
-		insertCount = service.insertOrder(order, orderProduct, id);
+		// 주문 미완료 & 중복 데이터 방지를 위한 데이터 처리 구문
+		service.deleteOrder(id);
+		
+		// 복수데이터를 하나의 주문번호로 처리하도록 주문번호 생성 
+		// orders(주문자 정보 등록) + 주문번호 생성
+		int order_code = service.insertOrders(order, id);
+		System.out.println("복수데이터 처리를 위한 주문번호 " +order_code);
 		
 		// 주문자 정보 리스트 (출력용)
-		List<OrdersBeanVO> orderMemberList = service.getOrderMemberList(id);
+		List<OrdersBeanVO> orderMemberList = service.getOrderMemberList(order_code, id);
 		System.out.println("오더컨트롤러 주문자 정보 확인 : " + orderMemberList);
 		// 주문상품 정보 리스트 (출력용)
-		List<CartProductVO> orderProductList = service.getOrderProductList(id, pro_code);
-		System.out.println("오더컨트롤러 주문상품 정보 확인 : " + orderProductList);
-		
-		if(insertCount > 0) { // 주문 정보 등록 성공
+		List<CartProductVO> orderProductList = new ArrayList<>();
+		// (1). 주문자 정보 & 주문상품 등록 구문 (orders & order_product table)
+		int insertCount = 0;
+		for(int i=0; i < proCodeArr.length; i++) {
+			// 복수상품 데이터(배열) > 단수상품 데이터 vo에 저장
+			OrderProductVO orderProduct = new OrderProductVO();
+			// 상품코드 저장을 위한 변수 선언
+			int pro_code = proCodeArr[i];
+			orderProduct.setOrder_stock(orderProductArr.getOrder_stock()[i]);
+			orderProduct.setPro_code(pro_code);
+			orderProduct.setOrder_code(order_code);
 			
-			model.addAttribute("orderMemberList", orderMemberList);
-			model.addAttribute("orderProductList", orderProductList);
-			return "order/order_payment";
+			System.out.println("잘 넘어오나 orderProduct - " + orderProduct);
 			
-		} else { // 주문 정보 등록 실패
+			// 주문자 & 주문상품 정보 등록
+			insertCount = service.insertOrderProduct(orderProduct);
 			
-			service.deleteUncompletedOrder(id, pro_code);
-			model.addAttribute("msg", "주문 정보 등록 실패!");
-			return "fail_back";
+			// 주문상품 정보 리스트 (출력용)
+			CartProductVO cartProduct = service.getOrderProductList(id, pro_code);
+			orderProductList.add(cartProduct);
+			System.out.println("오더컨트롤러 주문상품 정보 확인 : " + orderProductList);
+			
+			if(insertCount == 0) { // 주문 정보 등록 실패
+				
+				service.deleteUncompletedOrder(id, pro_code);
+				model.addAttribute("msg", "주문 정보 등록 실패!");
+				return "fail_back";
+				
+			} 
 			
 		}
-
+		
+		// 2-(5). 주문금액 합 계산하는 구문
+		int totalPrice = service.getTotalPrice(order_code);
+		
+		model.addAttribute("orderMemberList", orderMemberList);
+		model.addAttribute("orderProductList", orderProductList);
+		model.addAttribute("totalPrice", totalPrice);
+		
+		return "order/order_payment";
+		
 	} // OrderInsert
 	
 	// 3. 결제 페이지 : 쿠폰 페이지에서 받아온 쿠폰 코드로 할인금액 계산
@@ -264,7 +303,7 @@ public class OrderController {
 	// 4. 주문확인서 생성 및 결제 작업 진행 비즈니스 로직
 	@PostMapping(value = "OrderPaymentPro")
 	public String OrderPaymentPro(Model model, HttpSession session, HttpServletResponse response,
-			 int pro_code, int pro_amount, int order_code,
+			@RequestParam("pro_code") int[] proCodeArr, @RequestParam("hidden_total") int total, int order_code,
 			 @ModelAttribute PaymentsVO payments) {
 		
 		/*  결제 단계에서 결제 완료 후 
@@ -274,13 +313,14 @@ public class OrderController {
 		 *    쿠폰 테이블 : 사용 쿠폰 mc_used n > y 로 변경하기
 		 */
 		
+		
 		// 0. 최종주문번호 생성 구문
 		String id = (String)session.getAttribute("sId");
-		System.out.println("상품 코드 잘넘어 옵니까" + pro_code);
-		System.out.println("상품금액 잘넘어 옵니까" + pro_amount);
+		System.out.println("상품 코드 잘넘어 옵니까" + proCodeArr);
+		System.out.println("상품금액 잘넘어 옵니까" + total);
 		System.out.println("주문번호 잘넘어 옵니까" + order_code);
 		System.out.println("payments 잘넘어 옵니까" + payments);
-		int pay_amount = pro_amount - payments.getCp_discount_amount() + 3500;
+		int pay_amount = total - payments.getCp_discount_amount();
 		System.out.println("잘 계산된 pay_amount" + pay_amount);
 		
 		// 주문번호 생성 구문------------------------------------------
@@ -303,19 +343,34 @@ public class OrderController {
            List<PaymentsVO> paymentList = service.getPaymentsList(pay_number, order_code);
            model.addAttribute("paymentList", paymentList);
         // 4. 결제 상품 정보 리스트 생성 
-           List<CartProductVO> orderProductList = service.getPaymentProductList(id, pro_code);
-           model.addAttribute("orderProductList", orderProductList);
+           List<CartProductVO> orderProductList = new ArrayList<>();
         // 5. 배송 정보 및 주문자 정보 리스트 생성
            List<OrdersBeanVO> orderInfoList = service.getOrderPaymentInfoList(id, order_code);
            model.addAttribute("orderInfoList", orderInfoList);
 		// 6. 결제완료시 상품 테이블에서 수량변경
-	       int productQtyUpdateCount = service.productQtyUpdate(order_code, pro_code);
+	       int productQtyUpdateCount = 0;
 		// 7. 카트에서 주문한 상품 삭제
-	       int cartDeleteCount = service.cartDelete(id, pro_code);
+	       int cartDeleteCount = 0;
 		// 8. 사용한 쿠폰 mc_used = 'N' > 'Y'
 	       int couponUpdateCount = service.getCouponUpdateCount(payments, id);
-		
 	  
+	       for(int i=0; i < proCodeArr.length; i++) {
+	    	   
+				int pro_code = proCodeArr[i];
+				// 4. 결제 상품 정보 리스트 생성 
+				 CartProductVO cart = service.getPaymentProductList(id, pro_code);
+		         orderProductList.add(cart);
+		           
+		        // 6. 결제완료시 상품 테이블에서 수량변경
+			       productQtyUpdateCount = service.productQtyUpdate(order_code, pro_code);
+				
+			    // 7. 카트에서 주문한 상품 삭제
+			       cartDeleteCount = service.cartDelete(id, pro_code);
+			}
+	       
+	       // 4. 결제 상품 정보 리스트 생성
+	       model.addAttribute("orderProductList", orderProductList);
+	       
 	       try {
 			// 결제 후 주문 상태 수정
 			   if(isOrderStatusUpdate) {
@@ -323,7 +378,7 @@ public class OrderController {
 					 if(productQtyUpdateCount > 0) {
 						 // 결제 정보 입력
 						 if(paymentInsertCount > 0 ) {
-							 // 결제 완료 카트 삭제 (23/01/10 코드 꼬여서 실패)
+							 // 결제 완료 카트 삭제 
 							 if(cartDeleteCount > 0) {
 								 // cp_target(new_member, event)면 쿠폰 사용여부를 N > Y로 바꿈
 								 if(couponUpdateCount >= 0) {

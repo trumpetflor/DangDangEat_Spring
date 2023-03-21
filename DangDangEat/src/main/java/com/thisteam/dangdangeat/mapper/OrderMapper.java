@@ -19,28 +19,33 @@ public interface OrderMapper {
 	List<MemberVO> selectMemberList(String id);
 	
 	// 1-(2). 주문서에 장바구니 결제 상품 정보를 가져오는 추상메서드 정의
-	List<CartProductVO> selectCartList(
+	CartProductVO selectCartList(
 			@Param("id") String id, 
 			@Param("pro_code") int pro_code);
 	
+	// 2-(1). 주문번호 조회 구문
+	int getOrderCode(String id);
 	
 	// 2-(1). 주문자 정보 등록 구문 (orders)
 	int insertOrder(@Param("order") OrdersBeanVO order, @Param("id") String id);
 	
 	// 2-(1). 주문상품 등록 구문 (order_product)
-	int insertOrderProduct(@Param("orderProduct") OrderProductVO orderProduct,@Param("id") String id);
+	int insertOrderProduct(@Param("orderProduct") OrderProductVO orderProduct);
 	
 	//----------------------------------------------------------
 	
 	// 2-(2). 주문자 정보 리스트 (출력용)
-	List<OrdersBeanVO> selectOrderMemberList(String id);
+	List<OrdersBeanVO> selectOrderMemberList(@Param("order_code")int order_code,@Param("id") String id);
 
 	// 2-(3). 주문상품 정보 리스트 (출력용)
-	List<CartProductVO> selectOrderProductList(@Param("id") String id, @Param("pro_code") int pro_code);
+	CartProductVO selectOrderProductList(@Param("id") String id, @Param("pro_code") int pro_code);
 	
 	// 2-(4). 주문 상태가 0인 경우(=미완료) orders & order_product 테이블에서 삭제 (= 중복 데이터 방지)
-	int deleteUncompletedProduct(@Param("id") String id, @Param("pro_code") int pro_code);
+	int deleteUncompletedProduct(@Param("id") String id);
 	int deleteUncompleteOrder(String id);
+	
+	// 2-(5). 주문금액 합 계산하는 구문
+	int getTotalPrice(int order_code);
 	
 	// 3. 결제 페이지 : 쿠폰 페이지에서 받아온 쿠폰 코드로 할인금액 계산
 	int selectCouponDiscountPrice(
@@ -75,7 +80,7 @@ public interface OrderMapper {
 	List<PaymentsVO> SelectOrderPaymentsList(@Param("pay_number")int pay_number, @Param("order_code")int order_code);
 
 	// 4-(7). 결제 상품 정보 리스트 생성 
-	List<CartProductVO> selectPaymentProductList(
+	CartProductVO selectPaymentProductList(
 			@Param("id") String id, @Param("pro_code") int pro_code);
 
 	// 4-(8). 배송 정보 및 주문자 정보 리스트 생성
@@ -88,6 +93,10 @@ public interface OrderMapper {
 	
 
 	List<Mc_viewVO> selectCouponHistory(String sId);
+
+
+
+	
 
 
 

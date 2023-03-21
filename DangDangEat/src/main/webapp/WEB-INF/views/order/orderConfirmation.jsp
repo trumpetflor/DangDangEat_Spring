@@ -78,8 +78,8 @@
 			<tr>
 				<td width="20%"><img src="${pageContext.request.contextPath}/resources/upload/${orderProduct.pro_real_thumb }" alt="${orderProduct.pro_name }" 
 			            	class="product-frame" width="90" onerror="this.src='./img/sample1_thumb.png';" > </td>
-				<td width="60%"> <span class="font-weight-bold">상품명 : ${orderProduct.pro_name }</span>
-					<div class="product-qty"> <span class="d-block">주문수량 : ${orderProduct.cart_amount }개</span></div>
+				<td width="60%"> <span class="font-weight-bold">${orderProduct.pro_name }</span>
+					<div class="product-qty"><span class="d-block">주문수량 : ${orderProduct.cart_amount }개</span></div>
 				</td>
 				<td width="40%">
 					<div class="text-right"><span class="font-weight-bold">상품금액<br><fmt:formatNumber pattern="#,###">${orderProduct.pro_price}</fmt:formatNumber>원</span></div>
