@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="path" value="${pageContext.request.contextPath}"/>  
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <title>DangDangEAT - Qna List</title>
-<link href="css/bootstrap.css" rel="stylesheet" type="text/css">
-<link href="css/styles.css" rel="stylesheet" /> 
+<link href="${path }/resources/css/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="${path }/resources/css/styles.css" rel="stylesheet"/>  
 <style type="text/css">
 @font-face {
 	font-family: 'GmarketSansMedium';
@@ -113,21 +114,22 @@ input[type=button], input[type=submit], input[type=text] {
 					</c:choose>
 					<td id="subject">
 						<%-- ======================== 답글 관련 처리 ======================= --%>
-						<%-- qna_re_lev 값이 0보다 크면 답글이므로 들여쓰기 후 이미지 추가 --%> <c:if
-							test="${qna.qna_re_lev > 0 }">
+						<%-- qna_re_lev 값이 0보다 크면 답글이므로 들여쓰기 후 이미지 추가 --%> 
+						<c:if test="${qna.qna_re_lev > 0 }">
 							<%-- 반복문을 통해 qna_re_lev 값 만큼 공백 추가 --%>
 							<c:forEach var="i" begin="1" end="${qna.qna_re_lev }">
 							&nbsp;&nbsp;
-						</c:forEach>
+							</c:forEach>
 							<%-- 답글 제목 앞에 이미지 추가 --%>
-							<img src="img/reply.png">
-						</c:if> <%-- =============================================================== --%>
+							<img src="${path }/resources/img/reply.png">
+						</c:if> 
+						<%-- =============================================================== --%>
 						<c:if test="${qna.qna_secret eq 'N' }">
-							<img alt="" src="img/lock.svg">
+							<img src="${path }/resources/img/lock.svg">
 							<c:choose>
 								<c:when test="${qna.member_id eq sId || sId eq 'admin'}">
 									<a
-										href="QnaDetail.bo?qna_code=${qna.qna_code }&pageNum=${pageNum }">
+										href="QnaDetail?qna_code=${qna.qna_code }&pageNum=${pageNum }">
 										<c:out value="${qna.qna_subject }"></c:out>
 									</a>
 								</c:when>
@@ -135,7 +137,7 @@ input[type=button], input[type=submit], input[type=text] {
 							</c:choose>
 						</c:if> <c:if test="${qna.qna_secret eq 'Y' }">
 							<a
-								href="QnaDetail.bo?qna_code=${qna.qna_code }&pageNum=${pageNum }">
+								href="QnaDetail?qna_code=${qna.qna_code }&pageNum=${pageNum }">
 								${qna.qna_subject } </a>
 						</c:if>
 					</td>
@@ -149,26 +151,26 @@ input[type=button], input[type=submit], input[type=text] {
 						</c:if> <c:if test="${qna.qna_secret eq 'Y' }">
 						${qna.member_id }
 					</c:if></td>
-					<td> <fmt:formatDate
-							value="${qna.qna_date }" pattern="yy-MM-dd" />
+					<td> 
+					<fmt:formatDate value="${qna.qna_date }" pattern="yy-MM-dd" />
 					</td>
 				</tr>
 			</c:forEach>
 		</table>
 	</section>
 	<section id="buttonArea">
-		<form action="QnaList.bo">
+		<form action="QnaList">
 			<input type="text" name="keyword"> <input type="submit"
 				value="검색"> &nbsp;&nbsp; 
-				<c:if test="${not empty sessionScope.sId}"><input type="button" value="글쓰기"
-				onclick="location.href='QnaWriteForm.bo'" /></c:if>
+<%-- 				<c:if test="${not empty sessionScope.sId}"><input type="button" value="글쓰기" --%>
+<%-- 				onclick="location.href='QnaWriteForm'" /></c:if> --%>
 		</form>
 	</section>
 	<section id="pageList">		
 		<c:choose>
 			<c:when test="${pageNum > 1}">
 				<input type="button" value="이전"
-					onclick="location.href='QnaList.bo?pageNum=${pageNum - 1}'">
+					onclick="location.href='QnaList?pageNum=${pageNum - 1}'">
 			</c:when>
 			<c:otherwise>
 				<input type="button" value="이전">
@@ -184,7 +186,7 @@ input[type=button], input[type=submit], input[type=text] {
 					${i }
 				</c:when>
 				<c:otherwise>
-					<a href="QnaList.bo?pageNum=${i }">${i }</a>
+					<a href="QnaList?pageNum=${i }">${i }</a>
 				</c:otherwise>
 			</c:choose>
 		</c:forEach>
@@ -193,7 +195,7 @@ input[type=button], input[type=submit], input[type=text] {
 		<c:choose>
 			<c:when test="${pageNum < pageInfo.maxPage}">
 				<input type="button" value="다음"
-					onclick="location.href='QnaList.bo?pageNum=${pageNum + 1}'">
+					onclick="location.href='QnaList?pageNum=${pageNum + 1}'">
 			</c:when>
 			<c:otherwise>
 				<input type="button" value="다음">

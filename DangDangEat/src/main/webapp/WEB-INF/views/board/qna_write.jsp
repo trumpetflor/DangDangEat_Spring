@@ -1,85 +1,92 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="path" value="${pageContext.request.contextPath}"/>  
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-    <title>DangDangEAT - Qna Write</title>
-  <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
-  <link href="css/styles.css" rel="stylesheet" /> 
-  <style type="text/css">
-	@font-face {
-	    font-family: 'GmarketSansMedium';
-	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-	    font-weight: normal;
-	    font-style: normal;
-	}	
-	body {
-	    font-family:"GmarketSansMedium" ;
-	}	
-	  
-	#reviewForm {
-		width: 500px;
-		height: 450px;
-		border: 1px solid black;
-		margin: auto;
-	}	
-	h2 {
-	    font-family:"GmarketSansMedium" ;
-		text-align: center;
-	}
-	
-	table {
-		margin: auto;
-		width: 450px;
-	}
-	
-	.td_left {
-		width: 150px;
-		background: #D3D3D3;
-		text-align: center;
-	}
-	
-	.td_right {
-		width: 300px;
-	}
-	
-	#commandCell {
-		text-align: center;
-		margin-bottom: 30px;
-	}
-	
-	input[type=radio]{
-		top: -0.7em;
-	}
-	
-	input, textarea{
-	    font-family:"GmarketSansMedium" ;
-	    border-radius: 0px;
-	}
+<head>
+<title>DangDangEAT - Qna Write</title>
+<link href="${path }/resources/css/bootstrap.css" rel="stylesheet"
+	type="text/css">
+<link href="${path }/resources/css/styles.css" rel="stylesheet" />
+<style type="text/css">
+@font-face {
+	font-family: 'GmarketSansMedium';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
 
-	textarea {
-		resize: none;
-	}
-		
-	input{
-	    font-family:"GmarketSansMedium" ;
-	    border-radius: 0px;
-	}
+body {
+	font-family: "GmarketSansMedium";
+}
+
+#reviewForm {
+	width: 500px;
+	height: 450px;
+	border: 1px solid black;
+	margin: auto;
+}
+
+h2 {
+	font-family: "GmarketSansMedium";
+	text-align: center;
+}
+
+table {
+	margin: auto;
+	width: 450px;
+}
+
+.td_left {
+	width: 150px;
+	background: #D3D3D3;
+	text-align: center;
+}
+
+.td_right {
+	width: 300px;
+}
+
+#commandCell {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+input[type=radio] {
+	top: -0.7em;
+}
+
+input, textarea {
+	font-family: "GmarketSansMedium";
+	border-radius: 0px;
+}
+
+textarea {
+	resize: none;
+}
+
+input {
+	font-family: "GmarketSansMedium";
+	border-radius: 0px;
+}
 </style>
 </head>
 <body>
 	
-		<jsp:include page="/inc/top.jsp"></jsp:include>
+		<jsp:include page="../inc/top.jsp"></jsp:include>
 	
 	<!-- q&a 등록 -->
 	<section id="writeForm">
 		<h2>Q & A Write</h2>
-		<form action="QnaWritePro.bo" name="qnaForm" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="qna_code" value="${param.qna_code }" >
-		<input type="hidden" name="member_id" value="${qna.member_id }" >
+		<form action="QnaWritePro" name="qnaForm" method="post" enctype="multipart/form-data">
+<%-- 		<input type="hidden" name="qna_code" value="${param.qna_code }" > --%>
+		<input type="hidden" name="member_id" value="${sessionScope.sId }" >
 		<input type="hidden" name="pageNum" value="${param.pageNum }" >
+		<input type="hidden" name="pro_code" value="${param.pro_code }" >
 			<table class="table container">
 				<tr>
 					<td class="td_left"><label for="member_id">비밀글</label></td>
@@ -108,10 +115,10 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="td_left"><label for="qna_file">파일 첨부</label></td>
+					<td class="td_left"><label for="qna_image">파일 첨부</label></td>
 					<td class="td_right">
-						<input type="file" name="qna_file" />
-						<br>(기존 파일 : ${qna.qna_file })
+						<input type="file" name="qna_image" />
+<%-- 						<br>(기존 파일 : ${qna.qna_file }) --%>
 					</td>
 				</tr>
 			</table>

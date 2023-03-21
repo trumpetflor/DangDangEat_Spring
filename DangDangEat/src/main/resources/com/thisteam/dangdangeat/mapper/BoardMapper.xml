@@ -3,7 +3,8 @@
 <mapper namespace="com.thisteam.dangdangeat.mapper.BoardMapper">
 
 
-	<!-- ======================== sangwoo 시작 ============================== -->	
+	<!-- ======================== sangwoo 시작 ============================== -->
+	<!-- 공지 게시판 리스트 조회 -->	
 	<select id="getNoticeList" resultType="com.thisteam.dangdangeat.vo.NoticeVO">
 		SELECT
 			notice_code
@@ -22,6 +23,7 @@
 					</if>
 	</select>
 	
+	<!-- 공지 게시판 리스트 총 개수 -->
 	<select id="getNoticeListCount" resultType="int">
 		SELECT
 			COUNT(*)
@@ -30,6 +32,7 @@
 				notice_subject LIKE '%${keyword}%'
 	</select>
   	
+  	<!-- 공지 게시판 글 작성 -->
   	<insert id="insertNotice">
   		<selectKey keyProperty="notice_code" resultType="int" order="BEFORE">
   			SELECT MAX(notice_code)
@@ -55,12 +58,14 @@
   		
   	</insert>
   	
+  	<!-- 공지 게시판 게시글 상세보기 -->
   	<select id="getDetailList" resultType="com.thisteam.dangdangeat.vo.NoticeVO">
   		SELECT *
   			FROM notice
   			WHERE notice_code = #{code}
   	</select>
   	
+  	<!-- 공지 게시판 수정 -->
   	<update id="modifyNotice">
   		UPDATE notice
   			SET
@@ -75,7 +80,69 @@
   			FROM notice
   			WHERE notice_code = #{code}
   	</delete>
-
+  	
+  	<!-- qna 게시판 리스트 조회 -->
+  	<select id="getQnaList" resultType="com.thisteam.dangdangeat.vo.QnaVO">
+		SELECT
+			*
+			FROM qna
+				WHERE
+					qna_subject LIKE '%${keyword}%'
+				ORDER BY
+					qna_re_ref DESC, qna_re_seq ASC
+					<if test="listLimit gt 0">
+				LIMIT
+					#{startRow}, #{listLimit}
+					</if>
+	</select>
+	
+	<!-- qna 게시판 리스트 총 개수 -->
+	<select id="getQnaListCount" resultType="int">
+		SELECT
+			COUNT(*)
+			FROM qna
+			WHERE
+				qna_subject LIKE '%${keyword}%'
+	</select>
+	
+	<!-- qna 게시판 게시글 상세보기 -->
+  	<select id="getQnaDetaiList" resultType="com.thisteam.dangdangeat.vo.QnaVO">
+  		SELECT *
+  			FROM qna
+  			WHERE qna_code = #{code}
+  	</select>
+  	
+  	<!-- qna 글작성 -->
+  	<insert id="insertQna">
+  		<selectKey keyProperty="qna_code" resultType="int" order="BEFORE">
+  			SELECT MAX(qna_code)
+  				FROM qna
+  		</selectKey>
+  		INSERT 
+  			INTO qna
+  			VALUES (
+  				<choose>
+					<when test="qna_code eq '0'">
+					1
+					</when>
+					<otherwise>
+					(#{qna_code} + 1)
+					</otherwise>
+				</choose>
+				,#{member_id}
+				,#{qna_pass}
+				,#{qna_subject}
+				,#{qna_content}
+				,#{qna_file}
+				,#{qna_real_file}
+				,#{qna_code} + 1
+				,#{qna_re_lev}
+				,#{qna_re_seq}
+				,now()
+				,#{qna_secret}
+				,#{pro_code}
+  			) 
+  	</insert>
 
 	<!-- ======================== sangwoo 끝 ============================== -->
 
