@@ -1,5 +1,6 @@
 package com.thisteam.dangdangeat.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import com.mysql.cj.Session;
 
@@ -34,6 +36,7 @@ import com.thisteam.dangdangeat.service.ProductService;
 import com.thisteam.dangdangeat.vo.NoticeVO;
 import com.thisteam.dangdangeat.vo.PageInfo;
 import com.thisteam.dangdangeat.vo.ProductVO;
+import com.thisteam.dangdangeat.vo.QnaVO;
 import com.thisteam.dangdangeat.vo.ReviewVO;
 
 
@@ -161,6 +164,104 @@ public class BoardController {
 			return "redirect:NoticeList?pageNum="+pageNum;
 		} else {
 			model.addAttribute("msg","공지 삭제에 실패하였습니다");
+			return "fail_back";
+		}
+	}
+	
+	// qna 리스트
+	@GetMapping(value = "QnaList")
+	public String qnaList(@RequestParam(defaultValue = "") String keyword,
+							@RequestParam(defaultValue = "1") int pageNum,
+							Model model) {
+		
+		int listLimit = 10;
+		int startRow = (pageNum - 1) * listLimit;
+		
+		List<QnaVO> qnaList = service.getQnaList(keyword,pageNum,startRow,listLimit);
+		
+		int listCount = service.getQnaListCount(keyword);
+		
+		int pageListLimit = 10;
+		
+		int maxPage = listCount / listLimit
+						+ (listCount % listLimit == 0 ? 0 : 1);
+		
+		int startPage = (pageNum - 1) / pageListLimit * pageListLimit + 1;
+		
+		int endPage = startPage + pageListLimit - 1;
+		
+		if(endPage > maxPage) {
+			endPage = maxPage;
+		}
+		
+		PageInfo pageInfo = new PageInfo(listCount,pageListLimit,maxPage,startPage,endPage);
+		
+		
+		model.addAttribute("qnaList", qnaList);
+		model.addAttribute("pageInfo", pageInfo);
+		
+		return "board/qna_list";
+	}
+	
+	// qna 글 상세보기 조회
+	@GetMapping(value = "QnaDetail")
+	public String qnaDetail(@RequestParam(defaultValue = "0") int qna_code,
+							@RequestParam(defaultValue = "1") int pageNum,
+							Model model) {
+		
+		QnaVO detailList = service.getQnaDetailList(qna_code);
+		model.addAttribute("qna",detailList);
+		
+		return "board/qna_detail";
+	}
+	
+	// qna 글쓰기 폼
+	@GetMapping(value = "QnaWriteForm")
+	public String qnaWriteForm() {
+		
+		return "board/qna_write";
+	}
+	
+	// qna 글쓰기 프로
+	@PostMapping(value = "QnaWritePro")
+	public String qnaWritePro(@ModelAttribute QnaVO qna,
+								Model model,
+								HttpSession session,
+								@RequestParam("qna_image") MultipartFile file_qna,
+								MultipartRequest request) {
+		
+		System.out.println(qna);
+		//파일업로드 시작
+		String uploadPath = "/resources/upload"; 
+		String realPath = session.getServletContext().getRealPath(uploadPath);
+		//실제 업로드 경로 
+		System.out.println("실제 업로드 경로 : " + realPath);
+		 
+		String qna_image = file_qna.getOriginalFilename().toString();
+		qna.setQna_file(qna_image);
+		qna.setQna_real_file(qna_image);
+		
+		
+		// 파일 생성
+		File img_f = new File(realPath, qna_image); 
+		try {
+			file_qna.transferTo(img_f);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+			
+		// 파일 경로가 존재하지 않을 경우 파일 경로 생성
+		if(!img_f.exists()) {
+			img_f.mkdirs();
+		}
+		
+		int qnaInsertCount = service.insertQna(qna);
+		if(qnaInsertCount > 0) {
+			return "redirect:QnaList";
+		} else {
+			model.addAttribute("msg","상품 문의 작성에 실패하였습니다");
 			return "fail_back";
 		}
 	}

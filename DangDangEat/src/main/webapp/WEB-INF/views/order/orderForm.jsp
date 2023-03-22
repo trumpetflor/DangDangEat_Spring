@@ -24,6 +24,7 @@
 		* {
 		    font-family:"GmarketSansMedium" ;
 		}
+		
   </style>
   	<!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
@@ -65,7 +66,7 @@
   <main>
   	<form action="OrderInsertPro" method="post">
   		<!-- order_product 에 들어갈 정보 -->
-  		<input type="hidden" name="pro_code" value="${param.pro_code }">
+<%--   		<input type="hidden" name="pro_code" value="${param.pro_code }"> --%>
   		<!--  -->
 	    <div class="basket">
 	      <div class="basket-labels">
@@ -77,36 +78,38 @@
 	        </ul>
 	      </div>
 	   
-	      <div class="basket-product">
-	         <c:forEach var="cart" items="${cartList }" varStatus="status">
-	         	<input type="hidden" name="pro_code" value="${cart.pro_code }">
-	         	<input type="hidden" name="order_stock" value="${cart.cart_amount }">
-		        <div class="item">
-			          <div class="product-image">
-			            <a href="ProductDetail.pd?pro_code=${cart.pro_code}">
-			            	<img src="${pageContext.request.contextPath}/resources/upload/${cart.pro_real_thumb }" alt="${cart.pro_name }" 
-			            	class="product-frame" height="130" width="140" onerror="this.src='${pageContext.request.contextPath}/resources/img/sample1_thumb.png';" >
-			           	</a>
-			          </div>
-			          <div class="product-details">
-			            <h1><strong><span class="item-quantity" >상품명 : ${cart.pro_name }</span></strong></h1>
-<%-- 			            <p><strong>브랜드명 : ${cart.pro_brand }</strong></p> --%>
-			            <p>Product Code : ${cart.pro_code }</p>
-			          </div>
-		        </div>
-		        <div class="price" ><fmt:formatNumber pattern="#,###">${cart.pro_price }</fmt:formatNumber></div>
-		        <div class="quantity">
-		          <input type="number" value="${cart.cart_amount }" id="quantitiy" class="quantity-field">
-		        </div>
-		        <div class="subtotal"><fmt:formatNumber pattern="#,###">${cart.pro_price * cart.cart_amount }</fmt:formatNumber></div>
-	        </c:forEach>
-	      </div>
+		      <c:forEach var="cart" items="${cartList }" varStatus="status">
+			      <div class="basket-product">
+			         	<input type="hidden" name="pro_code" value="${cart.pro_code }">
+			         	<input type="hidden" name="order_stock" value="${cart.cart_amount }">
+				        <div class="item">
+					          <div class="product-image">
+					            <a href="ProductDetail.pd?pro_code=${cart.pro_code}">
+					            	<img src="${pageContext.request.contextPath}/resources/upload/${cart.pro_real_thumb }" alt="${cart.pro_name }" 
+					            	class="product-frame" height="130" width="140" onerror="this.src='${pageContext.request.contextPath}/resources/img/sample1_thumb.png';" >
+					           	</a>
+					          </div>
+					          <div class="product-details">
+					          	<br>
+					            <h1><strong><span class="item-quantity" >${cart.pro_name }</span></strong></h1>
+					            <p>Product Code : ${cart.pro_code }</p>
+					          </div>
+				        </div>
+				        <div class="price" ><br><br><fmt:formatNumber pattern="#,###">${cart.pro_price }</fmt:formatNumber></div>
+				        <div class="quantity">
+				          <br><br>
+				          <input type="text" value="${cart.cart_amount }"  class="quantity-field" readonly="readonly">
+				        </div>
+				        <div class="subtotal"><br><br><fmt:formatNumber pattern="#,###">${cart.pro_price * cart.cart_amount }</fmt:formatNumber></div>
+			      </div>
+		      </c:forEach>
+		      <hr>
 	     </div> 
 	   <!-- 주문자 정보 -->
-	  <hr />    
+	  <hr>    
 	  <h1>주문자 정보</h1>
 	  <p>Please check your order details.</p>
-	  <hr />
+	  <hr>
 		  <div class="form">
 		    <c:forEach var="member" items="${memberList }" varStatus="status">
 			  <div class="fields fields--2">

@@ -64,14 +64,12 @@
 		                		 },
 					 	 }); // ajax
 					 	 
-			               var msg = '결제가 완료되었습니다.';
-			                msg += '결제 금액 : ' + rsp.paid_amount;
+			               var msg = rsp.paid_amount + '원 결제 완료되었습니다.';
 
 					 	 $('#orderPaymentForm').submit(); // 폼 제출하여 결제 & 주문서 생성 작업 진행
 					  
 	            } else {
-	                var msg = '결제에 실패하였습니다.';
-	                 msg += '에러내용 : ' + rsp.error_msg;
+	                var msg = '결제에 실패하였습니다 ' + rsp.error_msg;
 	                 window.history.back();
 	            }
 	            alert(msg);
@@ -95,7 +93,7 @@
 					},
 				success: function(data){
 					console.log(data);
-					alert("쿠폰을 사용한 할인금액이 적용되었습니다!");
+					alert("결제 금액에 할인이 적용되었습니다");
 					
 					 $('#basket-promo').text(parseInt(data)).css("color","red"); // action을 통해 계산 완료 후 전달받은 할인금액 입력
 					 $('#basket-total').text(parseInt($('#hidden_total').val()) - parseInt(data)); // 전체 금액 - 완료받은 할인금액 
@@ -139,8 +137,8 @@
 	        </ul>
 	      </div>
 	   
+	      <c:forEach var="cart" items="${orderProductList }" varStatus="status">
 	      <div class="basket-product">
-	         <c:forEach var="cart" items="${orderProductList }" varStatus="status">
 		        <div class="item">
 			          <div class="product-image">
 			          		<a href="ProductDetail.pd?pro_code=${cart.pro_code}">
@@ -158,8 +156,8 @@
 		          <input type="number" value="${cart.cart_amount }" id="quantitiy" class="quantity-field">
 		        </div>
 		        <div class="subtotal"><fmt:formatNumber pattern="#,###">${cart.pro_price * cart.cart_amount }</fmt:formatNumber></div>
-	        </c:forEach>
 	      </div>
+	      </c:forEach>
 	      
 	   <!-- 주문자 정보 -->
 	  <hr />    
@@ -215,9 +213,7 @@
 	       <div class="basket-module"> 
 		        <label for="promo-code">Enter a promotional code</label>
 		        <input id="promo-code" type="text"  maxlength="5" class="promo-code-field">
-	         <c:forEach var="price" items="${orderProductList }" varStatus="status">
-		        <button class="promo-code-cta" type="button" onclick = "window.open('SelectCoupon?total=${price.pro_price * price.cart_amount }', '_blank', 'height=700, width=450, top=70, left=400')">Coupon</button>
-	         </c:forEach>
+		        <button class="promo-code-cta" type="button" onclick = "window.open('SelectCoupon?total=${totalPrice }', '_blank', 'height=700, width=450, top=70, left=400')">Coupon</button>
 	      </div>
 	  	 <hr>
 	</div>
@@ -225,22 +221,18 @@
 			        <div class="summary-total-items"><span class="total-items"></span> Items in your Bag</div>
 			        <div class="summary-subtotal">
 				          <div class="subtotal-title">상품금액</div>
-				<c:forEach var="price" items="${orderProductList }" varStatus="status">
-				          <div class="subtotal-value final-value" id="basket-subtotal"><fmt:formatNumber pattern="#,###">${price.pro_price * price.cart_amount }</fmt:formatNumber></div>
-			    </c:forEach> 
+				          <div class="subtotal-value final-value" id="basket-subtotal"><fmt:formatNumber pattern="#,###">${totalPrice }</fmt:formatNumber></div>
 						  <div class="subtotal-title">할인금액</div>
 				          <div class="subtotal-value final-value" id="basket-promo">0</div>
 				          <div class="subtotal-title">배송비</div>
 				          <div class="subtotal-value final-value" id="basket-delivery">3,500</div>
 			        </div>
-		     <c:forEach var="price" items="${orderProductList }" varStatus="status">
 			      <div class="summary-total">
 			          <div class="total-title">Total</div>
-			          <div class="total-value final-value" id="basket-total"><fmt:formatNumber pattern="#,###">${price.pro_price * price.cart_amount + 3500}</fmt:formatNumber></div>
-			          <input type="hidden" id="hidden_total" value="${price.pro_price * price.cart_amount + 3500}" >
+			          <div class="total-value final-value" id="basket-total"><fmt:formatNumber pattern="#,###">${totalPrice + 3500}</fmt:formatNumber></div>
+			          <input type="hidden" id="hidden_total" name="hidden_total" value="${totalPrice + 3500}" >
 <!-- 			          <input type="hidden" id="iamportPayment" > -->
 			      </div>
-	      	</c:forEach>
 		      	  <div class="summary-checkout">
 		             <button class="button" id="checkout" type="submit" >Checkout</button><hr>
 		             <button class="button" id="iamportPayment" type="button" >kakaopay</button><hr>

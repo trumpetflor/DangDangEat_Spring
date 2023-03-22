@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.thisteam.dangdangeat.mapper.BoardMapper;
 
 import com.thisteam.dangdangeat.vo.NoticeVO;
+import com.thisteam.dangdangeat.vo.QnaVO;
 import com.thisteam.dangdangeat.vo.ReviewVO;
 
 @Service
@@ -41,6 +42,21 @@ public class BoardService {
 		return mapper.deleteNotice(notice_code);
 	}
     
+	public List<QnaVO> getQnaList(String keyword, int pageNum, int startRow, int listLimit) {
+		return mapper.getQnaList(keyword,pageNum,startRow,listLimit);
+	}
+	
+	public int getQnaListCount(String keyword) {
+		return mapper.getQnaListCount(keyword);
+	}
+	
+	public QnaVO getQnaDetailList(int qna_code) {
+		return mapper.getQnaDetaiList(qna_code);
+	}
+	
+	public int insertQna(QnaVO qna) {
+		return mapper.insertQna(qna);
+	}
 	// ======================== sangwoo 끝 ===================================
   
   
@@ -65,6 +81,7 @@ public class BoardService {
 	public int registReview(ReviewVO review) {
 		return mapper.insertReview(review);
 	}
+
 	
 	// ======================== jakyoung 끝 ===================================
 	

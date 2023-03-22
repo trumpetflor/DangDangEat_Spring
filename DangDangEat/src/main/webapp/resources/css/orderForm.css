@@ -173,18 +173,19 @@ li.subtotal:after {
 }
 
 .item {
-  width: 55%;
+  width: 60%;
 }
 
 .price,
-.quantity,
-.subtotal {
-  width: 15%;
+.subtotal, 
+.quantity {
+  width: 12.5%;
   font-size: initial;
+  text-align: center;
 }
 
 .subtotal {
-  text-align: right;
+  text-align: center;
 }
 
 .remove {
@@ -219,11 +220,7 @@ li.subtotal:after {
 }
 
 .product-image {
-  width: 35%;
-}
-
-.product-details {
-  width: 65%;
+  width: 27%;
 }
 
 .product-frame {
@@ -231,7 +228,8 @@ li.subtotal:after {
 }
 
 .product-details {
-  padding: 0 1.5rem;
+  padding: 0.75rem;
+  width: 65%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -241,9 +239,10 @@ li.subtotal:after {
   background-color: #ccc;
   border: 1px solid #aaa;
   border-radius: 4px;
-  font-size: 0.8rem;
+  font-size: 0.98rem;
   padding: 2px;
   width: 3.75rem;
+  margin-left: 2.3rem;
 }
 
 /* aside { */
@@ -377,13 +376,14 @@ li.subtotal:after {
   .subtotal {
     width: 33%;
   }
-  .quantity {
-    text-align: center;
-    width: 34%;
-  }
-  .quantity-field {
-    float: none;
-  }
+/*   .quantity { */
+/*     text-align: center; */
+/*     width:40%; */
+/*     font-size: initial; */
+/*   } */
+/*   .quantity-field { */
+/*     float: none; */
+/*   } */
   .remove {
     bottom: 0;
     text-align: left;

@@ -5,10 +5,12 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.thisteam.dangdangeat.vo.NoticeVO;
+import com.thisteam.dangdangeat.vo.QnaVO;
 import com.thisteam.dangdangeat.vo.ReviewVO;
 
 public interface BoardMapper {
-
+	
+	// ======================== sangwoo 시작 ==================================
 	List<NoticeVO> getNoticeList(@Param("keyword") String keyword, 
 								@Param("pageNum") int pageNum, 
 								@Param("startRow") int startRow, 
@@ -24,6 +26,17 @@ public interface BoardMapper {
 
 	int deleteNotice(@Param("code") int notice_code);
 
+	List<QnaVO> getQnaList(@Param("keyword") String keyword, 
+							@Param("pageNum") int pageNum, 
+							@Param("startRow") int startRow, 
+							@Param("listLimit") int listLimit);
+	
+	int getQnaListCount(String keyword);
+	
+	QnaVO getQnaDetaiList(@Param("code") int qna_code);
+	
+	int insertQna(QnaVO qna);
+	// ======================== sangwoo 끝 ==================================
 
 	// ======================== jakyoung 시작 ===================================
 	
@@ -46,6 +59,7 @@ public interface BoardMapper {
 
 	// 상품 리뷰 등록
 	int insertReview(ReviewVO review);
+
 	
 	// ======================== jakyoung 끝 ===================================
 

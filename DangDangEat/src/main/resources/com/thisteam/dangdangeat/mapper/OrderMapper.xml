@@ -20,6 +20,11 @@
 				AND pro_code = #{pro_code} 
 	</select>
 	
+	<!-- 2-(1). 복수데이터 처리를 위한 주문번호 조회 구문 -->
+	<select id="getOrderCode" resultType="int">
+		SELECT MAX(order_code)
+				FROM orders WHERE member_id = #{id}
+	</select>
 	
 	<!-- 2-(1). 주문자 정보 등록 구문 (orders) -->
 	<insert id="insertOrder">
@@ -45,27 +50,33 @@
 	
 	<!-- 2-(1). 주문상품 등록 구문 (order_product) -->
 	<insert id="insertOrderProduct">
-		<selectKey keyProperty="order_code" resultType="integer" order="BEFORE">
-			SELECT o.order_code
-				FROM orders o NATURAL JOIN cart c
-				WHERE o.member_id = #{id} AND c.pro_code = #{orderProduct.pro_code}
-				AND c.cart_amount = #{orderProduct.order_stock} AND o.order_status = 0
-		</selectKey>
 		INSERT
 			INTO order_product 
 			VALUES
-				(#{order_code}, #{orderProduct.pro_code}, #{orderProduct.order_stock})
+				(#{orderProduct.order_code}, #{orderProduct.pro_code}, #{orderProduct.order_stock})
 	</insert>
+	
+<!-- 	<insert id="insertOrderProduct"> -->
+<!-- 		<selectKey keyProperty="order_code" resultType="integer" order="BEFORE"> -->
+<!-- 			SELECT o.order_code -->
+<!-- 				FROM orders o NATURAL JOIN cart c -->
+<!-- 				WHERE o.member_id = #{id} AND c.pro_code = #{orderProduct.pro_code} -->
+<!-- 				AND c.cart_amount = #{orderProduct.order_stock} AND o.order_status = 0 -->
+<!-- 		</selectKey> -->
+<!-- 		INSERT -->
+<!-- 			INTO order_product  -->
+<!-- 			VALUES -->
+<!-- 				(#{order_code}, #{orderProduct.pro_code}, #{orderProduct.order_stock}) -->
+<!-- 	</insert> -->
 	
 	
 	<!-- 2-(2). 주문자 정보 리스트 (출력용) -->
 	<select id="selectOrderMemberList" resultType="com.thisteam.dangdangeat.vo.OrdersBeanVO">
 		SELECT *
 			FROM orders 
-			WHERE order_code = (SELECT order_code 
-									FROM orders o NATURAL JOIN order_product op
-									WHERE o.order_code = op.order_code
-									AND member_id = #{id} AND o.order_status = 0) 
+			WHERE order_code = #{order_code}	
+				  AND member_id = #{id} 
+				  AND order_status = 0
 	</select>
 	
 	<!-- 2-(3). 주문상품 정보 리스트 (출력용) -->
@@ -83,12 +94,18 @@
 	
 	<delete id="deleteUncompletedProduct">
 		DELETE FROM order_product
-			WHERE pro_code = #{pro_code} AND
-				 order_code = (SELECT order_code FROM 
+			WHERE order_code = (SELECT order_code FROM 
 				 					(SELECT op.order_code FROM orders o NATURAL JOIN order_product op
-									 WHERE o.order_code = op.order_code AND member_id = #{id} AND o.order_status = 0) AS tempTable)
+									 WHERE o.order_code = op.order_code AND member_id = #{id} AND o.order_status = 0) 
+							    AS tempTable GROUP BY order_code)
 	</delete>
 	
+	<!-- 2-(5). 주문금액 합 계산하는 구문 -->
+	<select id="getTotalPrice" resultType="int">
+	SELECT SUM(op.order_stock * p.pro_price) AS total
+		FROM order_product op NATURAL JOIN product p 
+		WHERE order_code = #{order_code}
+	</select>
 	
 	<!-- 3. 결제 페이지 : 쿠폰 페이지에서 받아온 쿠폰 코드로 할인금액 계산 -->
 	<select id="selectCouponDiscountPrice" resultType="integer">
@@ -136,10 +153,8 @@
 							(SELECT pro_qty, pro_code FROM product) AS pro_update_sample 
 								WHERE pro_code = #{pro_code}) 
 						- (SELECT order_stock FROM order_product 
-							WHERE order_code = #{order_code})) 
-						WHERE pro_code = 
-							(SELECT pro_code FROM order_product 
-								WHERE order_code = #{order_code})
+							WHERE order_code = #{order_code} AND pro_code = #{pro_code})) 
+						WHERE pro_code = #{pro_code}
 				
 	</update>
 	

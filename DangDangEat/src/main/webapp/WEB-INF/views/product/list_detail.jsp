@@ -503,7 +503,7 @@ body {
 				<a class="navbar-brand" href="#pro_info">상품상세</a>
 				<a class="navbar-brand" href="#pro_delivery">배송/교환/환불</a>
 				<a class="navbar-brand" type="button" id="review_button">리뷰</a>
-				<a class="navbar-brand" type="button" id="qna_button">상품문의</a>
+				<a class="navbar-brand" type="button" id="qna_button" href="QnaWriteForm?pro_code=${product.pro_code }">상품문의</a>
 			</div>
 		</nav>
 	 </div>	

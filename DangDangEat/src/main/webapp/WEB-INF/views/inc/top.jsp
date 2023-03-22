@@ -248,7 +248,7 @@ header > div {
       <li>/</li>
       <li><a href="NoticeList">Notice</a></li>
       <li>/</li>
-      <li><a href="QnaList.bo">Q&A</a></li>
+      <li><a href="QnaList">Q&A</a></li>
     </ul>
   </div>
   </div>

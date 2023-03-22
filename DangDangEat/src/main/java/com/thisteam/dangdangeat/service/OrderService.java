@@ -108,50 +108,87 @@ public class OrderService {
 	}
 
 	// 1-(2). 주문서에 장바구니 결제 상품 정보를 가져오는 메서드
-	public List<CartProductVO> getCartList(String id, int pro_code) {
+	public CartProductVO getCartList(String id, int pro_code) {
 		return mapper.selectCartList(id, pro_code);
 	}
 
-	
-	// 2-(1). 주문자 정보 & 주문상품 등록 구문 (orders & order_product table)
-	public int insertOrder(OrdersBeanVO order, OrderProductVO orderProduct, String id) {
-		// 1. 중복 주문 처리 구문
-		int pro_code = orderProduct.getPro_code();
-		mapper.deleteUncompletedProduct(id, pro_code); // 미완료 주문상품 삭제
+	// 2-(1)-1. 중복 주문건 처리 구문
+	public void deleteOrder(String id) {
+		mapper.deleteUncompletedProduct(id); // 미완료 주문상품 삭제
 		mapper.deleteUncompleteOrder(id); // 미완료 주문자 정보 삭제
+	}
+	
+	// 2-(1)-2. 주문자 정보 등록 (orders)
+	public int insertOrders(OrdersBeanVO order, String id) {
 		
-		// 2. 주문자 정보 등록 (orders)
-		int insertOrderCount = mapper.insertOrder(order, id);
-		int insertOrderProductCount = 0;
+		int insertOrdersCount = mapper.insertOrder(order, id);
+		int order_code = 0;
 		
-		if(insertOrderCount > 0) { // 주문자 정보 입력 성공 후
-			// 3. 주문상품 등록 (order_product)
-			insertOrderProductCount = mapper.insertOrderProduct(orderProduct, id);
+		if(insertOrdersCount > 0) { // 주문자 정보 입력 성공 후
 			System.out.println("주문자 정보 등록 성공");
+			order_code = mapper.getOrderCode(id);
 		}
 		
+		return order_code;
+	}
+	
+	// 2-(1)-3. 주문상품 등록 구문 (order_product table)
+	public int insertOrderProduct(OrderProductVO orderProduct) {
+
+		int insertOrderProductCount = 0;
+	
+		insertOrderProductCount = mapper.insertOrderProduct(orderProduct);
+			if(insertOrderProductCount > 0) {
+			 System.out.println("주문 상품 정보 등록 성공");
+			}
 		return insertOrderProductCount;
 	}
+	
+	// 2-(1). 주문자 정보 & 주문상품 등록 구문 (orders & order_product table)
+//		public int insertOrderProduct(OrdersBeanVO order, OrderProductVO orderProduct, String id, int pro_code) {
+			// 1. 중복 주문 처리 구문
+//			int pro_code = orderProduct.getPro_code();
+//			mapper.deleteUncompletedProduct(id, pro_code); // 미완료 주문상품 삭제
+//			mapper.deleteUncompleteOrder(id); // 미완료 주문자 정보 삭제
+//			
+//			// 2. 주문자 정보 등록 (orders)
+//			int insertOrderCount = mapper.insertOrder(order, id);
+//			int insertOrderProductCount = 0;
+//			
+//			if(insertOrderCount > 0) { // 주문자 정보 입력 성공 후
+				// 3. 주문상품 등록 (order_product)
+//				insertOrderProductCount = mapper.insertOrderProduct(orderProduct, id);
+//				System.out.println("주문 상품 정보 등록 성공");
+//			}
+//			
+//			return insertOrderProductCount;
+//		}
 
 	// 2-(2). 주문자 정보 리스트 (출력용)
-	public List<OrdersBeanVO> getOrderMemberList(String id) {
-		return mapper.selectOrderMemberList(id);
+	public List<OrdersBeanVO> getOrderMemberList(int order_code, String id) {
+		return mapper.selectOrderMemberList(order_code, id);
 	}
 
 	// 2-(3). 주문상품 정보 리스트 (출력용)
-	public List<CartProductVO> getOrderProductList(String id, int pro_code) {
+	public CartProductVO getOrderProductList(String id, int pro_code) {
 		return mapper.selectOrderProductList(id, pro_code);
 	}
 
 	// 2-(4). 주문정보 등록 실패 시 실행하는 구문
 	public void deleteUncompletedOrder(String id, int pro_code) {
 		// 1. 주문 상태가 0인 경우(=미완료) orders 테이블에서 삭제 (= 중복 데이터 방지)
-		int deleteOrderCount = mapper.deleteUncompletedProduct(id, pro_code);
+		int deleteOrderCount = mapper.deleteUncompletedProduct(id);
 		if(deleteOrderCount > 0) {
-				mapper.deleteUncompleteOrder(id);
+			mapper.deleteUncompleteOrder(id);
 		}
 		
 	}
+	
+	// 2-(5). 주문금액 합 계산하는 구문
+	public int getTotalPrice(int order_code) {
+		return mapper.getTotalPrice(order_code);
+	}
+
 	
 	// 3. 결제 페이지 : 쿠폰 페이지에서 받아온 쿠폰 코드로 할인금액 계산
 	public int getCouponDiscountPrice(String cp_code, int pro_amount, int order_code) {
@@ -239,8 +276,8 @@ public class OrderService {
 	}
 
 	// 4-(7). 결제 상품 정보 리스트 생성 
-	public List<CartProductVO> getPaymentProductList(String id, int pro_code) {
-		List<CartProductVO> paymentProductList= null;
+	public CartProductVO getPaymentProductList(String id, int pro_code) {
+		CartProductVO paymentProductList= null;
 		
 		paymentProductList = mapper.selectPaymentProductList(id, pro_code);
 		
@@ -256,6 +293,8 @@ public class OrderService {
 		return orderPaymentInfoList;
 	}
 
+
+	
 	
 
 	

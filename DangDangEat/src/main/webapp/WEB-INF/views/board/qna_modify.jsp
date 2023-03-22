@@ -64,7 +64,7 @@
 </head>
 <body>
 	
-		<jsp:include page="/inc/top.jsp"></jsp:include>
+		<jsp:include page="../inc/top.jsp"></jsp:include>
 	
 	<!-- 게시판 글 수정 -->
 <!-- 	<section id="modifyForm"> -->
