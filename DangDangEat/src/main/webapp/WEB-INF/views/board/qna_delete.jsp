@@ -56,7 +56,7 @@ input[type=button], input[type=submit], input[type=password] {
 </head>
 <body>
 
-	<jsp:include page="/inc/top.jsp"></jsp:include>
+	<jsp:include page="../inc/top.jsp"></jsp:include>
 	
 	<h2>Q & A Delete</h2>
 	<section id="passForm">

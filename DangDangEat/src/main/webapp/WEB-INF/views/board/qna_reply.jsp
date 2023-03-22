@@ -63,7 +63,7 @@
 	
 </style>
 </head>
-		<jsp:include page="/inc/top.jsp"></jsp:include>
+		<jsp:include page="../inc/top.jsp"></jsp:include>
 
 <body>
 
