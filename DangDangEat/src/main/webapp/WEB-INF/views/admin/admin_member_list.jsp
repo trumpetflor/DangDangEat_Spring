@@ -190,7 +190,7 @@ font-family: 'GmarketSans';
 			<!-- Nav Item - Dashboard -->
 
 			<li class="nav-item active"><a class="nav-link"
-				href="AdminMain.ad"> <i class="fas fa-fw fa-tachometer-alt"></i>
+				href="AdminMain"> <i class="fas fa-fw fa-tachometer-alt"></i>
 					<span>관리자 메인 페이지</span></a></li>
 
 

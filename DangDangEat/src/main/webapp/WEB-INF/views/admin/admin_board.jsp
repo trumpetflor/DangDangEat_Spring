@@ -97,9 +97,9 @@ font-family: 'GmarketSans';
 
             <!-- Sidebar - Brand -->
 
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="AdminMain.ad">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="AdminMain">
                 <div class="div-top-icon">
-                <img class="main-icon" src="img/maindog_white.png">
+                <img class="main-icon" src="${pageContext.request.contextPath}/resources/img/maindog_white.png">
 <!--                     <i class="fas fa-laugh-wink"></i> -->
                 </div>
 
@@ -112,7 +112,7 @@ font-family: 'GmarketSans';
             <!-- Nav Item - Dashboard -->
 
             <li class="nav-item active">
-                <a class="nav-link" href="AdminMain.ad">
+                <a class="nav-link" href="AdminMain">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>관리자 메인 페이지</span></a>
             </li>
@@ -129,31 +129,31 @@ font-family: 'GmarketSans';
 
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminProductList.ad">
+                <a class="nav-link" href="AdminProductList">
                     <i class="fas fa-fw fa-table"></i>
                     <span>상품 관리</span></a>
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminMemberList.ad">
+                <a class="nav-link" href="AdminMemberList">
                     <i class="fas fa-fw fa-table"></i>
                     <span>회원 관리</span></a>
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminOrderList.ad">
+                <a class="nav-link" href="AdminOrderList">
                     <i class="fas fa-fw fa-table"></i>
                     <span>주문 관리</span></a>
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminCouponList.ad">
+                <a class="nav-link" href="AdminCouponList">
                     <i class="fas fa-fw fa-table"></i>
                     <span>쿠폰 관리</span></a>
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminBoardList.ad">
+                <a class="nav-link" href="AdminBoardList">
                     <i class="fas fa-fw fa-table"></i>
                     <span>게시판 관리</span></a>
             </li>

@@ -126,15 +126,15 @@ if (sId == null || !sId.equals("admin")) {
 					<span>상품 관리</span></a></li>
 			<!-- Nav Item - Tables -->
 			<li class="nav-item active"><a class="nav-link"
-				href="AdminMemberList.ad"> <i class="fas fa-fw fa-table"></i> <span>회원
+				href="AdminMemberList"> <i class="fas fa-fw fa-table"></i> <span>회원
 						관리</span></a></li>
 			<!-- Nav Item - Tables -->
 			<li class="nav-item active"><a class="nav-link"
-				href="AdminOrderList.ad"> <i class="fas fa-fw fa-dollar-sign"></i>
+				href="AdminOrderList"> <i class="fas fa-fw fa-dollar-sign"></i>
 					<span>주문 관리</span></a></li>
 			<!-- Nav Item - Tables -->
 			<li class="nav-item active"><a class="nav-link"
-				href="AdminCouponList.ad"> <i
+				href="AdminCouponList"> <i
 					class="fas fa-fw fa-clipboard-list"></i> <span>쿠폰 관리</span></a></li>
 			<!-- Nav Item - Tables -->
 			<li class="nav-item active"><a class="nav-link"

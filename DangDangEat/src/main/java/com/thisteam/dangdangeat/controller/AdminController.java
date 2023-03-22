@@ -70,9 +70,9 @@ public class AdminController {
 		int joinCount = service.getMemberMonthlyJoin();
 		model.addAttribute("joinCount", joinCount);
 		
-		// 한 달 매출액 == null
-//		int salestotal = service.getSalesTotalMonthly();
-//		model.addAttribute("salestotal", salestotal);
+		// 한 달 매출액
+		int salesTotal = service.getSalesTotalMonthly();
+		model.addAttribute("salesTotal", salesTotal);
 		
 		// 한 달 주문 건 수
 		int orderCount = service.getOrderMonthly();

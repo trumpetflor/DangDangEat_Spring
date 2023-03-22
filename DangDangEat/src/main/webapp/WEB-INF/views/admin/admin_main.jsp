@@ -118,7 +118,7 @@ body {
 
             <!-- Sidebar - Brand -->
 
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="AdminMain.ad">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="AdminMain">
                 <div class="div-top-icon">
                 <img class="main-icon" src="${pageContext.request.contextPath}/resources/img/maindog_white.png">
 <!--                     <i class="fas fa-laugh-wink"></i> -->
@@ -174,7 +174,7 @@ body {
             </li>
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="AdminBoardList.ad">
+                <a class="nav-link" href="AdminBoardList">
                     <i class="fas fa-fw fa-comments"></i>
                     <span>게시판 관리</span></a>
             </li>
