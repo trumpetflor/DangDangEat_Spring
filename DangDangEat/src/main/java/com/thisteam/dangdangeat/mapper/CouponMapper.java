@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import com.thisteam.dangdangeat.vo.CouponVO;
 import com.thisteam.dangdangeat.vo.Coupon_viewVO;
@@ -20,9 +21,6 @@ public interface CouponMapper {
 
 	//사용가능한 쿠폰 조회
 	public List<Map<String,Object>> selectMemberCoupon(@Param("id")String sId);
-	
-	//생일쿠폰 업데이트 작업
-//	public void updateBirthCp(@Param("id") String sId);
 
 	  
 	public String selectCouponCode(String cp_code);
@@ -31,7 +29,7 @@ public interface CouponMapper {
 	public String selectCouponCodebyUser(String cp_code);
 
 	
-	//쿠폰발행작업--------------
+	//====== 쿠폰발행작업 ======
 	//a. 회원이 이미 가지고 있는 쿠폰인지 조회
 	public String selectIsPossessCode(@Param("id")String sId, @Param("cp_code") String cp_code);
 	//b. 고객에게 쿠폰 발행 작업
@@ -39,5 +37,13 @@ public interface CouponMapper {
 
 	//쿠폰 히스토리
 	public List<Mc_viewVO> selectCouponHistory(@Param("id") String sId);
+	
+	
+	//====== 생일쿠폰 리셋작업 - @Scheduled로 실행함 ======
+	//1) 1-11월 생일쿠폰 리셋 작업
+	public int resetBirthCoupon();
+
+	//2)12월 생일쿠폰 리셋작업
+	public int resetBirthCoupon_12();
 
 }
