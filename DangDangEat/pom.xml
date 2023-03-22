@@ -200,10 +200,11 @@
 				
 		<!-- Servlet -->
 		<!-- Servlet(4.0 으로 변경) -->
+		<!-- cafe24 업데이트를 위하여 변경(23/03/21) -->
 		<dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>javax.servlet-api</artifactId>
-		    <version>4.0.0</version>
+		    <version>3.1.0</version>
 		    <scope>provided</scope>
 		</dependency>
 		
