@@ -8,6 +8,7 @@ import com.thisteam.dangdangeat.vo.AdminOrderListVO;
 import com.thisteam.dangdangeat.vo.CouponVO;
 import com.thisteam.dangdangeat.vo.Coupon_viewVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
+import com.thisteam.dangdangeat.vo.ReviewVO;
 import com.thisteam.dangdangeat.vo.WishlistVO;
 
 public interface AdminMapper {
@@ -20,6 +21,9 @@ public interface AdminMapper {
 
 	// 회원 삭제
 	int deleteMember(MemberVO member);
+	
+	// 리뷰 삭제
+	int deleteReview(ReviewVO review);
 	
 	// ============================================== yeram ================================================
 	// Wish Top
@@ -68,6 +72,7 @@ public interface AdminMapper {
 	
 	// 관리자 - 주문 관리 페이지
 	List<AdminOrderListVO> selectOrderList();
+
   
 //============================ admin/orderList 미주 ===========================================
 

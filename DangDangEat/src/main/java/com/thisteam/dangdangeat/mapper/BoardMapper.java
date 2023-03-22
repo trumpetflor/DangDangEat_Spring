@@ -52,8 +52,13 @@ public interface BoardMapper {
 			@Param("pro_code") int pro_code
 			, @Param("keyword") String keyword);
 
+	// 주문 상품 중 리뷰 작성 여부 확인
+	ReviewVO selectProductReview(
+			@Param("member_id") String member_id
+			, @Param("pro_code") int pro_code);
 
-
+	// 상품 리뷰 등록
+	int insertReview(ReviewVO review);
 
 	
 	// ======================== jakyoung 끝 ===================================

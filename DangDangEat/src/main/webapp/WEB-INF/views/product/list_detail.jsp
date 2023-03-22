@@ -124,6 +124,13 @@
 		
 		// ============================= jquery jakyoung 시작 ==================================
 		
+// 		var msg = '${msg}'; // 컨트롤러에서 액션이후 msg값이 있을 경우 해당 msg alert창 실행하기 위한 용도
+		
+// 		if(msg==1){
+// 			alert('리뷰가 성공적으로 등록되었습니다.');
+// 			 opener.location.reload();
+// 		}
+			
 		$("#review_button").on("click", function() {
 			let pageNum = 1;
 			let keyword = $("#keyword").val(); // 검색어
@@ -157,16 +164,27 @@
 						let strRc = '"' + jsonArray[index].review_code + '"'; // 파라미터 문자열로 보내려면 "" 결합해주기ㅠㅠㅠ!! - by. 킹갓제너럴영진
 						// 뿌릴 내용
 						// 받아온jsonArray변수명[인덱스명].접근할컬럼변수명 => 각 VO 객체의 변수에 접근)
-						let result = "<tr>"
-									+ "<td>" + jsonArray[index].review_code + "</td>"
-									+ "<td class='click' onclick='openReviewDetail(" + strRc + ", "+ pageNum + ")'>" + jsonArray[index].review_subject + "</td>"
-									+ "<td>" + jsonArray[index].member_id + "</td>"
-									+ "<td>" + jsonArray[index].review_date + "</td>"
-									+ "<td>" + jsonArray[index].review_readcount + "</td>"
-									+ "</tr>"
-									+ "<tr>"
-									+ "<td colspan='5'>" + jsonArray[index].review_content + "</td>"
-									+ "</tr>";
+						let result = "";
+						result += "<tr class='review_subject_tr'>";
+						result += "<td>" + (index + 1) + "</td>";
+						result += "<td>" + jsonArray[index].review_subject + "</td>";
+						result += "<td>" + jsonArray[index].member_id + "</td>";
+						result += "<td>" + jsonArray[index].review_date + "</td>";
+						result += "<td>" + jsonArray[index].review_readcount + "</td>";
+						result += "</tr>";
+						result += "<tr class='review_content_tr'>";
+						result += "<td></td>";
+						<c:choose>
+							<c:when test = "${sId eq 'admin' }">
+								result += "<td colspan='3'>" + jsonArray[index].review_content + "</td>"
+								result += "<td><button class='btn btn-danger btn-circle btn-sm' onclick='confirmDelete(" + strRc + ")'><i class='fas fa-trash'></i></button></td>";
+							</c:when>
+							<c:otherwise>
+								result += "<td colspan='4'>" + jsonArray[index].review_content + "</td>"
+							</c:otherwise>
+						</c:choose>
+						result += "</tr>";
+						
 						$("#review_table").append(result); // 뿌릴 내용 테이블 영역에 넣기
 					}
 					
@@ -204,81 +222,122 @@
 				}
 			});
 		}); // review_button
+		
+		// 리뷰 작성 버튼
+		$("#reviewWriteBtn").on("click", function() {
+			// 구매한 상품인지 확인
+// 			$.ajax({
+// 				type: "get",
+// 				url: "checkOrderedProduct?pd=" + ${product.pro_code},
+// 				dataType: "text" // 전송되는 데이터에 대한 타입 지정
+// 			})
+// 			.done(function(result) {
+				
+// 				// 리뷰 작성 가능할 경우
+// 				if(result == "true") {
+					window.open("ReviewWrite?pro_code=" + ${product.pro_code}, "_blank", "width=880, height=650, top=50, left=1000");
+// 				}
+// 			})
+// 			.fail(function() {
+				
+// 			});
+			
+		});
 
 		// ============================= jquery jakyoung 끝 ==================================
 	
   	});
 	
 	// ================================ 자바스크립트 jk 시작 =============================
+		
+	$(document).on("click", ".review_subject_tr", function() {
+		
+		if($(this).next().is(":visible")) {
+			
+			$(this).next().hide(); 
+		} else {
+			$(this).next().show(); 
+		}
+		
+	});
 	
-	function openReviewModal(review_code, pageNum) {
+	function confirmDelete(review_code) {
+		// confirm dialog 사용하여 "XXX 회원 기록을 삭제하시겠습니까?" 확인 요청
+		let result = confirm("해당 리뷰를 삭제하시겠습니까?");
 		
-		$("#out_table > tbody").empty();
-		$("#input_qty_sum").empty();
-		
-		let inputQtySum = 0; // 출고 지시 수량 합계 변수 선언
-		
-		$('input[name=outScheduleChecked]:checked').each(function(i, elements) {
-			
-// 			console.log('나와랏');
-// //	 		alert("모달창 열리네요~ 출고가 들어오죠");
-// 			//모달창 열기
-// 			$('#out_naga_modal').modal('show');
-// 			$('#out_naga_modal').show();
-			
-			let index = $(elements).index('input[name=outScheduleChecked]:checked');
-			
-			let out_list = ''; // 출력문 비우기
-			let result = 0; // 결과 초기화
-			
-			let tr_id = $(this).closest("tr").attr("id"); // 해당 <tr> id 값 저장
-			
-			console.log(tr_id);
-			
-			let out_schedule_cd = $(this).val().split("/")[0]; // 출고 예정 코드
-			let product_name = $(this).val().split("/")[1]; // 품목명
-			let not_out_qty = $(this).val().split("/")[2]; // 미출고수량
-			let input_out_qty = $("#" + tr_id).find("input[name=input_out_qty]").val(); // 출고 지시수량
-			let stock_cd = $(this).val().split("/")[3]; // 재고 코드
-			let wh_loc_in_area = ''; // 위치명
-			
-// 			alert(input_out_qty);
-			result = not_out_qty - input_out_qty;
-			console.log(not_out_qty + " - " + input_out_qty + " = " + result);
-			
-			if(result >= 0 && input_out_qty >= 1) { // 출고 지시 수량이 미출고 수량보다 작거나 같고, 1보다 크거나 같을 때
-// 				console.log('나와랏');
-//		 		alert("모달창 열리네요~ 출고가 들어오죠");
-				
-				// 출고 수량 합계 계산
-				inputQtySum = Number(inputQtySum) + Number(input_out_qty);
-
-				//모달창 열기
-				$('#out_naga_modal').modal('show');
-				$('#out_naga_modal').show();
-				
-				out_list += '<tr id="outList' + index + '">';
-				out_list += '<td>' + out_schedule_cd + '</td>';
-				out_list += '<td>' + product_name + '</td>';
-				out_list += '<td>' + input_out_qty + '</td>';
-				out_list += '<td class="stock_cd"><a href="javascript:findWhLocArea(' + stock_cd + ', ' + index + ')">' + stock_cd + '</a></td>';
-	// 			out_list += '<button type="button" class="btn-sm btn-dark " onclick="">확인</button>';
-	// 			out_list += '<div class="card select_stock_cd" id="select_' + stock_cd + '"></div></td>';
-				out_list += '<td class="wh_loc_in_area">' + wh_loc_in_area + '</td>';
-				out_list += '</tr>';
-				
-				$("#out_table").append(out_list);
-				
-			} else {
-				alert(out_schedule_cd + " 은(는) 출고 불가능한 수량입니다.");
-				return; // 왜 안 빠져나가지..? (함수 두 개 빠져나와야 함.. 어떻게..?)
-			}
-			
-		});
-		
-		$("#input_qty_sum").append("<b>출고 수량 합계 : " + inputQtySum + "</b>");
-	
+		if(result) {
+			location.href = "AdminReviewDelete?review_code=" + review_code + "&pro_code=" + ${product.pro_code};
+		}
 	}
+	
+// 	function openReviewModal(review_code, pageNum) {
+		
+// 		$("#out_table > tbody").empty();
+// 		$("#input_qty_sum").empty();
+		
+// 		let inputQtySum = 0; // 출고 지시 수량 합계 변수 선언
+		
+// 		$('input[name=outScheduleChecked]:checked').each(function(i, elements) {
+			
+// // 			console.log('나와랏');
+// // //	 		alert("모달창 열리네요~ 출고가 들어오죠");
+// // 			//모달창 열기
+// // 			$('#out_naga_modal').modal('show');
+// // 			$('#out_naga_modal').show();
+			
+// 			let index = $(elements).index('input[name=outScheduleChecked]:checked');
+			
+// 			let out_list = ''; // 출력문 비우기
+// 			let result = 0; // 결과 초기화
+			
+// 			let tr_id = $(this).closest("tr").attr("id"); // 해당 <tr> id 값 저장
+			
+// 			console.log(tr_id);
+			
+// 			let out_schedule_cd = $(this).val().split("/")[0]; // 출고 예정 코드
+// 			let product_name = $(this).val().split("/")[1]; // 품목명
+// 			let not_out_qty = $(this).val().split("/")[2]; // 미출고수량
+// 			let input_out_qty = $("#" + tr_id).find("input[name=input_out_qty]").val(); // 출고 지시수량
+// 			let stock_cd = $(this).val().split("/")[3]; // 재고 코드
+// 			let wh_loc_in_area = ''; // 위치명
+			
+// // 			alert(input_out_qty);
+// 			result = not_out_qty - input_out_qty;
+// 			console.log(not_out_qty + " - " + input_out_qty + " = " + result);
+			
+// 			if(result >= 0 && input_out_qty >= 1) { // 출고 지시 수량이 미출고 수량보다 작거나 같고, 1보다 크거나 같을 때
+// // 				console.log('나와랏');
+// //		 		alert("모달창 열리네요~ 출고가 들어오죠");
+				
+// 				// 출고 수량 합계 계산
+// 				inputQtySum = Number(inputQtySum) + Number(input_out_qty);
+
+// 				//모달창 열기
+// 				$('#out_naga_modal').modal('show');
+// 				$('#out_naga_modal').show();
+				
+// 				out_list += '<tr id="outList' + index + '">';
+// 				out_list += '<td>' + out_schedule_cd + '</td>';
+// 				out_list += '<td>' + product_name + '</td>';
+// 				out_list += '<td>' + input_out_qty + '</td>';
+// 				out_list += '<td class="stock_cd"><a href="javascript:findWhLocArea(' + stock_cd + ', ' + index + ')">' + stock_cd + '</a></td>';
+// 	// 			out_list += '<button type="button" class="btn-sm btn-dark " onclick="">확인</button>';
+// 	// 			out_list += '<div class="card select_stock_cd" id="select_' + stock_cd + '"></div></td>';
+// 				out_list += '<td class="wh_loc_in_area">' + wh_loc_in_area + '</td>';
+// 				out_list += '</tr>';
+				
+// 				$("#out_table").append(out_list);
+				
+// 			} else {
+// 				alert(out_schedule_cd + " 은(는) 출고 불가능한 수량입니다.");
+// 				return; // 왜 안 빠져나가지..? (함수 두 개 빠져나와야 함.. 어떻게..?)
+// 			}
+			
+// 		});
+		
+// 		$("#input_qty_sum").append("<b>출고 수량 합계 : " + inputQtySum + "</b>");
+	
+// 	}
 		
 		
 	// ================================ 자바스크립트 jk 끝 =============================
@@ -336,6 +395,14 @@ body {
 	left: 35%;
 	overflow-y: scroll;
 	
+	}
+	
+	.review_subject_tr {
+		cursor: pointer;
+	}
+	
+	.review_content_tr {
+ 		display: none; 
 	}
 
 /* *********************** CSS jakyoung 끝 *************************** */	
@@ -464,7 +531,7 @@ body {
 			</div>
 		</div>
 		<c:if test="${sId ne null }">
-			<button type="button" class="mx-1 btn btn-sm btn-dark rounded-1" style="float: right;" onclick="location.href=''">상품평 작성</button>
+			<button type="button" id="reviewWriteBtn" class="mx-1 btn btn-sm btn-dark rounded-1" style="float: right;" >상품평 작성</button>
        	</c:if>
 	 </div>
 	<!-- 상품 상세 -->	
@@ -544,7 +611,7 @@ body {
 	</section>
 	<!-- Related items section-->
 	<!-- -------------------------- jakyoung 시작 ------------------------------------- -->
-	<!-- 리뷰 내용 모달 -->
+	<!-- 리뷰 사진 모달 -->
 	
 		<div id="out_naga_modal" class="modal" data-backdrop="static">
 			<form class="">

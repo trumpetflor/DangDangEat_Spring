@@ -178,7 +178,38 @@
 			</if>
 	</select>
 	
+<!-- 	<select id="selectProductReview" ></select> -->
 	
+	<!-- 상품 리뷰 등록 -->
+	<insert id="insertReview">
+		<selectKey keyProperty="review_code" resultType="int" order="BEFORE">
+  			SELECT MAX(review_code)
+  				FROM review
+  		</selectKey>
+		INSERT INTO review 
+			VALUES (
+  				<choose>
+					<when test="review_code eq '0'">
+					1
+					</when>
+					<otherwise>
+					(#{review_code} + 1)
+					</otherwise>
+				</choose>
+				, #{member_id}
+				, #{review_pass}
+				, #{review_subject}
+				, #{review_content}
+				, #{review_file}
+				, #{review_real_file}
+				, #{review_re_ref}
+				, #{review_re_lev}
+				, #{review_re_seq}
+				, #{review_readcount}
+				, now()
+				, #{pro_code}
+  			)
+	</insert>
 	
 	<!-- ======================== jakyoung 끝 ============================== -->
 

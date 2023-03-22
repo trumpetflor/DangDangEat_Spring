@@ -30,6 +30,7 @@ import com.thisteam.dangdangeat.vo.Cp_target;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.PageInfo;
 import com.thisteam.dangdangeat.vo.ProductVO;
+import com.thisteam.dangdangeat.vo.ReviewVO;
 import com.thisteam.dangdangeat.vo.WishlistVO;
 
 
@@ -255,6 +256,49 @@ public class AdminController {
 	
    }
 
+   // 리뷰 삭제
+   @GetMapping(value = "AdminReviewDelete")
+   public String memberDelete(
+		   @RequestParam int review_code,
+		   @RequestParam int pro_code,
+		   Model model,
+		   HttpSession session
+		   ) {
+	   
+	   String sid = (String)session.getAttribute("sId");
+	   
+	   if(sid.equals("") || !sid.equals("admin")) { // 세션 아이디가 null 이거나 "" 이거나 admin 이 아닐 경우
+		   model.addAttribute("msg", "잘못된 접근입니다!");
+		   return "redirect:/";
+	   } else { // 세션 아이디 있을 경우
+		   // ReviewVO 객체 생성 및 파라미터 저장
+		   ReviewVO review = new ReviewVO();
+		   review.setReview_code(review_code);
+		   
+		   // 회원 삭제 수행
+		   int deleteCount = 0;
+		   try {
+			   deleteCount = service.reviewDelete(review);
+		   } catch (DataIntegrityViolationException e) {
+			   System.out.println("java.sql.SQLIntegrityConstraintViolationException"
+					   + ": Cannot delete or update a parent row"
+					   + ": a foreign key constraint fails"
+					   + " (`class5_220823_team2`.`auth`, CONSTRAINT `auth_ibfk_1` FOREIGN KEY (`auth_id`) REFERENCES `member` (`member_id`))");
+			   e.printStackTrace();
+		   }
+		   
+		   if(deleteCount > 0) { // 회원 삭제 성공
+//			   return "redirect:AdminBoardList";
+			   return "redirect:ProductDetail.pd?pro_code=" + pro_code;
+		   } else {
+			   model.addAttribute("msg", "회원 삭제 실패!");
+			   return "fail_back";
+		   }
+		   
+	   }
+	   
+   }
+   
 
 	
   // ============================================== hawon ================================================
