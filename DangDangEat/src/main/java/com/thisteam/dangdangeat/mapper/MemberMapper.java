@@ -3,6 +3,10 @@ package com.thisteam.dangdangeat.mapper;
 import com.thisteam.dangdangeat.vo.AuthVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.Member_Mypage_ViewVO;
+import com.thisteam.dangdangeat.vo.ReviewVO;
+import com.thisteam.dangdangeat.vo.Review_product_viewVO;
+
+import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -68,8 +72,14 @@ public interface MemberMapper {
 	// 회원 메일 인증 상태 업데이트
 	void updateMemberAuth(AuthVO auth);
 
-	//----------------------- sangwoo ---------------------// 
 
+	//----------------------- sangwoo ---------------------// 
+	
+	
+	//=======================hawon =======================
+	//내가 쓴 리뷰 조회
+	List<Review_product_viewVO> selectMyReview(String id);
+	//=======================hawon =======================
 }
 
 
