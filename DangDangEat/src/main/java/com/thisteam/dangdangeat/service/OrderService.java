@@ -5,19 +5,20 @@ import java.util.Map;
 
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.thisteam.dangdangeat.mapper.CouponMapper;
 import com.thisteam.dangdangeat.mapper.OrderMapper;
 import com.thisteam.dangdangeat.vo.CartProductVO;
-import com.thisteam.dangdangeat.vo.CouponVO;
 import com.thisteam.dangdangeat.vo.Coupon_viewVO;
 import com.thisteam.dangdangeat.vo.Mc_viewVO;
 import com.thisteam.dangdangeat.vo.MemberVO;
 import com.thisteam.dangdangeat.vo.OrderProductVO;
 import com.thisteam.dangdangeat.vo.OrdersBeanVO;
 import com.thisteam.dangdangeat.vo.PaymentsVO;
-
+@EnableScheduling
 @Service
 public class OrderService {
 	
@@ -52,14 +53,27 @@ public class OrderService {
 		}
 		return isExist;
 	}
+		
+	/*매년 생일 쿠폰 reset작업
+	 12월 쿠폰은 12월 사용 후 1월에 재사용 할 가능성이 있을 수 있으므로 따로 실행함 */
+	//@Scheduled(cron = "0 * * * * *") //초, 분, 시간, 일, 월, 년도 순서 ,  1분마다 실행
+	@Scheduled(cron = "0 0 0 1 1 *")/*매년 1월 1일 0시 0분 0초 마다 실행*/
+	public void resetBirthCoupon() {
+		mapper_cp.resetBirthCoupon();
+	}
+	
+	@Scheduled(cron = "0 0 0 6 1 *")/*매년 6월 1일 0시 0분 0초 마다 실행*/
+		public void resetBirthCoupon_12() {
+			mapper_cp.resetBirthCoupon_12();
+		}
+
+
 	
 	//회원별 사용가능 쿠폰 조회
 	public JSONArray getUsableMemberCoupon(String sId) {
 //		System.out.println("getUsableMemberCoupon 메서드");
 //		System.out.println("sId:  "+sId);
-		
-//		//1. 생일쿠폰 업데이트 작업
-//		mapper_cp.updateBirthCp(sId);
+
 		
 		//2. 쿠폰 조회 후 JSON 데이터로 변경
 
