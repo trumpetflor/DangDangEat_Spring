@@ -1,8 +1,8 @@
-## 🏭댕댕잇 🏭
+# 🐶 댕댕잇 🐶
 팀프로젝트로 진행한  반려간식 쇼핑몰 사이트입니다.
 ## DEMO : 👉<a href="http://itwillbs4.cafe24.com/DangDangEat/">댕댕잇</a>👈 
 <i>(**아이디 및 비밀번호 : 포트폴리오 7p 에 첨부)</i>
-
+<i>(**---4/6--- cafe24 호스팅 시 sql dump파일 인식 오류로 접속시 에러 )</i>
 
 ![그림3](https://user-images.githubusercontent.com/112055211/230164741-e8a8ea39-f02f-44a8-a098-7fb45d255c56.png)
 
