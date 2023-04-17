@@ -2,7 +2,7 @@
 팀프로젝트로 진행한  반려간식 쇼핑몰 사이트입니다.
 ## DEMO : 👉<a href="http://itwillbs4.cafe24.com/DangDangEat/">댕댕잇</a>👈 
 <i>(**아이디 및 비밀번호 : 포트폴리오 7p 에 첨부)</i>
-<i>(**---4/6--- cafe24 호스팅 시 sql dump파일 인식 오류로 접속시 에러 )</i>
+
 
 ![그림3](https://user-images.githubusercontent.com/112055211/230164741-e8a8ea39-f02f-44a8-a098-7fb45d255c56.png)
 
@@ -28,18 +28,68 @@
   - 사이트 디자인 총괄
   - 로고 제작
 
-
- 수정중  ~
  
  
 <br><br><br>
 2️⃣개발 환경 및 기술 스택
 ----
+개발환경
+- IDE: STS4
+- Server: Apache Tomcat 8.0
+- DB Tool: dbeaver, workbench
+- Build tool: maven
+기술 스택
+- BACK-END
+  - JAVA(jdk 1.8.0)
+  - SPRING FRAMEWORK / MVC 모델2 아키텍처 패턴
+  - jdbc
+  - MySQL
+  - Mybatis
+  - jsp
+  - AWS EC2, RDS
+  
+- FRONT-END
+  - Bootstrap
+  - javascript
+  - jQuery
+  - Ajax
+  - HTML/CSS
 
 <br><br><br>
 3️⃣담당파트 작업파일 경로
 ---
+<b>Controller</b>
+쿠폰
+https://github.com/trumpetflor/DangDangEat_Spring/blob/34d5ce36ce95fe530892776c40714e7e219777ae/DangDangEat/src/main/java/com/thisteam/dangdangeat/controller/OrderController.java#L43
+
+https://github.com/trumpetflor/DangDangEat_Spring/blob/34d5ce36ce95fe530892776c40714e7e219777ae/DangDangEat/src/main/java/com/thisteam/dangdangeat/controller/MemberController.java#L144
+
+<b>Service</b>
+https://github.com/trumpetflor/DangDangEat_Spring/blob/34d5ce36ce95fe530892776c40714e7e219777ae/DangDangEat/src/main/java/com/thisteam/dangdangeat/service/OrderService.java#L32
+
+<b>Mapper</b>
+https://github.com/trumpetflor/DangDangEat_Spring/blob/34d5ce36ce95fe530892776c40714e7e219777ae/DangDangEat/src/main/java/com/thisteam/dangdangeat/mapper/CouponMapper.java#L1
+
+<b>Mapper.xml</b>
+https://github.com/trumpetflor/DangDangEat_Spring/blob/main/DangDangEat/src/main/resources/com/thisteam/dangdangeat/mapper/CouponMapper.xml
+
 
 <br><br><br>
 4️⃣ERD 및 구현페이지 설명
 ---
+
+
+1.관리자페이지
+  1-1. 쿠폰 수정
+![admin_coupon_update](https://user-images.githubusercontent.com/112055211/232452189-89792ec1-120c-4870-b4c1-6605a5525bfa.gif)
+
+  1-2. 쿠폰 삭제
+![admin_coupon_delete](https://user-images.githubusercontent.com/112055211/232452793-00c2e278-b5e8-4209-8caa-29640a659e52.gif)
+
+
+2. 쿠폰 사용
+
+3. 마이페이지 _쿠폰 
+- 현재 사용 가능한 쿠폰 및 쿠폰 사용 내역 확인 기능
+- 새로운 쿠폰 등록 기능
+![mypage-coupon-register](https://user-images.githubusercontent.com/112055211/232450466-dfe3bae4-0c1f-4ae0-8133-d49d20181587.gif)
