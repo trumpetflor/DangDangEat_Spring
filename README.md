@@ -12,10 +12,17 @@ Pass: 1234
 
 ![그림3](https://user-images.githubusercontent.com/112055211/230164741-e8a8ea39-f02f-44a8-a098-7fb45d255c56.png)
 
+#️⃣목차
+---
+[1. 개요](#1️⃣개요)<br>
+[2. 개발 환경 및 기술 스택](#2️⃣개발-환경-및-기술-스택)<br>
+[3. 담당파트 작업파일 경로](#3️⃣담당파트-작업파일-경로)<br>
+[4. ERD 및 구현페이지 설명](#4️⃣erd-및-구현페이지-설명)<br>
+  - [4-1.ERD](-#erd)<br>
 
 
 <br><br><br>
-1️⃣개요
+# 1️⃣개요
 ----
 - 설명: <br>: MVC모델2을 기반으로 스프링 프레임워크를 이용하여 만든 반려간식 쇼핑몰 사이트입니다.<br>
               교육 수료 후 2022.12.12 - 2023.01.13 기간동안 진행한 JSP기반의 프로젝트를 기능 추가 및 스프링 프레임워크 기반으로 전환했습니다.
@@ -37,7 +44,7 @@ Pass: 1234
  
  
 <br><br><br>
-2️⃣개발 환경 및 기술 스택
+# 2️⃣개발 환경 및 기술 스택
 ----
 개발환경
 - IDE: STS4
@@ -62,7 +69,7 @@ Pass: 1234
   - HTML/CSS
 
 <br><br><br>
-3️⃣담당파트 작업파일 경로
+# 3️⃣담당파트 작업파일 경로
 ---
 <b>Controller</b>
 쿠폰
@@ -81,11 +88,13 @@ https://github.com/trumpetflor/DangDangEat_Spring/blob/main/DangDangEat/src/main
 
 
 <br><br><br>
-4️⃣ERD 및 구현페이지 설명
+# 4️⃣ERD 및 구현페이지 설명
 ---
+-# ERD
+![그림1](https://github.com/trumpetflor/DangDangEat_Spring/assets/112055211/bdc52fdb-b24c-4ae2-86be-ba34a9999971)
 
 
-1.관리자페이지
+1.관리자페이지 <br>
   1-1. 쿠폰 수정
 ![admin_coupon_update](https://user-images.githubusercontent.com/112055211/232452189-89792ec1-120c-4870-b4c1-6605a5525bfa.gif)
 
@@ -93,7 +102,7 @@ https://github.com/trumpetflor/DangDangEat_Spring/blob/main/DangDangEat/src/main
 ![admin_coupon_delete](https://user-images.githubusercontent.com/112055211/232452793-00c2e278-b5e8-4209-8caa-29640a659e52.gif)
 
 
-2. 쿠폰 사용
+2. 쿠폰 사용 <br>
 
 3. 마이페이지 _쿠폰 
 - 현재 사용 가능한 쿠폰 및 쿠폰 사용 내역 확인 기능
