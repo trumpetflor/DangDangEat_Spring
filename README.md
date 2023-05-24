@@ -90,7 +90,7 @@ https://github.com/trumpetflor/DangDangEat_Spring/blob/main/DangDangEat/src/main
 <br><br><br>
 # 4️⃣ERD 및 구현페이지 설명
 ---
--# ERD
+### ERD
 ![그림1](https://github.com/trumpetflor/DangDangEat_Spring/assets/112055211/bdc52fdb-b24c-4ae2-86be-ba34a9999971)
 
 
