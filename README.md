@@ -1,6 +1,7 @@
 # 🐶 댕댕잇 🐶
 팀프로젝트로 진행한  반려간식 쇼핑몰 사이트입니다.
-## DEMO : 👉<a href="http://itwillbs4.cafe24.com/DangDangEat/">댕댕잇</a>👈 
+## DEMO : 👉<a href="http://54.180.83.114:8080/DangDangEat/">댕댕잇</a>👈 
+배포 서버 및 DB: AWS EC2 / RDS
 (**관리자 계정
 *ID:* admin |
 Pass: 1234 <br>
@@ -90,7 +91,7 @@ https://github.com/trumpetflor/DangDangEat_Spring/blob/main/DangDangEat/src/main
 <br><br><br>
 # 4️⃣ERD 및 구현페이지 설명
 ---
-### ERD
+- ### ERD
 ![그림1](https://github.com/trumpetflor/DangDangEat_Spring/assets/112055211/bdc52fdb-b24c-4ae2-86be-ba34a9999971)
 
 
