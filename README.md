@@ -21,7 +21,7 @@ Pass: 1234
 [4. ERD 및 구현페이지 설명](#4️⃣erd-및-구현페이지-설명)<br>
   - [4-1.ERD](#erd)<br>
   - [4-2.관리자페이지](#관리자페이지)<br>
-  - [4-3.회원-결제 중 쿠폰 적용](#회원_결제_중_쿠폰사용)<br>
+  - [4-3.회원-결제 중 쿠폰 적용](#회원-결제-중-쿠폰사용)<br>
   - [4-4.마이페이지](#마이페이지)<br>
 
 <br><br><br>
@@ -100,6 +100,7 @@ https://github.com/trumpetflor/DangDangEat_Spring/blob/main/DangDangEat/src/main
 - ### 관리자페이지
 <br>
   1-1. 쿠폰 수정
+  
 ![admin_coupon_update](https://user-images.githubusercontent.com/112055211/232452189-89792ec1-120c-4870-b4c1-6605a5525bfa.gif)
 
   1-2. 쿠폰 삭제
