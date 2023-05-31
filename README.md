@@ -1,7 +1,7 @@
 # 🐶 댕댕잇 🐶
 팀프로젝트로 진행한  반려간식 쇼핑몰 사이트입니다.
 ## DEMO : 👉<a href="http://54.180.83.114:8080/DangDangEat/">댕댕잇</a>👈 
-배포 서버 및 DB: AWS EC2 / RDS <br>
+<b>배포 서버 및 DB: AWS EC2 / RDS(MySQL)</b><br><br>
 (**관리자 계정
 *ID:* admin |
 Pass: 1234 <br>
